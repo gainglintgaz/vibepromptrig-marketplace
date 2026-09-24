@@ -1,0 +1,102 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AI Employee Declaration",
+  "description": "Per-project declaration of autonomous AI behavior (rule: .claude/rules/ai-native.md). Must be accurate and match implemented functionality -- every does_autonomously item maps to shipped code or is marked 'planned'. Lives at repo root as ai-employee.json, or .forge/ai/<project-slug>.json for VibePromptRig plugin customers. NOTE: removed_ai_pct carries maximum 70 BY DESIGN -- the ai-native.md SS2 band gate. A genuinely simple tool (>70% workflows AI-free) is exempted via a DECISIONS.md note and does NOT carry this file at all; the exemption replaces the declaration.",
+  "type": "object",
+  "required": [
+    "does_autonomously",
+    "works_with_you_on",
+    "learns_from",
+    "saves",
+    "trust_ladder",
+    "removed_ai_pct",
+    "verified_claims",
+    "guardrails"
+  ],
+  "properties": {
+    "does_autonomously": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Tasks the AI performs autonomously without human intervention in the current shipped version. Mark planned items clearly."
+    },
+    "works_with_you_on": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Tasks where AI assists and a human must approve or edit before action is taken."
+    },
+    "learns_from": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Signals and feedback mechanisms that improve future outputs for this specific user (e.g. accept/dismiss, manual edits, outcome tracking, prompt_version logging)."
+    },
+    "saves": {
+      "type": "object",
+      "properties": {
+        "time": { "type": "string", "description": "Estimated time saved per typical session" },
+        "money": { "type": "string", "description": "Estimated financial value or cost avoided" },
+        "energy": { "type": "string", "description": "Reduction in mental load or repetitive toil" }
+      },
+      "required": ["time", "energy"]
+    },
+    "trust_ladder": {
+      "type": "object",
+      "properties": {
+        "now": {
+          "type": "string",
+          "enum": ["hybrid", "assisted", "supervised"],
+          "description": "Current level of AI autonomy"
+        },
+        "unlocks_full_agent_after": {
+          "type": "string",
+          "description": "Condition or loop count required before higher agency is enabled"
+        }
+      },
+      "required": ["now"]
+    },
+    "removed_ai_pct": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 70,
+      "description": "Percentage of PRIMARY USER WORKFLOWS completable WITHOUT AI inference (the refined Removed-AI metric, ai-native.md SS2). Bands: <=40 auto-pass; 41-70 requires a DECISIONS.md justification; >70 is schema-BLOCKED -- a deliberately simple tool takes the DECISIONS.md exemption instead of carrying this file."
+    },
+    "verified_claims": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Specific claims made in UI, marketing, or docs that have been implemented, tested, and are currently delivered."
+    },
+    "guardrails": {
+      "type": "object",
+      "required": ["forbidden_actions", "grounding_source", "legal_disclaimers_required"],
+      "description": "The Truth & Compliance Shield contract (ai-native.md SS4): what the AI is mechanically forbidden to do, what real sources ground its output, and which disclaimers its surfaces must carry.",
+      "properties": {
+        "forbidden_actions": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" },
+          "description": "Actions the AI must NEVER take autonomously (e.g. execute commands, write to the DB directly, send external messages, spend money, delete data)."
+        },
+        "grounding_source": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" },
+          "description": "The real data sources every AI output must be grounded in / cite (no source = no claim)."
+        },
+        "legal_disclaimers_required": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Disclaimers that MUST render with this project's AI output (empty array allowed only for genuinely no-stakes output)."
+        }
+      }
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional context, planned improvements, or known limitations."
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date",
+      "description": "Date this declaration was last reviewed and updated"
+    }
+  },
+  "additionalProperties": false
+}

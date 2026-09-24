@@ -1,0 +1,27 @@
+{
+  "name": "bash-destructive-drop-table",
+  "hook_event": "PreToolUse",
+  "tool": "Bash",
+  "category": "destructive",
+  "gate": "pre-bash-destructive-sql-guard",
+  "description": "A Bash command carrying destructive SQL. The guard must BLOCK it (exit 2, message to stderr).",
+  "stdin": {
+    "session_id": "00000000-0000-4000-8000-0000000000a2",
+    "transcript_path": "/tmp/transcript.jsonl",
+    "cwd": "/workspace/repo",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "psql \"$DATABASE_URL\" -c 'DROP TABLE users;'",
+      "description": "Remove a table"
+    }
+  },
+  "stdin_b64": null,
+  "expect": {
+    "exit_code": 2,
+    "stdout": "",
+    "stderr_contains": "BLOCKED",
+    "side_effects": []
+  },
+  "provenance": "Claude Code PreToolUse(Bash) envelope; expectation derived from scripts/hooks/pre-bash-destructive-sql-guard.ps1 DROP-TABLE branch (live Windows session 2026-06-13)."
+}

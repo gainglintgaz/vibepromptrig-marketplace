@@ -1,0 +1,18 @@
+{
+  "name": "git-force-push-feature-allowed",
+  "hook_event": "PreToolUse",
+  "tool": "Bash",
+  "category": "happy",
+  "gate": "pre-bash-destructive-git-guard",
+  "description": "git push --force to a NON-main/master branch is allowed (exit 0). Guards the false-positive boundary -- force is only blocked on main/master.",
+  "stdin": {
+    "session_id": "00000000-0000-4000-8000-0000000000c3",
+    "cwd": "/workspace/repo",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": { "command": "git push --force origin feature-xplat" }
+  },
+  "stdin_b64": null,
+  "expect": { "exit_code": 0, "stdout": "", "stderr_contains": null, "side_effects": [] },
+  "provenance": "scripts/hooks/pre-bash-destructive-git-guard.ps1 -- force-push requires main|master to block (live Windows session 2026-06-13)."
+}

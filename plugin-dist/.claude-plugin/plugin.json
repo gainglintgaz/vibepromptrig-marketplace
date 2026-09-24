@@ -1,0 +1,20 @@
+{
+  "name": "vibepromptrig",
+  "displayName": "VibePromptRig",
+  "version": "5.1.4",
+  "description": "VibePromptRig helps AI coding assistants plan, configure projects, review changes, and verify work through reusable skills, specialist agents, compact rule cards, and forge tools. Claude Code distribution preview.",
+  "author": {
+    "name": "gainglintgaz"
+  },
+  "keywords": [
+    "ai-factory",
+    "agents",
+    "code-quality",
+    "multi-tenant",
+    "vibe-standard",
+    "vibepromptrig"
+  ],
+  "license": "MIT",
+  "defaultEnabled": true,
+  "skills": "./skills/"
+}

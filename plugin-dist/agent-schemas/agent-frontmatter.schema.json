@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/gainglintgaz/vibepromptrig-marketplace/main/plugin-dist/agent-schemas/agent-frontmatter.schema.json",
+  "title": "Agent Frontmatter -- configurable block",
+  "description": "The 'configurable:' block an agent .md declares so the resolver knows which fields lift out of the body. v5.0 Sprint 1, arch 9d7294c.",
+  "type": "object",
+  "required": ["schema_version", "configurable"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "configurable": {
+      "type": "object",
+      "required": ["fields"],
+      "properties": {
+        "fields": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "defaults": { "type": "object" },
+        "budget_cents_per_month": { "type": "integer", "minimum": 0 },
+        "overage_policy": { "type": "string", "enum": ["hard_stop"] }
+      }
+    }
+  }
+}

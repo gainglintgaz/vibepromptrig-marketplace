@@ -1,0 +1,28 @@
+{
+  "name": "apply-migration-destructive",
+  "hook_event": "PreToolUse",
+  "tool": "apply_migration",
+  "category": "destructive",
+  "gate": "pre-migration-destructive-guard",
+  "description": "Supabase apply_migration MCP call whose SQL is destructive. The migration guard scans every string field of tool_input and must BLOCK (exit 2).",
+  "stdin": {
+    "session_id": "00000000-0000-4000-8000-0000000000a6",
+    "transcript_path": "/tmp/transcript.jsonl",
+    "cwd": "/workspace/repo",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "mcp__31fc416e9d2c1a__apply_migration",
+    "tool_input": {
+      "project_id": "deadbeefcafe0001",
+      "name": "drop_legacy_accounts",
+      "query": "DROP TABLE legacy_accounts;"
+    }
+  },
+  "stdin_b64": null,
+  "expect": {
+    "exit_code": 2,
+    "stdout": "",
+    "stderr_contains": "BLOCKED",
+    "side_effects": []
+  },
+  "provenance": "Claude Code PreToolUse envelope for matcher mcp__31fc416e*apply_migration (.claude/settings.json); expectation from scripts/hooks/pre-migration-destructive-guard.ps1 (live Windows session 2026-06-13)."
+}

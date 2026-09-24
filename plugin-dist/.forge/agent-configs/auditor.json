@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0.0",
+  "agent": "auditor",
+  "config": {
+    "tripwire_categories": ["fabrication", "mode-filter", "public-lang", "api-key", "sparse-data", "compliance"]
+  },
+  "budget_cents_per_month": 300,
+  "overage_policy": "hard_stop"
+}

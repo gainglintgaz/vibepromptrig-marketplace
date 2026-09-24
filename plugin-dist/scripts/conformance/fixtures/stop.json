@@ -1,0 +1,22 @@
+{
+  "name": "stop",
+  "hook_event": "Stop",
+  "tool": null,
+  "category": "lifecycle",
+  "gate": "session-guard-stop",
+  "description": "Stop envelope (stop_hook_active guards re-entrancy). session-guard releases the lock if owned and exits 0.",
+  "stdin": {
+    "session_id": "00000000-0000-4000-8000-0000000000b2",
+    "transcript_path": "/tmp/transcript.jsonl",
+    "hook_event_name": "Stop",
+    "stop_hook_active": false
+  },
+  "stdin_b64": null,
+  "expect": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr_contains": null,
+    "side_effects": ["may remove .claude/.session-lock.json if owned"]
+  },
+  "provenance": "Claude Code Stop envelope; field contract verified against scripts/hooks/session-guard.ps1 -Event stop + scripts/post-session-enforcer.ps1 (live Windows session 2026-06-13)."
+}

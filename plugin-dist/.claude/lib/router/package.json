@@ -1,0 +1,24 @@
+{
+  "name": "@vibepromptrig/router",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "description": "v5.0 provider abstraction: route() per task-category with budget hard-stop (A9) + config-run provenance (A8). Arch 9d7294c.",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test dist/*.test.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "@google/genai": "^2.7.0",
+    "openai": "^6.41.0",
+    "proper-lockfile": "^4.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/proper-lockfile": "^4.1.4",
+    "typescript": "^5.7.2"
+  }
+}

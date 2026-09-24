@@ -1,0 +1,14 @@
+{
+  "name": "vibepromptrig",
+  "owner": {
+    "name": "gainglintgaz"
+  },
+  "description": "VibePromptRig: reusable development workflows, project setup, compact rules, and verification tools for Claude Code.",
+  "plugins": [
+    {
+      "name": "vibepromptrig",
+      "source": "./plugin-dist",
+      "description": "VibePromptRig 5.1.4: agents, skills, compact Context V2 cards, hooks, and forge tools from the curated plugin-dist directory."
+    }
+  ]
+}

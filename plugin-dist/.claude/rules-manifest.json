@@ -1,0 +1,2191 @@
+{
+  "schema_version": 2,
+  "version": "2.0.2",
+  "generated": "2026-09-12",
+  "description": "Canonical VibePromptRig context contract extending the v1 bucket/lesson registry without changing legacy identifiers.",
+  "safeguards_map_version": "1.1.0",
+  "buckets": {
+    "A": {
+      "description": "Always-on, no paths: frontmatter, loads every session",
+      "files": [
+        "vibe-standard.md",
+        "execution.md",
+        "secrets-handling.md",
+        "data-protection.md",
+        "privacy.md",
+        "architect-first.md",
+        "senior-council.md",
+        "lessons-critical.md",
+        "gear-shift.md",
+        "completion-truth-contract.md"
+      ]
+    },
+    "B": {
+      "description": "Code-touch triggered, loads when Claude reads matching files",
+      "files": [
+        "discovery-protocol.md",
+        "data-citizenship.md",
+        "two-way-traceability.md",
+        "testing-strategy.md",
+        "migration-strategy.md",
+        "auth.md",
+        "webhook-handling.md",
+        "data-integrity.md",
+        "error-monitoring.md",
+        "accessibility.md",
+        "performance.md",
+        "design-system.md",
+        "ai-native.md",
+        "agent-native-spine.md",
+        "enforcement-first.md",
+        "feature-flags.md",
+        "email-deliverability.md",
+        "observability.md",
+        "composable-outputs.md",
+        "wired-not-orphaned.md"
+      ]
+    },
+    "C": {
+      "description": "Reference, narrow paths, domain-specific",
+      "files": [
+        "reference/lessons-archive.md",
+        "hostile-architect.md",
+        "compliance.md",
+        "ai-first-principles.md",
+        "aggregate-design.md",
+        "data-flywheel.md",
+        "self-reflection.md",
+        "consulting.md",
+        "stack-optimizer.md",
+        "mcp-servers.md",
+        "tech-defaults.md",
+        "seo.md",
+        "localization.md",
+        "domain-primers/finance.md",
+        "domain-primers/saas.md",
+        "domain-primers/bookkeeping.md",
+        "domain-primers/generic.md",
+        "completion-truth-contract.md"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "id": "VF-RULE-ACCESSIBILITY",
+      "legacy_file": "accessibility.md",
+      "source": "docs/rules-reference/factory/accessibility.md",
+      "summary": "Safeguards retained from accessibility.",
+      "card": ".forge/context/rules/ui-quality.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#accessibility",
+      "applicability": {
+        "intents": [
+          "ui"
+        ],
+        "paths": [
+          "src/**/*.tsx",
+          "src/**/*.jsx",
+          "src/**/*.vue",
+          "src/**/*.svelte",
+          "app/**",
+          "components/**"
+        ],
+        "capabilities": [
+          "ui"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "axe-core CI gate (project-applied) + WCAG checklist at the SS9 audit gate",
+        "coverage_limit": "Named review is process enforcement, not runtime authorization."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "ui-quality"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-AGENT-NATIVE-SPINE",
+      "legacy_file": "agent-native-spine.md",
+      "source": "docs/rules-reference/factory/agent-native-spine.md",
+      "summary": "Safeguards retained from agent-native-spine.",
+      "card": ".forge/context/rules/ai-and-agent-safety.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#agent-native-spine",
+      "applicability": {
+        "intents": [
+          "ai"
+        ],
+        "paths": [
+          "**/*ai*",
+          "**/*agent*",
+          "supabase/functions/**"
+        ],
+        "capabilities": [
+          "ai"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "Named process gate: architect-first.md probe + discovery-protocol.md persona review must answer SS1-SS3 before code. GAP: no mechanical verifier in v0.1 (v0.2 north-star in SS6).",
+        "coverage_limit": "Named review is process enforcement, not runtime authorization."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "ai-and-agent-safety"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-AGGREGATE-DESIGN",
+      "legacy_file": "aggregate-design.md",
+      "source": "docs/rules-reference/factory/aggregate-design.md",
+      "summary": "Safeguards retained from aggregate-design.",
+      "card": ".forge/context/rules/data-and-finance-truth.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#aggregate-design",
+      "applicability": {
+        "intents": [
+          "finance"
+        ],
+        "paths": [
+          "supabase/**",
+          "db/**",
+          "**/*finance*",
+          "**/*tax*"
+        ],
+        "capabilities": [
+          "data"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "SS7.2 render_threshold_met merge-block tripwire (project-applied) + SS8 DoD checklist",
+        "coverage_limit": "Named review is process enforcement, not runtime authorization."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "data-and-finance-truth"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-AI-FIRST-PRINCIPLES",
+      "legacy_file": "ai-first-principles.md",
+      "source": "docs/rules-reference/factory/ai-first-principles.md",
+      "summary": "Safeguards retained from ai-first-principles.",
+      "card": ".forge/context/rules/ai-and-agent-safety.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#ai-first-principles",
+      "applicability": {
+        "intents": [
+          "ai"
+        ],
+        "paths": [
+          "**/*ai*",
+          "**/*agent*",
+          "supabase/functions/**"
+        ],
+        "capabilities": [
+          "ai"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 3,
+        "kind": "advisory",
+        "reference": "Legacy frontmatter has no enforcement reference.",
+        "coverage_limit": "Advisory only."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "ai-and-agent-safety"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-AI-NATIVE",
+      "legacy_file": "ai-native.md",
+      "source": "docs/rules-reference/factory/ai-native.md",
+      "summary": "Safeguards retained from ai-native.",
+      "card": ".forge/context/rules/ai-and-agent-safety.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#ai-native",
+      "applicability": {
+        "intents": [
+          "ai"
+        ],
+        "paths": [
+          "**/*ai*",
+          "**/*agent*",
+          "supabase/functions/**"
+        ],
+        "capabilities": [
+          "ai"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [
+        "VF-RULE-PRIVACY",
+        "VF-RULE-DATA-INTEGRITY",
+        "VF-RULE-TWO-WAY-TRACEABILITY"
+      ],
+      "enforcement": {
+        "tier": 1,
+        "kind": "mechanical",
+        "reference": "agent-schemas/ai-employee.schema.json via scripts/validate-agent-schemas.ps1 + in-rule SS8 tripwires",
+        "coverage_limit": "Declared gate still requires seeded pass/fail proof and actual caller wiring."
+      },
+      "replacement": {
+        "outcome": "mechanically_enforced",
+        "card_ids": [
+          "ai-and-agent-safety"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-ARCHITECT-FIRST",
+      "legacy_file": "architect-first.md",
+      "source": "docs/rules-reference/factory/architect-first.md",
+      "summary": "Safeguards retained from architect-first.",
+      "card": ".forge/context/rules/architecture-and-risk.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#architect-first",
+      "applicability": {
+        "intents": [
+          "architecture"
+        ],
+        "paths": [],
+        "capabilities": [],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 1,
+        "kind": "mechanical",
+        "reference": "scripts/templates/shared/.githooks/commit-msg Gate 1 (SS9 soft gate, inline bash, cross-OS; the same-named scripts/hooks/pre-feat-commit-architecture-gate.ps1 is a superseded orphan wired nowhere) + scripts/verifiers/verify-foundational-requirements.mjs (SS0.5 inception foundational-requirements gate, forge doctor)",
+        "coverage_limit": "Declared gate still requires seeded pass/fail proof and actual caller wiring."
+      },
+      "replacement": {
+        "outcome": "mechanically_enforced",
+        "card_ids": [
+          "architecture-and-risk"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-AUTH",
+      "legacy_file": "auth.md",
+      "source": "docs/rules-reference/factory/auth.md",
+      "summary": "Safeguards retained from auth.",
+      "card": ".forge/context/rules/auth-and-privacy.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#auth",
+      "applicability": {
+        "intents": [
+          "auth"
+        ],
+        "paths": [
+          "**/auth/**",
+          "**/login*",
+          "**/signup*"
+        ],
+        "capabilities": [
+          "auth"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [
+        "VF-RULE-SECRETS-HANDLING",
+        "VF-RULE-PRIVACY"
+      ],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "privacy.md pre-launch security checklist + lessons #33 enrollment+enforcement DoD (reviewer veto)",
+        "coverage_limit": "Named review is process enforcement, not runtime authorization."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "auth-and-privacy"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-COMPLIANCE",
+      "legacy_file": "compliance.md",
+      "source": "docs/rules-reference/factory/compliance.md",
+      "summary": "Safeguards retained from compliance.",
+      "card": ".forge/context/rules/auth-and-privacy.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#compliance",
+      "applicability": {
+        "intents": [
+          "auth",
+          "finance"
+        ],
+        "paths": [
+          "**/auth/**",
+          "**/login*",
+          "**/signup*",
+          "supabase/**",
+          "db/**",
+          "**/*finance*",
+          "**/*tax*"
+        ],
+        "capabilities": [
+          "auth",
+          "data"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "SS9 pre-launch checklist + SS10 attorney gate (human veto) + compliance_audit_log pattern",
+        "coverage_limit": "Named review is process enforcement, not runtime authorization."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "auth-and-privacy",
+          "data-and-finance-truth",
+          "completion-claims"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-COMPOSABLE-OUTPUTS",
+      "legacy_file": "composable-outputs.md",
+      "source": "docs/rules-reference/factory/composable-outputs.md",
+      "summary": "Safeguards retained from composable-outputs.",
+      "card": ".forge/context/rules/ai-and-agent-safety.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#composable-outputs",
+      "applicability": {
+        "intents": [
+          "ai"
+        ],
+        "paths": [
+          "**/*ai*",
+          "**/*agent*",
+          "supabase/functions/**"
+        ],
+        "capabilities": [
+          "ai"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [
+        "VF-RULE-AI-NATIVE",
+        "VF-RULE-TWO-WAY-TRACEABILITY"
+      ],
+      "enforcement": {
+        "tier": 1,
+        "kind": "mechanical",
+        "reference": "scripts/verifiers/verify-traceability.ps1 (forge doctor, FAIL mode) + agent-schemas/composed-output.schema.json",
+        "coverage_limit": "Declared gate still requires seeded pass/fail proof and actual caller wiring."
+      },
+      "replacement": {
+        "outcome": "mechanically_enforced",
+        "card_ids": [
+          "ai-and-agent-safety"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-CONSULTING",
+      "legacy_file": "consulting.md",
+      "source": "docs/rules-reference/factory/consulting.md",
+      "summary": "Safeguards retained from consulting.",
+      "card": ".forge/context/rules/scope-and-preservation.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#consulting",
+      "applicability": {
+        "intents": [
+          "all"
+        ],
+        "paths": [],
+        "capabilities": [],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 3,
+        "kind": "advisory",
+        "reference": "Legacy frontmatter has no enforcement reference.",
+        "coverage_limit": "Advisory only."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "scope-and-preservation"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-DATA-CITIZENSHIP",
+      "legacy_file": "data-citizenship.md",
+      "source": "docs/rules-reference/factory/data-citizenship.md",
+      "summary": "Safeguards retained from data-citizenship.",
+      "card": ".forge/context/rules/data-and-finance-truth.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#data-citizenship",
+      "applicability": {
+        "intents": [
+          "finance"
+        ],
+        "paths": [
+          "supabase/**",
+          "db/**",
+          "**/*finance*",
+          "**/*tax*"
+        ],
+        "capabilities": [
+          "data"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "SS4 pre-commit grep tripwires (project-applied) + Data Citizen council veto (senior-council.md)",
+        "coverage_limit": "Named review is process enforcement, not runtime authorization."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "data-and-finance-truth"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-DATA-FLYWHEEL",
+      "legacy_file": "data-flywheel.md",
+      "source": "docs/rules-reference/factory/data-flywheel.md",
+      "summary": "Safeguards retained from data-flywheel.",
+      "card": ".forge/context/rules/ai-and-agent-safety.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#data-flywheel",
+      "applicability": {
+        "intents": [
+          "ai"
+        ],
+        "paths": [
+          "**/*ai*",
+          "**/*agent*",
+          "supabase/functions/**"
+        ],
+        "capabilities": [
+          "ai"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 3,
+        "kind": "advisory",
+        "reference": "Legacy frontmatter has no enforcement reference.",
+        "coverage_limit": "Advisory only."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "ai-and-agent-safety"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-DATA-INTEGRITY",
+      "legacy_file": "data-integrity.md",
+      "source": "docs/rules-reference/factory/data-integrity.md",
+      "summary": "Safeguards retained from data-integrity.",
+      "card": ".forge/context/rules/data-and-finance-truth.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#data-integrity",
+      "applicability": {
+        "intents": [
+          "finance"
+        ],
+        "paths": [
+          "supabase/**",
+          "db/**",
+          "**/*finance*",
+          "**/*tax*"
+        ],
+        "capabilities": [
+          "data"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [
+        "VF-RULE-DATA-CITIZENSHIP"
+      ],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "ai-native.md SS5 DMG function-layer linkage + Integrity-First DoD checklist (reviewer agent veto)",
+        "coverage_limit": "Named review is process enforcement, not runtime authorization."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "data-and-finance-truth"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-DATA-PROTECTION",
+      "legacy_file": "data-protection.md",
+      "source": "docs/rules-reference/factory/data-protection.md",
+      "summary": "Safeguards retained from data-protection.",
+      "card": ".forge/context/rules/safe-actions.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#data-protection",
+      "applicability": {
+        "intents": [
+          "auth"
+        ],
+        "paths": [
+          "**/auth/**",
+          "**/login*",
+          "**/signup*"
+        ],
+        "capabilities": [
+          "auth"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 1,
+        "kind": "mechanical",
+        "reference": "scripts/hooks/pre-bash-destructive-sql-guard.ps1 + scripts/hooks/pre-migration-destructive-guard.ps1",
+        "coverage_limit": "Declared gate still requires seeded pass/fail proof and actual caller wiring."
+      },
+      "replacement": {
+        "outcome": "mechanically_enforced",
+        "card_ids": [
+          "safe-actions",
+          "auth-and-privacy"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-DESIGN-SYSTEM",
+      "legacy_file": "design-system.md",
+      "source": "docs/rules-reference/factory/design-system.md",
+      "summary": "Safeguards retained from design-system.",
+      "card": ".forge/context/rules/ui-quality.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#design-system",
+      "applicability": {
+        "intents": [
+          "ui"
+        ],
+        "paths": [
+          "src/**/*.tsx",
+          "src/**/*.jsx",
+          "src/**/*.vue",
+          "src/**/*.svelte",
+          "app/**",
+          "components/**"
+        ],
+        "capabilities": [
+          "ui"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 1,
+        "kind": "mechanical",
+        "reference": "agent-schemas/design-system.schema.json via scripts/validate-agent-schemas.ps1 + in-rule SS8 tripwires",
+        "coverage_limit": "Declared gate still requires seeded pass/fail proof and actual caller wiring."
+      },
+      "replacement": {
+        "outcome": "mechanically_enforced",
+        "card_ids": [
+          "ui-quality"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-DISCOVERY-PROTOCOL",
+      "legacy_file": "discovery-protocol.md",
+      "source": "docs/rules-reference/factory/discovery-protocol.md",
+      "summary": "Safeguards retained from discovery-protocol.",
+      "card": ".forge/context/rules/architecture-and-risk.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#discovery-protocol",
+      "applicability": {
+        "intents": [
+          "architecture"
+        ],
+        "paths": [],
+        "capabilities": [],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 1,
+        "kind": "mechanical",
+        "reference": "scripts/hooks/pre-feat-commit-architecture-gate.ps1 (Interlock 1, union markers)",
+        "coverage_limit": "Declared gate still requires seeded pass/fail proof and actual caller wiring."
+      },
+      "replacement": {
+        "outcome": "mechanically_enforced",
+        "card_ids": [
+          "architecture-and-risk"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-DOMAIN-PRIMERS-BOOKKEEPING",
+      "legacy_file": "domain-primers/bookkeeping.md",
+      "source": "docs/rules-reference/factory/domain-primers/bookkeeping.md",
+      "summary": "Safeguards retained from domain-primers/bookkeeping.",
+      "card": ".forge/context/rules/data-and-finance-truth.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#domain-primers-bookkeeping",
+      "applicability": {
+        "intents": [
+          "finance"
+        ],
+        "paths": [
+          "supabase/**",
+          "db/**",
+          "**/*finance*",
+          "**/*tax*"
+        ],
+        "capabilities": [
+          "data"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 3,
+        "kind": "advisory",
+        "reference": "Legacy frontmatter has no enforcement reference.",
+        "coverage_limit": "Advisory only."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "data-and-finance-truth"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "reference",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-DOMAIN-PRIMERS-FINANCE",
+      "legacy_file": "domain-primers/finance.md",
+      "source": "docs/rules-reference/factory/domain-primers/finance.md",
+      "summary": "Safeguards retained from domain-primers/finance.",
+      "card": ".forge/context/rules/data-and-finance-truth.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#domain-primers-finance",
+      "applicability": {
+        "intents": [
+          "finance"
+        ],
+        "paths": [
+          "supabase/**",
+          "db/**",
+          "**/*finance*",
+          "**/*tax*"
+        ],
+        "capabilities": [
+          "data"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 3,
+        "kind": "advisory",
+        "reference": "Legacy frontmatter has no enforcement reference.",
+        "coverage_limit": "Advisory only."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "data-and-finance-truth"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "reference",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-DOMAIN-PRIMERS-GENERIC",
+      "legacy_file": "domain-primers/generic.md",
+      "source": "docs/rules-reference/factory/domain-primers/generic.md",
+      "summary": "Safeguards retained from domain-primers/generic.",
+      "card": ".forge/context/rules/architecture-and-risk.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#domain-primers-generic",
+      "applicability": {
+        "intents": [
+          "architecture"
+        ],
+        "paths": [],
+        "capabilities": [],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 3,
+        "kind": "advisory",
+        "reference": "Legacy frontmatter has no enforcement reference.",
+        "coverage_limit": "Advisory only."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "architecture-and-risk"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "reference",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-DOMAIN-PRIMERS-SAAS",
+      "legacy_file": "domain-primers/saas.md",
+      "source": "docs/rules-reference/factory/domain-primers/saas.md",
+      "summary": "Safeguards retained from domain-primers/saas.",
+      "card": ".forge/context/rules/auth-and-privacy.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#domain-primers-saas",
+      "applicability": {
+        "intents": [
+          "auth"
+        ],
+        "paths": [
+          "**/auth/**",
+          "**/login*",
+          "**/signup*"
+        ],
+        "capabilities": [
+          "auth"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 3,
+        "kind": "advisory",
+        "reference": "Legacy frontmatter has no enforcement reference.",
+        "coverage_limit": "Advisory only."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "auth-and-privacy"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "reference",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-EMAIL-DELIVERABILITY",
+      "legacy_file": "email-deliverability.md",
+      "source": "docs/rules-reference/factory/email-deliverability.md",
+      "summary": "Safeguards retained from email-deliverability.",
+      "card": ".forge/context/rules/external-boundaries.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#email-deliverability",
+      "applicability": {
+        "intents": [
+          "integration"
+        ],
+        "paths": [
+          "**/*webhook*",
+          "**/*email*",
+          "**/*deploy*"
+        ],
+        "capabilities": [
+          "external-integrations"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "SPF/DKIM/DMARC pre-launch checklist (SS9 audit gate)",
+        "coverage_limit": "Named review is process enforcement, not runtime authorization."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "external-boundaries"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-ENFORCEMENT-FIRST",
+      "legacy_file": "enforcement-first.md",
+      "source": "docs/rules-reference/factory/enforcement-first.md",
+      "summary": "Safeguards retained from enforcement-first.",
+      "card": ".forge/context/rules/testing-and-evidence.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#enforcement-first",
+      "applicability": {
+        "intents": [
+          "test",
+          "review"
+        ],
+        "paths": [],
+        "capabilities": [],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 1,
+        "kind": "mechanical",
+        "reference": "scripts/verifiers/verify-enforcement.ps1 (forge doctor, FAIL mode)",
+        "coverage_limit": "Declared gate still requires seeded pass/fail proof and actual caller wiring."
+      },
+      "replacement": {
+        "outcome": "mechanically_enforced",
+        "card_ids": [
+          "testing-and-evidence"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.1.0",
+      "reference_version": "1.1.0"
+    },
+    {
+      "id": "VF-RULE-ERROR-MONITORING",
+      "legacy_file": "error-monitoring.md",
+      "source": "docs/rules-reference/factory/error-monitoring.md",
+      "summary": "Safeguards retained from error-monitoring.",
+      "card": ".forge/context/rules/testing-and-evidence.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#error-monitoring",
+      "applicability": {
+        "intents": [
+          "test",
+          "review"
+        ],
+        "paths": [],
+        "capabilities": [],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "in-rule Sentry/PII-scrub checklist enforced at the SS9 audit gate",
+        "coverage_limit": "Named review is process enforcement, not runtime authorization."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "testing-and-evidence"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.1.0",
+      "reference_version": "1.1.0"
+    },
+    {
+      "id": "VF-RULE-EXECUTION",
+      "legacy_file": "execution.md",
+      "source": "docs/rules-reference/factory/execution.md",
+      "summary": "Safeguards retained from execution.",
+      "card": ".forge/context/rules/scope-and-preservation.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#execution",
+      "applicability": {
+        "intents": [
+          "architecture",
+          "test",
+          "review"
+        ],
+        "paths": [],
+        "capabilities": [],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 1,
+        "kind": "mechanical",
+        "reference": "scripts/hooks/pre-feat-commit-architecture-gate.ps1 (Phase 0 Interlock 1)",
+        "coverage_limit": "Declared gate still requires seeded pass/fail proof and actual caller wiring."
+      },
+      "replacement": {
+        "outcome": "mechanically_enforced",
+        "card_ids": [
+          "scope-and-preservation",
+          "architecture-and-risk",
+          "testing-and-evidence"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-FEATURE-FLAGS",
+      "legacy_file": "feature-flags.md",
+      "source": "docs/rules-reference/factory/feature-flags.md",
+      "summary": "Safeguards retained from feature-flags.",
+      "card": ".forge/context/rules/external-boundaries.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#feature-flags",
+      "applicability": {
+        "intents": [
+          "integration"
+        ],
+        "paths": [
+          "**/*webhook*",
+          "**/*email*",
+          "**/*deploy*"
+        ],
+        "capabilities": [
+          "external-integrations"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "written-expiration lifecycle + monthly cleanup audit (SS9 audit gate)",
+        "coverage_limit": "Named review is process enforcement, not runtime authorization."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "external-boundaries"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-GEAR-SHIFT",
+      "legacy_file": "gear-shift.md",
+      "source": "docs/rules-reference/factory/gear-shift.md",
+      "summary": "Safeguards retained from gear-shift.",
+      "card": ".forge/context/rules/delegation.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#gear-shift",
+      "applicability": {
+        "intents": [
+          "all"
+        ],
+        "paths": [],
+        "capabilities": [],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": ".claude/lib/router/src/budget.ts checkAndReserve (per-task USD cap ONLY; the per-session cap declared in .claude/model-router.json hard_caps is NOT yet enforced) + auto-route protocol (this file)",
+        "coverage_limit": "Named review is process enforcement, not runtime authorization."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "delegation"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-HOSTILE-ARCHITECT",
+      "legacy_file": "hostile-architect.md",
+      "source": "docs/rules-reference/factory/hostile-architect.md",
+      "summary": "Safeguards retained from hostile-architect.",
+      "card": ".forge/context/rules/architecture-and-risk.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#hostile-architect",
+      "applicability": {
+        "intents": [
+          "architecture"
+        ],
+        "paths": [],
+        "capabilities": [],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "/architect-probe persona 5 + QA matrix consumed by SS5 review gates (hostile-architect agent verdict)",
+        "coverage_limit": "Named review is process enforcement, not runtime authorization."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "architecture-and-risk"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-LESSONS-CRITICAL",
+      "legacy_file": "lessons-critical.md",
+      "source": "docs/rules-reference/factory/lessons-critical.md",
+      "summary": "Safeguards retained from lessons-critical.",
+      "card": ".forge/context/rules/scope-and-preservation.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#lessons-critical",
+      "applicability": {
+        "intents": [
+          "all"
+        ],
+        "paths": [],
+        "capabilities": [],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 3,
+        "kind": "advisory",
+        "reference": "Legacy frontmatter has no enforcement reference.",
+        "coverage_limit": "Advisory only."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "scope-and-preservation"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-LOCALIZATION",
+      "legacy_file": "localization.md",
+      "source": "docs/rules-reference/factory/localization.md",
+      "summary": "Safeguards retained from localization.",
+      "card": ".forge/context/rules/ui-quality.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#localization",
+      "applicability": {
+        "intents": [
+          "ui"
+        ],
+        "paths": [
+          "src/**/*.tsx",
+          "src/**/*.jsx",
+          "src/**/*.vue",
+          "src/**/*.svelte",
+          "app/**",
+          "components/**"
+        ],
+        "capabilities": [
+          "ui"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 3,
+        "kind": "advisory",
+        "reference": "Legacy frontmatter has no enforcement reference.",
+        "coverage_limit": "Advisory only."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "ui-quality"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-MCP-SERVERS",
+      "legacy_file": "mcp-servers.md",
+      "source": "docs/rules-reference/factory/mcp-servers.md",
+      "summary": "Safeguards retained from mcp-servers.",
+      "card": ".forge/context/rules/external-boundaries.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#mcp-servers",
+      "applicability": {
+        "intents": [
+          "integration"
+        ],
+        "paths": [
+          "**/*webhook*",
+          "**/*email*",
+          "**/*deploy*"
+        ],
+        "capabilities": [
+          "external-integrations"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 3,
+        "kind": "advisory",
+        "reference": "Legacy frontmatter has no enforcement reference.",
+        "coverage_limit": "Advisory only."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "external-boundaries"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-MIGRATION-STRATEGY",
+      "legacy_file": "migration-strategy.md",
+      "source": "docs/rules-reference/factory/migration-strategy.md",
+      "summary": "Safeguards retained from migration-strategy.",
+      "card": ".forge/context/rules/safe-actions.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#migration-strategy",
+      "applicability": {
+        "intents": [
+          "test",
+          "review"
+        ],
+        "paths": [],
+        "capabilities": [],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [
+        "VF-RULE-DATA-PROTECTION",
+        "VF-RULE-TESTING-STRATEGY"
+      ],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "scripts/hooks/pre-migration-destructive-guard.ps1 + data-protection.md SS4.3 advisors-after-migration",
+        "coverage_limit": "Named review is process enforcement, not runtime authorization."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "safe-actions",
+          "testing-and-evidence"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-OBSERVABILITY",
+      "legacy_file": "observability.md",
+      "source": "docs/rules-reference/factory/observability.md",
+      "summary": "Safeguards retained from observability.",
+      "card": ".forge/context/rules/testing-and-evidence.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#observability",
+      "applicability": {
+        "intents": [
+          "test",
+          "review"
+        ],
+        "paths": [],
+        "capabilities": [],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "structured-logging/PII-hash checklist at the SS9 audit gate",
+        "coverage_limit": "Named review is process enforcement, not runtime authorization."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "testing-and-evidence"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.1.0",
+      "reference_version": "1.1.0"
+    },
+    {
+      "id": "VF-RULE-PERFORMANCE",
+      "legacy_file": "performance.md",
+      "source": "docs/rules-reference/factory/performance.md",
+      "summary": "Safeguards retained from performance.",
+      "card": ".forge/context/rules/ui-quality.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#performance",
+      "applicability": {
+        "intents": [
+          "ui"
+        ],
+        "paths": [
+          "src/**/*.tsx",
+          "src/**/*.jsx",
+          "src/**/*.vue",
+          "src/**/*.svelte",
+          "app/**",
+          "components/**"
+        ],
+        "capabilities": [
+          "ui"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "Lighthouse CI budget gates (project-applied) + CWV checklist at the SS9 audit gate",
+        "coverage_limit": "Named review is process enforcement, not runtime authorization."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "ui-quality"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-PRIVACY",
+      "legacy_file": "privacy.md",
+      "source": "docs/rules-reference/factory/privacy.md",
+      "summary": "Safeguards retained from privacy.",
+      "card": ".forge/context/rules/auth-and-privacy.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#privacy",
+      "applicability": {
+        "intents": [
+          "auth"
+        ],
+        "paths": [
+          "**/auth/**",
+          "**/login*",
+          "**/signup*"
+        ],
+        "capabilities": [
+          "auth"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "scripts/signal-classifier-tier1.ps1 PII scrub + pre-launch RLS/security checklist (auditor agent veto)",
+        "coverage_limit": "Named review is process enforcement, not runtime authorization."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "auth-and-privacy"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-REFERENCE-LESSONS-ARCHIVE",
+      "legacy_file": "reference/lessons-archive.md",
+      "source": "docs/rules-reference/factory/reference/lessons-archive.md",
+      "summary": "Safeguards retained from reference/lessons-archive.",
+      "card": ".forge/context/rules/scope-and-preservation.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#reference-lessons-archive",
+      "applicability": {
+        "intents": [
+          "all"
+        ],
+        "paths": [],
+        "capabilities": [],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 3,
+        "kind": "advisory",
+        "reference": "Legacy frontmatter has no enforcement reference.",
+        "coverage_limit": "Advisory only."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "scope-and-preservation"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "reference",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-SECRETS-HANDLING",
+      "legacy_file": "secrets-handling.md",
+      "source": "docs/rules-reference/factory/secrets-handling.md",
+      "summary": "Safeguards retained from secrets-handling.",
+      "card": ".forge/context/rules/secrets-and-sensitive-data.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#secrets-handling",
+      "applicability": {
+        "intents": [
+          "all"
+        ],
+        "paths": [],
+        "capabilities": [],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 1,
+        "kind": "mechanical",
+        "reference": "scripts/forge/config-lib.ps1 token-scan (A10) + SS11 tripwire greps",
+        "coverage_limit": "Declared gate still requires seeded pass/fail proof and actual caller wiring."
+      },
+      "replacement": {
+        "outcome": "mechanically_enforced",
+        "card_ids": [
+          "secrets-and-sensitive-data"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-SELF-REFLECTION",
+      "legacy_file": "self-reflection.md",
+      "source": "docs/rules-reference/factory/self-reflection.md",
+      "summary": "Safeguards retained from self-reflection.",
+      "card": ".forge/context/rules/scope-and-preservation.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#self-reflection",
+      "applicability": {
+        "intents": [
+          "all"
+        ],
+        "paths": [],
+        "capabilities": [],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 1,
+        "kind": "mechanical",
+        "reference": "scripts/signal-classifier-tier1.ps1 (UserPromptSubmit hook) + scripts/signal-batch-analyzer.ps1 (Stop hook)",
+        "coverage_limit": "Declared gate still requires seeded pass/fail proof and actual caller wiring."
+      },
+      "replacement": {
+        "outcome": "mechanically_enforced",
+        "card_ids": [
+          "scope-and-preservation"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-SENIOR-COUNCIL",
+      "legacy_file": "senior-council.md",
+      "source": "docs/rules-reference/factory/senior-council.md",
+      "summary": "Safeguards retained from senior-council.",
+      "card": ".forge/context/rules/architecture-and-risk.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#senior-council",
+      "applicability": {
+        "intents": [
+          "architecture"
+        ],
+        "paths": [],
+        "capabilities": [],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "'build approved' keyword gate (founder veto) + arch-gate hook override markers",
+        "coverage_limit": "Named review is process enforcement, not runtime authorization."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "architecture-and-risk"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-SEO",
+      "legacy_file": "seo.md",
+      "source": "docs/rules-reference/factory/seo.md",
+      "summary": "Safeguards retained from seo.",
+      "card": ".forge/context/rules/ui-quality.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#seo",
+      "applicability": {
+        "intents": [
+          "ui"
+        ],
+        "paths": [
+          "src/**/*.tsx",
+          "src/**/*.jsx",
+          "src/**/*.vue",
+          "src/**/*.svelte",
+          "app/**",
+          "components/**"
+        ],
+        "capabilities": [
+          "ui"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 3,
+        "kind": "advisory",
+        "reference": "Legacy frontmatter has no enforcement reference.",
+        "coverage_limit": "Advisory only."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "ui-quality"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-STACK-OPTIMIZER",
+      "legacy_file": "stack-optimizer.md",
+      "source": "docs/rules-reference/factory/stack-optimizer.md",
+      "summary": "Safeguards retained from stack-optimizer.",
+      "card": ".forge/context/rules/external-boundaries.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#stack-optimizer",
+      "applicability": {
+        "intents": [
+          "integration"
+        ],
+        "paths": [
+          "**/*webhook*",
+          "**/*email*",
+          "**/*deploy*"
+        ],
+        "capabilities": [
+          "external-integrations"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 3,
+        "kind": "advisory",
+        "reference": "Legacy frontmatter has no enforcement reference.",
+        "coverage_limit": "Advisory only."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "external-boundaries"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-TECH-DEFAULTS",
+      "legacy_file": "tech-defaults.md",
+      "source": "docs/rules-reference/factory/tech-defaults.md",
+      "summary": "Safeguards retained from tech-defaults.",
+      "card": ".forge/context/rules/portable-delivery.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#tech-defaults",
+      "applicability": {
+        "intents": [
+          "tooling"
+        ],
+        "paths": [
+          "scripts/**",
+          "plugin-dist/**"
+        ],
+        "capabilities": [
+          "factory-tooling"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 3,
+        "kind": "advisory",
+        "reference": "Legacy frontmatter has no enforcement reference.",
+        "coverage_limit": "Advisory only."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "portable-delivery",
+          "scope-and-preservation"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-TESTING-STRATEGY",
+      "legacy_file": "testing-strategy.md",
+      "source": "docs/rules-reference/factory/testing-strategy.md",
+      "summary": "Safeguards retained from testing-strategy.",
+      "card": ".forge/context/rules/testing-and-evidence.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#testing-strategy",
+      "applicability": {
+        "intents": [
+          "test",
+          "review"
+        ],
+        "paths": [],
+        "capabilities": [],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "vibe-standard.md Rule 35 gates 2-4 (tests green before done; tester agent veto)",
+        "coverage_limit": "Named review is process enforcement, not runtime authorization."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "testing-and-evidence"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.1.0",
+      "reference_version": "1.1.0"
+    },
+    {
+      "id": "VF-RULE-TWO-WAY-TRACEABILITY",
+      "legacy_file": "two-way-traceability.md",
+      "source": "docs/rules-reference/factory/two-way-traceability.md",
+      "summary": "Safeguards retained from two-way-traceability.",
+      "card": ".forge/context/rules/data-and-finance-truth.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#two-way-traceability",
+      "applicability": {
+        "intents": [
+          "finance",
+          "ai"
+        ],
+        "paths": [
+          "supabase/**",
+          "db/**",
+          "**/*finance*",
+          "**/*tax*",
+          "**/*ai*",
+          "**/*agent*",
+          "supabase/functions/**"
+        ],
+        "capabilities": [
+          "data",
+          "ai"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "SS6 tripwire greps (project-applied) + execution.md Phase 0 Q12-15 gate",
+        "coverage_limit": "Named review is process enforcement, not runtime authorization."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "data-and-finance-truth",
+          "ai-and-agent-safety"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-VIBE-STANDARD",
+      "legacy_file": "vibe-standard.md",
+      "source": "docs/rules-reference/factory/vibe-standard.md",
+      "summary": "Safeguards retained from vibe-standard.",
+      "card": ".forge/context/rules/scope-and-preservation.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#vibe-standard",
+      "applicability": {
+        "intents": [
+          "all"
+        ],
+        "paths": [],
+        "capabilities": [],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 1,
+        "kind": "mechanical",
+        "reference": "scripts/hooks/pre-feat-commit-architecture-gate.ps1 + scripts/test-factory.ps1 (Rule 35 five-gate DoD)",
+        "coverage_limit": "Declared gate still requires seeded pass/fail proof and actual caller wiring."
+      },
+      "replacement": {
+        "outcome": "mechanically_enforced",
+        "card_ids": [
+          "scope-and-preservation"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-WEBHOOK-HANDLING",
+      "legacy_file": "webhook-handling.md",
+      "source": "docs/rules-reference/factory/webhook-handling.md",
+      "summary": "Safeguards retained from webhook-handling.",
+      "card": ".forge/context/rules/external-boundaries.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#webhook-handling",
+      "applicability": {
+        "intents": [
+          "integration"
+        ],
+        "paths": [
+          "**/*webhook*",
+          "**/*email*",
+          "**/*deploy*"
+        ],
+        "capabilities": [
+          "external-integrations"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [
+        "VF-RULE-SECRETS-HANDLING"
+      ],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "in-rule idempotency/signature checklist enforced at the SS9 audit gate (auditor agent veto)",
+        "coverage_limit": "Named review is process enforcement, not runtime authorization."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "external-boundaries"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-WIRED-NOT-ORPHANED",
+      "legacy_file": "wired-not-orphaned.md",
+      "source": "docs/rules-reference/factory/wired-not-orphaned.md",
+      "summary": "Safeguards retained from wired-not-orphaned.",
+      "card": ".forge/context/rules/scope-and-preservation.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#wired-not-orphaned",
+      "applicability": {
+        "intents": [
+          "tooling",
+          "test",
+          "review"
+        ],
+        "paths": [
+          "scripts/**",
+          "plugin-dist/**"
+        ],
+        "capabilities": [
+          "factory-tooling"
+        ],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [
+        "VF-RULE-TESTING-STRATEGY"
+      ],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": ".forge/cockpit.json proven-not-wired milestone convention (founder review). GAP: SS5 verify-wiring-debt verifier not built (v0.2)",
+        "coverage_limit": "Named review is process enforcement, not runtime authorization."
+      },
+      "replacement": {
+        "outcome": "merged",
+        "card_ids": [
+          "scope-and-preservation",
+          "portable-delivery",
+          "testing-and-evidence"
+        ],
+        "rationale": "Normative behavior is retained in compact cards; long examples remain reference-only."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-COMPLETION-TRUTH-CONTRACT",
+      "legacy_file": "completion-truth-contract.md",
+      "source": "docs/rules-reference/factory/completion-truth-contract.md",
+      "summary": "Scoped evidence and human-only absolute declarations; remote completion safeguards retained.",
+      "card": ".forge/context/rules/completion-claims.md",
+      "reference": "docs/rules-reference/context-v2-safeguards.md#completion-truth-contract",
+      "applicability": {
+        "intents": [
+          "all"
+        ],
+        "paths": [],
+        "capabilities": [],
+        "risks": [
+          "W0",
+          "W1",
+          "W2",
+          "W3"
+        ]
+      },
+      "dependencies": [
+        "VF-RULE-TESTING-STRATEGY"
+      ],
+      "enforcement": {
+        "tier": 1,
+        "kind": "mechanical",
+        "reference": "scripts/completion/*; scripts/templates/shared/.githooks/commit-msg; .github/workflows/factory-release-gate.yml",
+        "coverage_limit": "Mechanical checks cover scanned commit/status text and supplied receipts, not unobserved host behavior or human release approval."
+      },
+      "replacement": {
+        "outcome": "mechanically_enforced",
+        "card_ids": [
+          "completion-claims"
+        ],
+        "rationale": "Retain remote completion-evidence gates and human-only declarations through compact routing; routine reports state evidence and gaps."
+      },
+      "lifecycle": "active",
+      "card_version": "2.0.0",
+      "reference_version": "1.0.0"
+    }
+  ],
+  "selection_requirements": {
+    "baseline": [
+      "VF-RULE-VIBE-STANDARD",
+      "VF-RULE-SECRETS-HANDLING",
+      "VF-RULE-DATA-PROTECTION",
+      "VF-RULE-TESTING-STRATEGY"
+    ],
+    "ui": [
+      "VF-RULE-ACCESSIBILITY",
+      "VF-RULE-DESIGN-SYSTEM",
+      "VF-RULE-TESTING-STRATEGY"
+    ],
+    "auth": [
+      "VF-RULE-AUTH",
+      "VF-RULE-PRIVACY",
+      "VF-RULE-SECRETS-HANDLING",
+      "VF-RULE-TESTING-STRATEGY"
+    ],
+    "finance": [
+      "VF-RULE-DATA-CITIZENSHIP",
+      "VF-RULE-DATA-INTEGRITY",
+      "VF-RULE-TWO-WAY-TRACEABILITY",
+      "VF-RULE-PRIVACY",
+      "VF-RULE-COMPLIANCE",
+      "VF-RULE-TESTING-STRATEGY"
+    ],
+    "unknown": [
+      "VF-RULE-ARCHITECT-FIRST",
+      "VF-RULE-SECRETS-HANDLING",
+      "VF-RULE-DATA-PROTECTION",
+      "VF-RULE-TESTING-STRATEGY"
+    ],
+    "high_risk": [
+      "VF-RULE-ARCHITECT-FIRST",
+      "VF-RULE-DATA-PROTECTION",
+      "VF-RULE-PRIVACY",
+      "VF-RULE-TESTING-STRATEGY"
+    ]
+  },
+  "packet_budgets": {
+    "normal_bytes": 16384,
+    "high_risk_bytes": 24576,
+    "policy": "Refuse the whole packet when required content exceeds the applicable ceiling; never truncate or drop a required safety card."
+  },
+  "lessons": {
+    "critical": [
+      33,
+      50,
+      68,
+      73,
+      74,
+      81,
+      88,
+      93,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102
+    ],
+    "critical_file": "lessons-critical.md",
+    "archive_file": "reference/lessons-archive.md"
+  },
+  "usage_measurement": {
+    "evidence_commit": "2fcc7045497c8d73eaed24efb71661df1b1c663d",
+    "clean_baseline_revision": "019f9f80f7faca5ae148f808b4b557a035b6290e",
+    "evidence_report": "docs/evidence/VF-CONTEXT-V2-evidence-audit.md",
+    "dirty_checkout_observations_preserved_separately": true,
+    "factory_controlled_bytes": "measurable",
+    "estimated_loaded_bytes": "separate",
+    "observed_loaded_bytes": null,
+    "exact_provider_tokens": null,
+    "host_controlled_overhead": null,
+    "child_agent_overhead": null,
+    "next_measurement": {
+      "session_2": [
+        "selected_packet_bytes",
+        "resolver_behavior"
+      ],
+      "adapter_verification": [
+        "effective_instruction_loading_when_exposed"
+      ],
+      "representative_task_verification": [
+        "native_token_cache_counters_when_available"
+      ],
+      "dispatch_verification": [
+        "child_agent_overhead_when_supported_path_is_exercised"
+      ]
+    },
+    "claim": "No provider token or allowance savings are established by this manifest."
+  }
+}

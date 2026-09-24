@@ -1,0 +1,254 @@
+# ARCHITECTURE.md -- <feature or sprint name>
+
+> **Status:** DRAFT pending the project owner's approval | APPROVED <date> | IN PROGRESS | SHIPPED <date>
+> **Owner:** <the project owner> + <agent name if applicable>
+> **Probe:** architect-probe ran on <date>; produced <N> persona questions; <N> assumptions surfaced.
+> **Foundational scope:** <inception (new project/sprint) | feature> -- inception REQUIRES §0 below (the six expensive-to-reverse non-functionals, decided FIRST); feature skips §0.
+
+---
+
+## §0 -- Foundational Requirements (inception only -- new project / new sprint)
+
+> **Decide these BEFORE the six feature personas.** They are the expensive-to-reverse
+> non-functionals -- the ones that, left unstated, surface as a 95%-done retrofit (the
+> Node cross-platform port and the de-personalization scrub were both this exact bug class:
+> Windows/personal defaults baked in silently). Answer all six EXPLICITLY -- never defaulted.
+> Per `architect-first.md` §0.5 + `enforcement-first.md`, an inception artifact that declares
+> `Foundational scope: inception` above MUST carry this section with all six fields filled.
+> Gate: `scripts/verifiers/verify-foundational-requirements.mjs` (forge doctor).
+> Feature-scoped artifacts set `Foundational scope: feature` and omit this section.
+
+- **Target OS / platforms:** <Windows | macOS | Linux | web | mobile -- list EVERY target that must work>
+- **Runtime / language:** <e.g. Node 20+ / Python 3.12 / Deno -- and is it available on ALL the targets above? note how that was verified>
+- **Audience:** <me-only | others -- "others" forces portability + de-personalization from the FIRST commit, never as a retrofit>
+- **Tenancy:** <single | multi -- per VIBE Rule 17; if multi, every UX-affecting value is per-user-configurable from day 1>
+- **Distribution model:** <local | plugin | SaaS | installable -- determines packaging + secrets posture>
+- **Data + privacy boundary:** <what data lives where; what must NEVER leave the device/tenant; which AI/external services see what>
+
+---
+
+## §1 -- Goal
+
+<One paragraph. What the user (the project owner or end customer) will be able to do after this ships that they can't do now. Use the project owner's verbatim words at least once.>
+
+**Verbatim founder request:**
+> <paste the project owner's words exactly here>
+
+---
+
+## §2 -- Personas
+
+Minimum 3 personas (primary + 2 edges). For each: state when they encounter this feature, what they need, what they expect, what they'd complain about.
+
+### P1: <name + role> (primary)
+- **State:** <what they were doing right before this feature appears>
+- **Need:** <the underlying need, not the feature request>
+- **Expects:** <what they'd assume happens>
+- **Complains about:** <what would frustrate them>
+
+### P2: <name + role> (edge: harder usage)
+...
+
+### P3: <name + role> (edge: power user / scale)
+...
+
+---
+
+## §3 -- 9-scenario map (per VIBE Rule 11)
+
+3 common flows + 3 edge cases + 3 adjacent surfaces. Required by `vibe-standard.md` Rule 11. If you can't list 9 concrete scenarios, the feature scope is bare-minimum -- re-scope.
+
+**Common (3):**
+1. <flow 1: who, what they click, what happens, what they see>
+2. <flow 2>
+3. <flow 3>
+
+**Edge cases (3):**
+4. <edge 1: empty state, missing data, error path>
+5. <edge 2: max data, throttle, large scale>
+6. <edge 3: concurrency / second-time / undo>
+
+**Adjacent surfaces (3):**
+7. <surface 1 where this data also appears>
+8. <surface 2>
+9. <surface 3>
+
+---
+
+## §4 -- Two-way data flow (per `two-way-traceability.md`)
+
+### Forward: where do numbers come FROM?
+
+| Surface / number | Source rows (table + column) | Helper (file:line) | Source-kind value |
+|---|---|---|---|
+| <feature element> | <e.g. transactions.amount_cents> | <e.g. src/lib/finance/tax.ts:42> | <e.g. plaid> |
+
+### Reverse: where do numbers GO TO?
+
+For each new source row this feature creates, list every downstream surface that depends on it:
+
+| Source row | Consumer surface(s) |
+|---|---|
+| <e.g. investment_accounts.balance_cents> | NetWorthCard, /networth page, Dashboard top-line, AI insights "Q4 retirement check" |
+
+### Drill-down contract
+
+- Every rendered number has a `<SourceTrace>` (or equivalent) that opens the contributing rows
+- Every source row has a `<ConsumersIndex>` that shows where it's used
+- AI outputs that cite numbers log to `ai_output_provenance` with `sources[]`
+
+---
+
+## §5 -- Stakeholder concerns
+
+One paragraph per stakeholder. Captures the persona-probe findings.
+
+### Senior architect
+<system design considerations: ownership, integration points, scale architecture, observability>
+
+### Senior engineer
+<implementation reality: edge cases, failure modes, idempotency, dependencies, test approach>
+
+### Domain expert (<CPA / lawyer / auditor / etc>)
+<regulatory, compliance, professional-standards considerations>
+
+### End user
+<literal usage expectations, mental models from competing products, anticipated complaints>
+
+### Hostile architect (per `hostile-architect.md`)
+<second-time use, scale, malicious user, edge data, 8-phase stress test summary>
+
+### Auditor
+<trail, evidence, retention, 30-second test outcome>
+
+---
+
+## §6 -- Real-world friction
+
+### Applicable regulations
+- <regulation 1 + which section applies>
+- <regulation 2>
+
+### Audit / evidence requirements
+- What gets logged: <what>
+- Retention: <how long>
+- Format: <shape>
+
+### Scale assumptions
+- 10 users: <what works>
+- 1K users: <what changes>
+- 10K users: <what breaks; mitigation deferred to V2 or addressed now>
+
+### Multi-tenant implications (per CLAUDE.md SS4 Rule 17)
+- Per-user-configurable values: <list>
+- Cron dispatcher needed: yes/no
+- Cross-tenant data leak surfaces: <list>
+
+### Internationalization / accessibility
+- i18n keys needed: <or N/A>
+- a11y considerations: <per `accessibility.md`>
+
+### Security boundaries
+- Which AI / external service sees what data: <per `privacy.md`>
+- RLS policies new tables need: <list>
+- Secrets handling: <per `secrets-handling.md`>
+
+---
+
+## §7 -- Explicit assumptions (REQUIRES PROJECT OWNER'S APPROVAL)
+
+Every assumption that would otherwise be silent. Each requires `[approved]` or `[reject: <correction>]`.
+
+1. [pending] <assumption 1>
+2. [pending] <assumption 2>
+3. [pending] <assumption 3>
+...
+
+**the project owner approval block:**
+```
+[ ] All assumptions approved as-is
+[ ] Approved except: <list of #>
+[ ] Reject + correction: <list of # + corrections>
+[ ] Scale-down: <new smaller scope>
+
+Signed: <date>
+```
+
+---
+
+## §8 -- Non-goals (what we are NOT building)
+
+Prevents scope creep + future "why didn't you also do X?". Each non-goal has a reason.
+
+- <thing 1>: <reason -- deferred / not-aligned / out-of-budget>
+- <thing 2>: <reason>
+- <thing 3>: <reason>
+
+---
+
+## §9 -- Acceptance criteria
+
+Specific, measurable, verifiable. Not "works well." Numbers, deltas, files-produced, queries that return certain results.
+
+- [ ] <criterion 1 -- with the exact test or query that proves it>
+- [ ] <criterion 2>
+- [ ] <criterion 3>
+- [ ] All <relevant rule files> tripwire checks clean (list which)
+- [ ] `forge doctor` pass count doesn't regress
+- [ ] `test-factory.ps1` doesn't regress
+- [ ] Pre-commit gate satisfied: ARCHITECTURE.md committed before feat(...) commits in this slice
+
+---
+
+## §10 -- Rollback plan
+
+If this ships and breaks, how do we revert?
+
+- **Time-to-rollback:** <minutes>
+- **Data-loss risk:** <none / X rows / Y kind of write>
+- **Communication:** <the project owner / customers via email / Discord post / etc>
+- **Procedure:**
+  1. <step 1>
+  2. <step 2>
+  3. <step 3>
+- **Validation post-rollback:**
+  - <smoke test 1>
+  - <smoke test 2>
+
+---
+
+## §11 -- Source persona-probe artifacts
+
+For traceability (in case we need to remember WHY a decision was made):
+
+- Senior architect questions: <link or paste>
+- Senior engineer questions: <link or paste>
+- Domain expert questions: <link or paste>
+- End user questions: <link or paste>
+- Hostile architect questions: <link or paste>
+- Auditor questions: <link or paste>
+
+Probe ran on: <date>
+Probe took: <minutes>
+Questions surfaced: <N> total / <N> answered from prompt / <N> from the project owner / <N> from research
+
+---
+
+## §12 -- Cross-rule integration
+
+Lists which factory rules this feature touches, so future maintainers know where to look:
+
+- [ ] `architect-first.md` -- this artifact satisfies the gate
+- [ ] `two-way-traceability.md` -- SS4 above implements
+- [ ] `hostile-architect.md` -- Persona 5 ran the stress test
+- [ ] `data-integrity.md` (DMG) -- if data-maturity-gated, SS5/SS6 cover
+- [ ] `compliance.md` -- if regulated, SS6 lists disclosures
+- [ ] `aggregate-design.md` -- if cross-user metric, cohort design in SS6
+- [ ] `ai-first-principles.md` -- if AI-touching, "% works without AI" answered in SS5
+- [ ] `secrets-handling.md` -- if secrets involved, handling spec in SS6
+- [ ] `data-protection.md` -- if prod data, dev/prod isolation + backup in SS6
+- [ ] Per-domain primer applied (which): <name>
+
+---
+
+*Template version: 2026-05-17 (v4.4.5). Update via `scripts/templates/ARCHITECTURE.md.template`.*

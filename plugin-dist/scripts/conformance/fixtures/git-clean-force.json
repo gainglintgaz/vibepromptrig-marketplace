@@ -1,0 +1,18 @@
+{
+  "name": "git-clean-force",
+  "hook_event": "PreToolUse",
+  "tool": "Bash",
+  "category": "destructive",
+  "gate": "pre-bash-destructive-git-guard",
+  "description": "git clean -f (deletes untracked files) must BLOCK (exit 2).",
+  "stdin": {
+    "session_id": "00000000-0000-4000-8000-0000000000c5",
+    "cwd": "/workspace/repo",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": { "command": "git clean -fd" }
+  },
+  "stdin_b64": null,
+  "expect": { "exit_code": 2, "stdout": "", "stderr_contains": "BLOCKED", "side_effects": [] },
+  "provenance": "scripts/hooks/pre-bash-destructive-git-guard.ps1 clean -f branch (live Windows session 2026-06-13)."
+}

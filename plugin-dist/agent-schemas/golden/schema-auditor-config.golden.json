@@ -1,0 +1,5 @@
+{
+  "_comment": "GOLDEN -- captured BEFORE the schema-auditor body refactor (v5.0 Phase D, arch 9d7294c). Structural snapshot: the default audit depth (full) and the default dev project ref (empty -- resolved at runtime from BRIEF.md/.env). Tier-2 configurable -- the directive's 'which DBs' knob (dev_project_ref) + depth. the project owner resolves project_id per-project, so there is NO .forge/agent-configs/schema-auditor.json and the resolver returns the frontmatter defaults unchanged. After retrofit, resolve-config.ps1 MUST reproduce these values. Tests assert structural equivalence, NOT DB/advisor output. See override-layer arch SS1.5.",
+  "depth": "full",
+  "dev_project_ref": ""
+}

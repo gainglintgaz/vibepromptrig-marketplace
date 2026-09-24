@@ -1,0 +1,10 @@
+{
+  "_comment": "GOLDEN -- structural snapshot for the synthesizer override-layer retrofit (v5.0 Sprint 1 Commit 2, arch 9d7294c). 'projects' is the OPERATOR-PRIVATE .forge override and ships REDACTED as [] -- no operator paths belong in a distributed fixture (closes the [PORTABLE-PATHS] golden leak). resolver.tests.ps1 T2 therefore asserts that 'projects' RESOLVES to a non-empty list (the deep-merge fired) rather than matching this []; the remaining fields are the frontmatter factory defaults a stranger inherits and ARE matched exactly. Override-content divergence is proven separately by the second-customer test (T3, synthetic path). LLM output is NOT tested (mocked). See override-layer arch SS1.5.",
+  "projects": [],
+  "signal_types": [
+    "REPEAT", "SECURITY", "RULE_VIOLATION", "REWORK", "CORRECTION", "BUG",
+    "MISSING", "FRUSTRATION", "CLARIFY_NEEDED", "CONFUSION", "APPROVAL", "PIVOT_STRATEGIC"
+  ],
+  "lookback_days": 7,
+  "output_path": "WEEKLY_INSIGHTS.md"
+}

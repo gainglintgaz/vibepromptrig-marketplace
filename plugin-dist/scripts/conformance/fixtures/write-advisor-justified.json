@@ -1,0 +1,21 @@
+{
+  "name": "write-advisor-justified",
+  "hook_event": "PreToolUse",
+  "tool": "Write",
+  "category": "happy",
+  "gate": "pre-write-mcp-advisor",
+  "description": "Same file as write-advisor-block but with a `Justified:` line -- the override must let it PASS (exit 0). Guards the override path.",
+  "stdin": {
+    "session_id": "00000000-0000-4000-8000-0000000000d2",
+    "cwd": "/workspace/repo",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Write",
+    "tool_input": {
+      "file_path": "scripts/pdf-extract-helper.mjs",
+      "content": "// pdf text extraction helper\n// Justified: anthropic-skills:pdf cannot export fillable forms; this lib does.\nimport fs from 'node:fs';\nimport path from 'node:path';\nconst pdfParse = require('pdf-parse');\n\nexport async function extractTextFromPdf(filePath) {\n  const buf = fs.readFileSync(filePath);\n  const data = await pdfParse(buf);\n  return data.text;\n}\n\nexport function listPdfs(dir) {\n  return fs.readdirSync(dir)\n    .filter((f) => f.toLowerCase().endsWith('.pdf'))\n    .map((f) => path.join(dir, f));\n}\n\nexport async function extractAll(dir) {\n  const out = {};\n  for (const p of listPdfs(dir)) {\n    out[p] = await extractTextFromPdf(p);\n  }\n  return out;\n}\n\nexport default { extractTextFromPdf, listPdfs, extractAll };\n"
+    }
+  },
+  "stdin_b64": null,
+  "expect": { "exit_code": 0, "stdout": "", "stderr_contains": null, "side_effects": [] },
+  "provenance": "scripts/hooks/pre-write-mcp-advisor.ps1 -- Justified: line short-circuits to exit 0 (live Windows session 2026-06-13)."
+}

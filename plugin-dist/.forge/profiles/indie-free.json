@@ -1,0 +1,30 @@
+{
+  "$schema": "../../forge-profile.schema.json",
+  "profile": "indie-free",
+  "ai_plan": "claude-free",
+  "byok": false,
+  "monthly_budget_tokens": 500000,
+  "session_budget_tokens": 50000,
+  "verbosity": "terse",
+  "rule_tier": "essential",
+  "agents_enabled": [],
+  "skills_enabled": ["catchup", "today", "ship-status"],
+  "hooks_enabled": ["destructive-sql-blocker"],
+  "subagent_dispatch_threshold_tokens": 0,
+  "compaction_trigger_percent": 50,
+  "tool_result_truncation_kb": 10,
+  "llm_cache_ttl_hours": 168,
+  "vertical_pack": null,
+  "compliance_overlay": [],
+  "user_overrides": {
+    "rules_added": [],
+    "rules_removed": [],
+    "agents_added": [],
+    "agents_removed": [],
+    "skills_added": [],
+    "skills_removed": [],
+    "hooks_added": [],
+    "hooks_removed": []
+  },
+  "factory_version_at_init": "v4.4"
+}

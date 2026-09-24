@@ -1,0 +1,8 @@
+{
+  "_comment": "GOLDEN -- captured BEFORE the tech-radar body refactor (v5.0 Phase D, arch 9d7294c). Structural snapshot of the inputs tech-radar used while hardcoded in the .md body: the four-major-provider scan set (Anthropic/OpenAI/Google/xAI), the standard default scan depth, the STATUS_REPORT.md + PENDING_APPROVALS.md output targets, and the 10% price-change threshold. After retrofit, resolve-config.ps1 (the project owner's .forge/agent-configs/tech-radar.json -- providers declared, rest inherited -- deep-merged onto the frontmatter factory defaults) MUST reproduce these exact values. providers is the directive's per-customer 'tech stack' knob; a different customer scans their own stack. Tests assert structural equivalence field-by-field, NOT WebFetch/LLM output. See override-layer arch SS1.5.",
+  "providers": ["anthropic", "openai", "google", "xai"],
+  "scan_depth_default": "standard",
+  "status_report_path": "STATUS_REPORT.md",
+  "pending_approvals_path": "PENDING_APPROVALS.md",
+  "price_change_threshold_pct": 10
+}

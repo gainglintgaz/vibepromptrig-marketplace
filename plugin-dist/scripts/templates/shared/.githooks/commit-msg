@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+# VibePromptRig commit-msg gates (Tier-1 mechanical) -- installed in every
+# scaffolded/onboarded project via `git config core.hooksPath .githooks`.
+#
+# Receives the commit-message file as $1 (the only hook where the message is
+# guaranteed present), so all override-marker gates live here:
+#
+#   Gate 1  arch-gate            architect-first.md SS9      [no-arch: <reason>]
+#   Gate 2  destructive SQL      data-protection.md SS4.1    [approved-destructive]
+#   Gate 3  component deletion   data-protection.md SS6.3    [approved-deletion]
+#   Gate 4  discovery interlock  discovery-protocol.md SS7   [discovery-skipped] ...
+#
+# All gates are soft-with-override by design: the override marker IS the audit
+# trail. git commit --no-verify bypasses everything -- use only in emergencies.
+
+MSG_FILE="$1"
+[ -f "$MSG_FILE" ] || exit 0
+MSG=$(cat "$MSG_FILE")
+SUBJECT=$(head -n 1 "$MSG_FILE")
+
+# --- Gate 0: no self-issued absolute completion certificate ----------------
+# Fails closed if the project was incompletely onboarded and the blocker is absent.
+node tools/block-unverified-claims.mjs "$MSG_FILE" || exit $?
+
+has_marker() { printf '%s' "$MSG" | grep -qE "$1"; }
+
+STAGED=$(git diff --cached --name-only)
+
+# --- Gate 1: arch-gate on feat( commits (architect-first.md SS9) ------------
+# Accept BOTH documented marker shapes: the colon-inside form architect-first.md
+# uses ([no-arch: <reason>]) AND the bracket-close form discovery-protocol.md uses
+# ([discovery-skipped] reason: <why>). The (:|]) after the marker word matches both.
+if printf '%s' "$SUBJECT" | grep -qE '^(feat|feature)[[:space:]]*\('; then
+    if ! has_marker '\[(no-arch|discovery-skipped|bridge-skipped)(:|\])'; then
+        staged_arch=$(printf '%s\n' "$STAGED" | grep -E '^docs/architecture/.+\.md$' | head -n 1)
+        recent_arch=$(git log --since="14 days ago" --name-only --pretty=format: -- 'docs/architecture' 'ARCHITECTURE.md' 2>/dev/null | grep -E '\.md$' | head -n 1)
+        if [ -z "$staged_arch" ] && [ -z "$recent_arch" ]; then
+            echo ""
+            echo "[BLOCKED] feat() commit without an ARCHITECTURE artifact (architect-first.md SS9)."
+            echo "  No docs/architecture/*.md staged in this commit or committed in the last 14 days."
+            echo "  To proceed:"
+            echo "    1. Run /architect-probe and commit docs/architecture/<feature>.md first, OR"
+            echo "    2. Add an override line to the commit body (either marker shape works):"
+            echo "       [no-arch: <reason>]   or   [discovery-skipped] reason: <why>   or   [bridge-skipped: <reason>]"
+            exit 1
+        fi
+    fi
+fi
+
+# --- Gate 2: destructive SQL in migrations (data-protection.md SS4.1) -------
+SQL_FILES=$(printf '%s\n' "$STAGED" | grep -E '^supabase/migrations/.*\.sql$')
+if [ -n "$SQL_FILES" ] && ! has_marker '\[approved-destructive\]'; then
+    bad=""
+    while IFS= read -r f; do
+        [ -z "$f" ] && continue
+        content=$(git show ":$f" 2>/dev/null)
+        [ -z "$content" ] && continue
+        if printf '%s' "$content" | grep -qiE 'drop[[:space:]]+table|drop[[:space:]]+column|alter[[:space:]]+table[^;]*[[:space:]]drop[[:space:]]|truncate[[:space:]]|drop[[:space:]]+policy|drop[[:space:]]+index|reset[[:space:]]+role'; then
+            bad="${bad}    ${f}
+"
+        elif printf '%s' "$content" | tr '\n' ' ' | grep -qiE 'delete[[:space:]]+from[[:space:]]+[A-Za-z_."]+[[:space:]]*;'; then
+            bad="${bad}    ${f} (DELETE without WHERE)
+"
+        fi
+    done <<EOF
+$SQL_FILES
+EOF
+    if [ -n "$bad" ]; then
+        echo ""
+        echo "[BLOCKED] Destructive SQL in staged migrations (data-protection.md SS4.1):"
+        printf '%s' "$bad"
+        echo "  If intentional, add to the commit body: [approved-destructive] <one-line reason>"
+        exit 1
+    fi
+fi
+
+# --- Gate 3: user-facing component deletion (data-protection.md SS6.3) ------
+DELETED=$(git diff --cached --name-only --diff-filter=D | grep -E '^src/(features|components|pages)/')
+if [ -n "$DELETED" ] && ! has_marker '\[approved-deletion\]'; then
+    echo ""
+    echo "[BLOCKED] Deleting user-facing components requires approval (data-protection.md SS6.3):"
+    printf '%s\n' "$DELETED" | sed 's/^/    /'
+    echo "  Gate-as-default, not delete-as-default (Example Finance App 2026-04 lesson: 22 'fake'"
+    echo "  components deleted, most were real; restoration cost ~6h)."
+    echo "  If the project owner approved, add to the commit body: [approved-deletion] <reason>"
+    exit 1
+fi
+
+# --- Gate 4: discovery interlock for new feature files (discovery-protocol.md SS7)
+NEW_FEATURES=$(git diff --cached --name-only --diff-filter=A | grep -E '^src/(pages|features)/.*\.(tsx|ts)$' | grep -v '__tests__' | grep -v '\.test\.')
+if [ -n "$NEW_FEATURES" ] && ! has_marker '\[(discovery-skipped|no-arch|bridge-skipped)(:|\])'; then
+    staged_doc=$(printf '%s\n' "$STAGED" | grep -E '^docs/(discovery|architecture)/.+\.md$' | head -n 1)
+    recent_doc=$(git log --since="14 days ago" --name-only --pretty=format: -- 'docs/discovery' 'docs/architecture' 2>/dev/null | grep -E '\.md$' | head -n 1)
+    if [ -z "$staged_doc" ] && [ -z "$recent_doc" ]; then
+        echo ""
+        echo "[BLOCKED] New feature files without a Discovery/Architecture doc (discovery-protocol.md SS7):"
+        printf '%s\n' "$NEW_FEATURES" | sed 's/^/    /'
+        echo "  To proceed:"
+        echo "    1. Create docs/architecture/<slug>.md (or docs/discovery/<slug>.md), get sign-off, OR"
+        echo "    2. Add to the commit body: [discovery-skipped] reason: <why>"
+        exit 1
+    fi
+fi
+
+exit 0

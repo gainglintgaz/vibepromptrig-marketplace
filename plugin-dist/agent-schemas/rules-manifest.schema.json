@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/gainglintgaz/vibepromptrig-marketplace/main/plugin-dist/agent-schemas/rules-manifest.schema.json",
+  "title": "VibePromptRig context rules manifest v2",
+  "type": "object",
+  "required": ["schema_version", "version", "rules", "selection_requirements", "lessons"],
+  "properties": {
+    "schema_version": { "const": 2 },
+    "version": { "type": "string" },
+    "rules": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["id", "legacy_file", "source", "summary", "card", "card_version", "reference", "reference_version", "applicability", "dependencies", "enforcement", "replacement", "lifecycle"], "properties": {
+      "id": { "type": "string" }, "legacy_file": { "type": "string" }, "source": { "type": "string" }, "summary": { "type": "string" }, "card": { "type": "string" }, "card_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" }, "reference": { "type": "string" }, "reference_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+      "applicability": { "type": "object", "required": ["intents", "paths", "capabilities", "risks"], "properties": { "intents": { "type": "array", "items": { "type": "string" } }, "paths": { "type": "array", "items": { "type": "string" } }, "capabilities": { "type": "array", "items": { "type": "string" } }, "risks": { "type": "array", "items": { "enum": ["W0", "W1", "W2", "W3"] } } } },
+      "dependencies": { "type": "array", "items": { "type": "string" } },
+      "enforcement": { "type": "object", "required": ["tier", "kind", "reference", "coverage_limit"], "properties": { "tier": { "type": "integer", "minimum": 1, "maximum": 3 }, "kind": { "enum": ["mechanical", "process", "advisory"] }, "reference": { "type": "string" }, "coverage_limit": { "type": "string" } } },
+      "replacement": { "type": "object", "required": ["outcome", "card_ids", "rationale"], "properties": { "outcome": { "enum": ["retained", "mechanically_enforced", "merged", "retired"] }, "card_ids": { "type": "array", "minItems": 1, "items": { "type": "string" } }, "rationale": { "type": "string" } } },
+      "lifecycle": { "enum": ["active", "reference", "superseded"] }
+    } } },
+    "selection_requirements": { "type": "object" },
+    "lessons": { "type": "object" }
+  }
+}

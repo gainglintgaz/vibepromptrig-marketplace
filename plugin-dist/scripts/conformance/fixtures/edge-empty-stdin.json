@@ -1,0 +1,17 @@
+{
+  "name": "edge-empty-stdin",
+  "hook_event": "PreToolUse",
+  "tool": "Bash",
+  "category": "edge-empty",
+  "gate": "pre-bash-destructive-sql-guard",
+  "description": "Empty stdin (zero bytes). Every gate must tolerate it and exit 0 -- never crash the tool loop. stdin_b64 is the empty string.",
+  "stdin": null,
+  "stdin_b64": "",
+  "expect": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr_contains": null,
+    "side_effects": []
+  },
+  "provenance": "scripts/hooks/pre-bash-destructive-sql-guard.ps1 line 24: empty/whitespace stdin -> exit 0 (live Windows session 2026-06-13)."
+}

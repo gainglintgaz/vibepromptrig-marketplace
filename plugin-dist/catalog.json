@@ -1,0 +1,251 @@
+{
+  "catalog_version": "5.0.0",
+  "generated": "2026-06-10",
+  "schema_note": "Static, VibePromptRig-curated catalog read by the /vibepromptrig:setup skill. NOT a live registry -- updated only when the plugin is rebuilt + published. For anything this catalog misses, /setup directs the user to /vibepromptrig:mcp-advisor (live registry search). See docs/architecture/equip-discovery.md.",
+  "disclaimer": "VibePromptRig /setup recommendations are best-effort. Verify any MCP server before installing, especially those with network, filesystem-write, or secrets-access permissions. The full install command is shown before you approve. You are responsible for what runs in your Claude Code session. 'publisher_verified' is set only by the project owner after a personal vetting pass -- 'verified_against' + 'last_vetted' record only that the install command matched the named source on that date.",
+  "field_reference": {
+    "kind": "mcp | rule-pack | skill | agent | hook",
+    "stack_triggers": "Signals in the scanned project that make this entry relevant. type: package (string match inside a manifest file) | dir (directory name present) | file (file present) | dep-any (any of several deps).",
+    "confidence": "high | medium | low -- drives proposal ordering (max 5 per run, highest first).",
+    "known_permissions": "network | filesystem-read | filesystem-write | secrets-access -- shown to the user before approval.",
+    "publisher_verified": "boolean -- publisher-only personal vouch. false does NOT mean unsafe; it means not-yet-personally-vetted.",
+    "verified_against": "What source the install command was checked against, and 'last_vetted' when.",
+    "sha256": "Tarball checksum when the entry pins a fixed artifact. null for @latest/npx and hosted HTTP servers (nothing to pin).",
+    "tombstoned": "true = a previously-shipped entry marked insecure/retired. /setup NEVER proposes a tombstoned entry, and warns if one is already installed."
+  },
+  "entries": [
+    {
+      "id": "mcp-supabase",
+      "kind": "mcp",
+      "name": "Supabase MCP",
+      "summary": "Lets Claude work with your Supabase project -- run SQL, apply migrations, inspect schema, manage RLS, deploy Edge Functions.",
+      "why_it_fits": "Your project uses Supabase (detected @supabase/supabase-js and/or a supabase/ directory).",
+      "stack_triggers": [
+        { "type": "package", "file": "package.json", "match": "@supabase/supabase-js" },
+        { "type": "package", "file": "package.json", "match": "supabase" },
+        { "type": "dir", "match": "supabase" }
+      ],
+      "confidence": "high",
+      "install": {
+        "transport": "stdio",
+        "command": "npx -y @supabase/mcp-server-supabase@latest --read-only --project-ref=<your-dev-project-ref>",
+        "scope": "project",
+        "requires": "A Supabase Personal Access Token in env SUPABASE_ACCESS_TOKEN."
+      },
+      "known_permissions": ["network", "filesystem-write", "secrets-access"],
+      "source_url": "https://supabase.com/docs/guides/ai-tools/mcp",
+      "verified_against": "official Supabase MCP docs",
+      "last_vetted": "2026-06-10",
+      "publisher_verified": false,
+      "sha256": null,
+      "tombstoned": false,
+      "notes": "Ship with --read-only by default and point at your DEV project ref, never prod -- per data-protection.md token-scope tiers. Drop --read-only only when you explicitly intend migrations."
+    },
+    {
+      "id": "mcp-vercel",
+      "kind": "mcp",
+      "name": "Vercel MCP",
+      "summary": "Official hosted Vercel MCP -- gives Claude OAuth access to your deployments, logs, project metadata, and Vercel docs.",
+      "why_it_fits": "Your project deploys on Vercel (detected vercel.json, a .vercel/ directory, or Next.js).",
+      "stack_triggers": [
+        { "type": "file", "match": "vercel.json" },
+        { "type": "dir", "match": ".vercel" },
+        { "type": "package", "file": "package.json", "match": "next" }
+      ],
+      "confidence": "high",
+      "install": {
+        "transport": "http",
+        "command": "claude mcp add --transport http vercel https://mcp.vercel.com",
+        "scope": "project",
+        "requires": "Browser OAuth on first use (type /mcp in Claude Code to authenticate). No token to store."
+      },
+      "known_permissions": ["network"],
+      "source_url": "https://vercel.com/docs/agent-resources/vercel-mcp",
+      "verified_against": "official Vercel MCP docs",
+      "last_vetted": "2026-06-10",
+      "publisher_verified": false,
+      "sha256": null,
+      "tombstoned": false,
+      "notes": "Hosted + OAuth -- no secret lands in .mcp.json. Read-leaning by design."
+    },
+    {
+      "id": "mcp-github",
+      "kind": "mcp",
+      "name": "GitHub MCP",
+      "summary": "GitHub's official remote MCP -- repos, issues, PRs, code search, Actions.",
+      "why_it_fits": "Your project has a GitHub remote (detected github.com in .git/config).",
+      "stack_triggers": [
+        { "type": "file", "match": ".git/config", "contains": "github.com" }
+      ],
+      "confidence": "high",
+      "install": {
+        "transport": "http",
+        "command": "claude mcp add --transport http github https://api.githubcopilot.com/mcp/ --header \"Authorization: Bearer <YOUR_GITHUB_PAT>\"",
+        "scope": "user",
+        "requires": "A GitHub Personal Access Token. Grant only the scopes you are comfortable giving an AI tool."
+      },
+      "known_permissions": ["network", "secrets-access"],
+      "source_url": "https://github.com/github/github-mcp-server/blob/main/docs/installation-guides/install-claude.md",
+      "verified_against": "official github/github-mcp-server install guide",
+      "last_vetted": "2026-06-10",
+      "publisher_verified": false,
+      "sha256": null,
+      "tombstoned": false,
+      "notes": "The PAT is the whole blast radius -- scope it minimally (read-only where possible). On CLI 2.1.1+ you can use `claude mcp add-json github ...` instead. Claude Desktop needs the local Docker setup (OAuth app not supported there)."
+    },
+    {
+      "id": "mcp-cloudflare-docs",
+      "kind": "mcp",
+      "name": "Cloudflare Docs MCP",
+      "summary": "Cloudflare's hosted documentation MCP -- searchable Workers/Pages/D1/R2/KV docs in-session.",
+      "why_it_fits": "Your project targets Cloudflare (detected wrangler.toml / wrangler.jsonc / a Workers entrypoint).",
+      "stack_triggers": [
+        { "type": "file", "match": "wrangler.toml" },
+        { "type": "file", "match": "wrangler.jsonc" },
+        { "type": "file", "match": "_worker.js" }
+      ],
+      "confidence": "medium",
+      "install": {
+        "transport": "stdio",
+        "command": "claude mcp add-json cloudflare '{\"command\":\"npx\",\"args\":[\"mcp-remote\",\"https://docs.mcp.cloudflare.com/sse\"]}'",
+        "scope": "project",
+        "requires": "Nothing for the docs server (read-only). Cloudflare's account-scoped servers (Workers, D1, R2 admin) are separate and OAuth-gated -- add those deliberately."
+      },
+      "known_permissions": ["network"],
+      "source_url": "https://developers.cloudflare.com/agents/model-context-protocol/mcp-servers-for-cloudflare/",
+      "verified_against": "official Cloudflare Agents docs",
+      "last_vetted": "2026-06-10",
+      "publisher_verified": false,
+      "sha256": null,
+      "tombstoned": false,
+      "notes": "This entry is the read-only DOCS server only. The account-management Cloudflare servers carry filesystem-write-equivalent authority over your CF account -- do not auto-add them; vet each separately."
+    },
+    {
+      "id": "mcp-stripe",
+      "kind": "mcp",
+      "name": "Stripe MCP",
+      "summary": "Official Stripe MCP -- customers, subscriptions, invoices, product catalog, plus Stripe docs/knowledge-base search.",
+      "why_it_fits": "Your project integrates Stripe (detected the stripe dependency).",
+      "stack_triggers": [
+        { "type": "package", "file": "package.json", "match": "stripe" },
+        { "type": "package", "file": "requirements.txt", "match": "stripe" }
+      ],
+      "confidence": "medium",
+      "install": {
+        "transport": "stdio",
+        "command": "claude mcp add stripe -- npx -y @stripe/mcp --api-key=<STRIPE_RESTRICTED_KEY>",
+        "scope": "project",
+        "requires": "A Stripe API key. Use a RESTRICTED key (read-only or narrowly-scoped), never your live secret key. Hosted alternative: https://mcp.stripe.com (OAuth)."
+      },
+      "known_permissions": ["network", "secrets-access"],
+      "source_url": "https://docs.stripe.com/mcp",
+      "verified_against": "official Stripe MCP docs",
+      "last_vetted": "2026-06-10",
+      "publisher_verified": false,
+      "sha256": null,
+      "tombstoned": false,
+      "notes": "Money surface -- use a restricted/test key, prefer the hosted OAuth server (https://mcp.stripe.com) so no secret lands in .mcp.json. Pair with the webhook-handling rule pack below."
+    },
+    {
+      "id": "hook-precommit-gates",
+      "kind": "hook",
+      "name": "VibePromptRig pre-commit gates",
+      "summary": "Installs the factory's tracked git hooks (.githooks/ wired via core.hooksPath): secrets scan, architect-first gate on feat() commits, destructive-SQL block, user-facing component-deletion gate, discovery interlock.",
+      "why_it_fits": "Your project is a git repository without the VibePromptRig mechanical gates installed. The factory rules assume these gates exist -- per enforcement-first.md, a load-bearing rule without a mechanical gate WILL decay.",
+      "stack_triggers": [
+        { "type": "dir", "match": ".git" }
+      ],
+      "confidence": "high",
+      "install": {
+        "target": ".githooks/",
+        "source": "scripts/templates/shared/.githooks/",
+        "action": "copy-dir-then-set-hooks-path",
+        "on_conflict": "skip-with-warning"
+      },
+      "known_permissions": [],
+      "source_url": "internal: scripts/templates/shared/.githooks/",
+      "verified_against": "first-party VibePromptRig hooks",
+      "last_vetted": "2026-06-12",
+      "publisher_verified": true,
+      "sha256": null,
+      "tombstoned": false,
+      "notes": "First-party. All gates are soft-with-override ([no-arch:], [approved-destructive], [approved-deletion], [discovery-skipped]) -- the marker IS the audit trail. Rollback: git config --unset core.hooksPath, then delete .githooks/. Never proposed/installed over an existing hooks setup (husky, custom core.hooksPath) -- merge manually in that case."
+    },
+    {
+      "id": "rule-finance-primer-reference-v2",
+      "kind": "rule-pack",
+      "name": "Finance domain primer",
+      "summary": "Architect-probe checklist for money-touching features: BIGINT cents, two-way drill-down, OBBBA/tax-year labels, DMG gates, PII boundaries.",
+      "why_it_fits": "Your project touches money (detected stripe / plaid / a payments or tax surface).",
+      "stack_triggers": [
+        { "type": "dep-any", "match": ["stripe", "plaid", "@plaid/plaid", "dinero.js"] }
+      ],
+      "confidence": "medium",
+      "install": {
+        "target": "docs/rules-reference/factory/domain-primers/finance.md",
+        "source": "docs/rules-reference/factory/domain-primers/finance.md",
+        "action": "copy",
+        "on_conflict": "skip-with-warning"
+      },
+      "known_permissions": [],
+      "source_url": "internal: docs/rules-reference/factory/domain-primers/finance.md",
+      "verified_against": "first-party VibePromptRig rule",
+      "last_vetted": "2026-06-10",
+      "publisher_verified": true,
+      "sha256": null,
+      "tombstoned": false,
+      "notes": "First-party. Copied as a reference document (never into a native autoload directory such as .claude/rules/). /setup skips it when the target already exists."
+    },
+    {
+      "id": "rule-webhook-handling-reference-v2",
+      "kind": "rule-pack",
+      "name": "Webhook handling rule pack",
+      "summary": "Signature verification, idempotency keys, dead-letter handling for inbound webhooks.",
+      "why_it_fits": "Your project receives webhooks (detected stripe / svix / a webhook route).",
+      "stack_triggers": [
+        { "type": "dep-any", "match": ["stripe", "svix"] },
+        { "type": "dir", "match": "webhooks" }
+      ],
+      "confidence": "medium",
+      "install": {
+        "target": "docs/rules-reference/factory/webhook-handling.md",
+        "source": "docs/rules-reference/factory/webhook-handling.md",
+        "action": "copy",
+        "on_conflict": "skip-with-warning"
+      },
+      "known_permissions": [],
+      "source_url": "internal: docs/rules-reference/factory/webhook-handling.md",
+      "verified_against": "first-party VibePromptRig rule",
+      "last_vetted": "2026-06-10",
+      "publisher_verified": true,
+      "sha256": null,
+      "tombstoned": false,
+      "notes": "First-party. Pairs with the Stripe MCP entry. Copied as a reference document, never into a native autoload directory such as .claude/rules/."
+    },
+    {
+      "id": "rule-testing-strategy-reference-v2",
+      "kind": "rule-pack",
+      "name": "Testing strategy rule pack",
+      "summary": "Trophy-not-pyramid testing: real-DB integration, intent-encoding tests, verify-with-SELECT round-trips.",
+      "why_it_fits": "Your project has a test runner (detected vitest / jest / playwright / pytest).",
+      "stack_triggers": [
+        { "type": "dep-any", "match": ["vitest", "jest", "@playwright/test", "pytest"] }
+      ],
+      "confidence": "low",
+      "install": {
+        "target": "docs/rules-reference/factory/testing-strategy.md",
+        "source": "docs/rules-reference/factory/testing-strategy.md",
+        "action": "copy",
+        "on_conflict": "skip-with-warning"
+      },
+      "known_permissions": [],
+      "source_url": "internal: docs/rules-reference/factory/testing-strategy.md",
+      "verified_against": "first-party VibePromptRig rule",
+      "last_vetted": "2026-06-10",
+      "publisher_verified": true,
+      "sha256": null,
+      "tombstoned": false,
+      "notes": "First-party. Copied as a reference document (never into a native autoload directory such as .claude/rules/). /setup skips it when the target already exists."
+    }
+  ]
+}
