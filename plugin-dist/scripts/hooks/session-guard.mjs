@@ -18,10 +18,12 @@
 // path exits 0 except the deliberate interactive commit/push block (exit 2).
 
 import { existsSync, readFileSync, writeFileSync, renameSync, rmSync, mkdirSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import os from 'node:os';
 import process from 'node:process';
+import { createHash } from 'node:crypto';
+import { projectWritesAllowed } from './hook-lib.mjs';
 
 // Kill-switch (arch assumption 9): never block when disabled.
 if (process.env.VIBE_HOOKS_DISABLE) process.exit(0);
@@ -68,7 +70,13 @@ function getProjectDir(hook) {
   if (hook && hook.cwd && existsSync(String(hook.cwd))) return String(hook.cwd);
   return dirname(dirname(here));
 }
-function getLockPath(projectDir) { return join(projectDir, '.claude', '.session-lock.json'); }
+// An installed plugin copy without the project's consent keeps the lock outside the project (OS temp,
+// keyed by the project path), so the guard still works without writing into the user's repository.
+function getLockPath(projectDir) {
+  if (projectWritesAllowed(here, projectDir)) return join(projectDir, '.claude', '.session-lock.json');
+  const key = createHash('sha256').update(resolve(projectDir).toLowerCase()).digest('hex').slice(0, 16);
+  return join(os.tmpdir(), 'vibepromptrig-session-locks', `${key}.json`);
+}
 
 function readLock(path) {
   if (!existsSync(path)) return null;

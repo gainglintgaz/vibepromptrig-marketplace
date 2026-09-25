@@ -1,3 +1,3 @@
 # VibePromptRig package
 
-Current version: 5.1.5
+Current version: 5.1.6

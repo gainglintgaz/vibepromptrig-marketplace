@@ -184,6 +184,13 @@ Present the (max 5) proposals. For EACH, show in plain English:
 - If an item needs a key the user may not have yet (e.g. Stripe), say so: "requires a Stripe account --
   skip if you're not using Stripe."
 
+After the catalog proposals, always offer one more optional item, **off unless approved**:
+
+- **Session notes (`notes`):** "At the end of each session, VibePromptRig can write `SESSION_DEBRIEF.md`,
+  append this session's commits to `CHANGELOG.md`, bump `VERSION.md` if the project has one, and keep a
+  local `.claude/signal-log.jsonl` with short prompt excerpts. Without approval the plugin writes none of
+  these into your project." Approving writes `.claude/vibepromptrig.json` with `{"session_notes": true}`.
+
 ### Phase 5 -- Approval loop
 
 Ask the user to approve a subset explicitly (e.g. "approve 1,3,4" / "approve all" / "none"). Record
@@ -200,6 +207,12 @@ criterion #4 -- so an interrupted run is always recoverable):
    It lists the exact undo command for every change about to be made:
    - For each MCP entry to add: `claude mcp remove <name>` (or "delete the \"<name>\" key from .mcp.json").
    - For each rule pack to copy: "delete `<install.target>`".
+   - For each hook pack: `git config --unset core.hooksPath` (only if it was unset before), "delete
+     `.githooks/`", and "delete `<target>`" for every `install.requires` file this run creates.
+   - If session notes are approved: "delete `.claude/vibepromptrig.json`", plus the files session notes
+     may create later (`SESSION_DEBRIEF.md`, `.claude/signal-log.jsonl`, and the CHANGELOG/VERSION edits).
+   - Setup's own records, as the final optional step: "delete `.claude/setup-manifest.json`,
+     `.claude/setup-audit.jsonl`, and this rollback file".
    Date the file with today's date (get it from the environment, ASCII only, PowerShell-safe).
 3. **MCP entries:** for each approved MCP item, if its server key is already in `.mcp.json`, skip it
    (idempotency); otherwise add the equivalent entry to `.mcp.json` (create the file with
@@ -219,10 +232,16 @@ criterion #4 -- so an interrupted run is always recoverable):
    - Resolve `install.source` under `${CLAUDE_PLUGIN_ROOT}` first, then the factory root (dogfood case).
    - Copy the source dir's files into the project's `.githooks/` -- skip any file that already exists
      (never overwrite).
+   - Copy every `install.requires` entry (`source` resolved the same way) to its project `target`, for
+     example `tools/block-unverified-claims.mjs`, which `commit-msg` runs on every commit. Skip a target
+     that already exists. If a required source is missing, do NOT set `core.hooksPath`: report the item
+     as failed, because the installed hooks would reject every commit.
    - Run `git config core.hooksPath .githooks`.
-   - Rollback manifest entries (written in step 2 with the rest): `git config --unset core.hooksPath`
-     and "delete `.githooks/`".
-6. Proceed to Phase 7.
+   - Rollback manifest entries were written in step 2 with the rest.
+6. **Session notes (only if `notes` was approved):** write `.claude/vibepromptrig.json` as
+   `{"session_notes": true}` (merge the key if the file exists). Without it, the installed plugin's hooks
+   write nothing into the project.
+7. Proceed to Phase 7.
 
 **Never claim success past "written."** You did not start or verify any server. Restart + verification is
 the user's job (Phase 7 message).

@@ -40,9 +40,24 @@ export function emitHeartbeat(factoryRoot, hookName, exitCode) {
 // Returns { factoryRoot, defer }: defer=true => this is a plugin distribution copy running inside a
 // factory session, so the hook must no-op (the repo-local copy does the work). factoryRoot may be
 // null when running from an installed plugins cache with no VIBE_ROOT (no factory ledger to write).
+export function isPluginCopy(scriptDir) {
+  return /[\\/]plugin-dist([\\/]|$)/.test(scriptDir) || /[\\/]plugins[\\/]cache[\\/]/.test(scriptDir);
+}
+
+// Consent for a hook to create or change files inside the user's project. A repo-local factory copy
+// keeps its behavior. An installed plugin copy writes project files only when the project opted in
+// (setup writes .claude/vibepromptrig.json {"session_notes": true} after the user approves it) or when
+// the operator configured a factory (VIBE_ROOT). Customers have neither, so nothing is written.
+export function projectWritesAllowed(scriptDir, projectDir) {
+  if (!isPluginCopy(scriptDir)) return true;
+  if (process.env.VIBE_ROOT) return true;
+  try {
+    return JSON.parse(readFileSync(join(projectDir, '.claude', 'vibepromptrig.json'), 'utf8'))?.session_notes === true;
+  } catch { return false; }
+}
+
 export function resolveFactoryRoot(scriptDir) {
-  const isPluginCopy = /[\\/]plugin-dist([\\/]|$)/.test(scriptDir) || /[\\/]plugins[\\/]cache[\\/]/.test(scriptDir);
-  if (isPluginCopy) {
+  if (isPluginCopy(scriptDir)) {
     const cwd = process.cwd();
     if (existsSync(join(cwd, '.claude-plugin', 'plugin.json')) && existsSync(join(cwd, 'plugin-dist'))) {
       return { factoryRoot: null, defer: true };

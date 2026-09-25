@@ -33,6 +33,7 @@ import {
   utcStamp,
   resolveFactoryRoot,
   finishHook,
+  projectWritesAllowed,
 } from './hook-lib.mjs';
 
 const HOOK_NAME = 'signal-classifier-tier1';
@@ -48,6 +49,8 @@ const here = dirname(fileURLToPath(import.meta.url));
 // no-op silently so the repo-local copy does the work (and writes the heartbeat).
 const { factoryRoot, defer } = resolveFactoryRoot(here);
 if (defer) process.exit(0);
+// The signal log (prompt excerpts) lives in the project; an installed plugin copy needs consent.
+if (!projectWritesAllowed(here, process.cwd())) finishHook(factoryRoot, HOOK_NAME, 0);
 
 // From here on, EVERY exit routes through finishHook(...,0) so exactly one heartbeat
 // row is written per invocation -- including early fail-open bails.

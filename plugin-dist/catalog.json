@@ -160,12 +160,18 @@
         "target": ".githooks/",
         "source": "scripts/templates/shared/.githooks/",
         "action": "copy-dir-then-set-hooks-path",
-        "on_conflict": "skip-with-warning"
+        "on_conflict": "skip-with-warning",
+        "requires": [
+          {
+            "source": "scripts/completion/block-unverified-claims.mjs",
+            "target": "tools/block-unverified-claims.mjs"
+          }
+        ]
       },
       "known_permissions": [],
       "source_url": "internal: scripts/templates/shared/.githooks/",
       "verified_against": "first-party VibePromptRig hooks",
-      "last_vetted": "2026-06-12",
+      "last_vetted": "2026-09-25",
       "publisher_verified": true,
       "sha256": null,
       "tombstoned": false,

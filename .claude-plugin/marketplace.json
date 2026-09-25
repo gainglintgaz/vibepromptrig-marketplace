@@ -8,7 +8,7 @@
     {
       "name": "vibepromptrig",
       "source": "./plugin-dist",
-      "description": "VibePromptRig 5.1.5: agents, skills, compact Context V2 cards, hooks, and forge tools from the curated plugin-dist directory."
+      "description": "VibePromptRig 5.1.6: agents, skills, compact Context V2 cards, hooks, and forge tools from the curated plugin-dist directory."
     }
   ]
 }

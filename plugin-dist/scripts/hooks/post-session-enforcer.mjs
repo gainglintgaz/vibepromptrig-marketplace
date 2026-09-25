@@ -19,12 +19,14 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import process from 'node:process';
-import { resolveFactoryRoot, finishHook } from './hook-lib.mjs';
+import { resolveFactoryRoot, finishHook, projectWritesAllowed } from './hook-lib.mjs';
 
 const HOOK = 'post-session-enforcer';
 const here = dirname(fileURLToPath(import.meta.url));
 const { factoryRoot, defer } = resolveFactoryRoot(here);
 if (defer) process.exit(0); // plugin copy in a factory session -> repo-local copy does the work
+// Installed plugin copies write SESSION_DEBRIEF/CHANGELOG/VERSION only with the project's consent.
+if (!projectWritesAllowed(here, process.cwd())) finishHook(factoryRoot, HOOK, 0);
 
 try {
   const cwd = process.cwd();

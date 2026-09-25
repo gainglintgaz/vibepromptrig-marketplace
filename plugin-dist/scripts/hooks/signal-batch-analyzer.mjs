@@ -18,7 +18,7 @@ import { existsSync, readFileSync, appendFileSync, writeFileSync } from 'node:fs
 import { join, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import process from 'node:process';
-import { resolveFactoryRoot, finishHook } from './hook-lib.mjs';
+import { resolveFactoryRoot, finishHook, projectWritesAllowed } from './hook-lib.mjs';
 
 const HOOK_NAME = 'signal-batch-analyzer';
 const here = dirname(fileURLToPath(import.meta.url));
@@ -28,6 +28,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 // defer to the repo-local copy -- exit WITHOUT a heartbeat.
 const { factoryRoot, defer } = resolveFactoryRoot(here);
 if (defer) process.exit(0);
+if (!projectWritesAllowed(here, process.cwd())) finishHook(factoryRoot, HOOK_NAME, 0);
 
 // Single fail-open exit path. Everything below is wrapped; on ANY error we still
 // emit exactly one heartbeat and exit 0.
