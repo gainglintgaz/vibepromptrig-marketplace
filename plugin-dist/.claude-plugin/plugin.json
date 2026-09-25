@@ -1,7 +1,9 @@
 {
   "name": "vibepromptrig",
   "displayName": "VibePromptRig",
-  "version": "5.1.4",
+  "version": "5.1.5",
+  "homepage": "https://github.com/gainglintgaz/vibepromptrig-marketplace#readme",
+  "repository": "https://github.com/gainglintgaz/vibepromptrig-marketplace",
   "description": "VibePromptRig helps AI coding assistants plan, configure projects, review changes, and verify work through reusable skills, specialist agents, compact rule cards, and forge tools. Claude Code distribution preview.",
   "author": {
     "name": "gainglintgaz"

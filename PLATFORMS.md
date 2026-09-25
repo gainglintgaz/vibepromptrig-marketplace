@@ -1,6 +1,6 @@
 # Platform status
 
-Updated 2026-09-24. VibePromptRig 5.1.4 is packaged as a Claude Code plugin. A public GitHub repository makes its source available to read or adapt; it does not install the plugin in other AI tools or put it in their directories.
+Updated 2026-09-25. VibePromptRig 5.1.5 is packaged as a Claude Code plugin. A public GitHub repository makes its source available to read or adapt; it does not install the plugin in other AI tools or put it in their directories.
 
 | Platform | Verified status |
 |---|---|

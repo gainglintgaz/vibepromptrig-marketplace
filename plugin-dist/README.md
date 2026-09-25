@@ -2,7 +2,7 @@
 
 An open-source toolkit that gives AI coding assistants reusable workflows for planning, project setup, implementation, review, and verification.
 
-VibePromptRig ships as the `vibepromptrig` Claude Code plugin. The 5.1.4 package has 14 agents, 9 skills, 3 commands, 4 workflows, the `forge` tools, and a compact Context V2 rule resolver. The installable boundary is the generated `plugin-dist/` directory.
+VibePromptRig ships as the `vibepromptrig` Claude Code plugin. The 5.1.5 package has 14 agents, 9 skills, 3 commands, 4 workflows, the `forge` tools, and a compact Context V2 rule resolver. The installable boundary is the generated `plugin-dist/` directory.
 
 **The source repository is private.** Customer releases are distributed through the separate sanitized marketplace at [gainglintgaz/vibepromptrig-marketplace](https://github.com/gainglintgaz/vibepromptrig-marketplace). Publication is a separate release step; see that repository for the currently available release. See [INSTALL.md](INSTALL.md) for marketplace and local-checkout commands, first use, update, and uninstall.
 
