@@ -4,7 +4,7 @@
 // blocks (fail-open), and emits a per-invocation heartbeat. Dependency-free (Node stdlib), Node>=18.
 
 import { appendFileSync, readFileSync, existsSync } from 'node:fs';
-import { join, basename, dirname } from 'node:path';
+import { join, dirname } from 'node:path';
 import process from 'node:process';
 
 // BOM-tolerant, never-throws synchronous stdin read. Returns '' on empty / TTY / error.
@@ -36,37 +36,49 @@ export function emitHeartbeat(factoryRoot, hookName, exitCode) {
   });
 }
 
-// Resolve the OPERATOR factory root, mirroring the .ps1 double-fire + plugin-copy guards.
-// Returns { factoryRoot, defer }: defer=true => this is a plugin distribution copy running inside a
-// factory session, so the hook must no-op (the repo-local copy does the work). factoryRoot may be
-// null when running from an installed plugins cache with no VIBE_ROOT (no factory ledger to write).
 export function isPluginCopy(scriptDir) {
   return /[\\/]plugin-dist([\\/]|$)/.test(scriptDir) || /[\\/]plugins[\\/]cache[\\/]/.test(scriptDir);
 }
 
-// Consent for a hook to create or change files inside the user's project. A repo-local factory copy
-// keeps its behavior. An installed plugin copy writes project files only when the project opted in
-// (setup writes .claude/vibepromptrig.json {"session_notes": true} after the user approves it) or when
-// the operator configured a factory (VIBE_ROOT). Customers have neither, so nothing is written.
+// A VibePromptRig factory checkout: the only place an operator ledger (factory_metrics.jsonl) lives.
+// The manifest must carry the VibePromptRig plugin identity; another plugin's checkout never qualifies.
+function isFactoryCheckout(dir) {
+  if (!dir || !existsSync(join(dir, 'scripts', 'hooks', 'hook-lib.mjs'))) return false;
+  try {
+    return JSON.parse(readFileSync(join(dir, '.claude-plugin', 'plugin.json'), 'utf8'))?.name === 'vibepromptrig';
+  } catch { return false; }
+}
+
+// Two separate authorizations govern what capture hooks may write.
+//
+// Project consent -- files inside the user's project (SESSION_DEBRIEF.md, CHANGELOG/VERSION edits,
+// .claude/signal-log.jsonl, the in-project session lock). A repo-local factory copy keeps its behavior.
+// An installed plugin copy needs the project's own marker, written by /setup after the user approves
+// session notes: .claude/vibepromptrig.json {"session_notes": true}. Absent, false or malformed = no.
+// Operator configuration (VIBE_ROOT) is NOT project consent.
 export function projectWritesAllowed(scriptDir, projectDir) {
   if (!isPluginCopy(scriptDir)) return true;
-  if (process.env.VIBE_ROOT) return true;
   try {
     return JSON.parse(readFileSync(join(projectDir, '.claude', 'vibepromptrig.json'), 'utf8'))?.session_notes === true;
   } catch { return false; }
 }
 
+// Operator ledger -- resolve where heartbeats and session summaries go. Returns { factoryRoot, defer }:
+// defer=true => a plugin distribution copy running inside a factory session must no-op (the repo-local
+// copy does the work). An installed plugin copy (marketplace cache OR a local-directory install) writes
+// the ledger only when the operator explicitly configured one: VIBE_ROOT naming a VibePromptRig factory
+// checkout. Install location never authorizes a ledger; otherwise factoryRoot is null and every write,
+// including early-exit heartbeats, is skipped. A repo-local factory copy keeps its existing resolution.
 export function resolveFactoryRoot(scriptDir) {
   if (isPluginCopy(scriptDir)) {
     const cwd = process.cwd();
     if (existsSync(join(cwd, '.claude-plugin', 'plugin.json')) && existsSync(join(cwd, 'plugin-dist'))) {
       return { factoryRoot: null, defer: true };
     }
+    const operatorRoot = process.env.VIBE_ROOT;
+    return { factoryRoot: isFactoryCheckout(operatorRoot) ? operatorRoot : null, defer: false };
   }
-  let root = process.env.VIBE_ROOT || dirname(dirname(scriptDir));
-  if (basename(root) === 'plugin-dist') root = dirname(root);
-  else if (/[\\/]plugins[\\/]cache[\\/]/.test(root)) root = process.env.VIBE_ROOT || null;
-  return { factoryRoot: root, defer: false };
+  return { factoryRoot: process.env.VIBE_ROOT || dirname(dirname(scriptDir)), defer: false };
 }
 
 // Finish a hook: emit the heartbeat with the final exit code, then exit. The single exit path so

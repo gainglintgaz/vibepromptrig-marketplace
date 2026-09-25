@@ -1,6 +1,6 @@
 # VibePromptRig marketplace
 
-Reusable project setup, planning, review, and verification workflows for AI-assisted development. This is a Claude Code plugin distribution preview, version 5.1.6.
+Reusable project setup, planning, review, and verification workflows for AI-assisted development. This is a Claude Code plugin distribution preview, version 5.1.7.
 
 The package contains 14 agents, 9 skills, 3 commands, 4 workflows, compact rule cards, hooks, and forge tools. Project labels in examples are anonymized teaching placeholders. Native support in other AI products has not been verified.
 
