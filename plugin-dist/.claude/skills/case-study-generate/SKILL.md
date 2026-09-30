@@ -9,6 +9,8 @@ allowed-tools:
   - Write
 ---
 
+> **Needs Claude Code with the project folder open and a terminal.** It reads the project's git history and signal logs. In chat, it cannot run: open the project in Claude Code and run `/vibepromptrig:case-study-generate` there.
+
 # /case-study-generate -- auto case study drafter
 
 ## When to invoke

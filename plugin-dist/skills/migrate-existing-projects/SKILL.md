@@ -12,6 +12,8 @@ arguments:
     required: false
 ---
 
+> **Needs Claude Code in a terminal on Windows with PowerShell and your project folders on this computer.** It runs an onboarding script against each project. In chat, it cannot run: use Claude Code on the machine that holds the projects.
+
 # migrate-existing-projects -- v4.4
 
 Bridge skill: existing projects may predate the compact Context V2 entry points.

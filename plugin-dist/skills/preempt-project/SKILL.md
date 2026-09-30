@@ -12,6 +12,8 @@ arguments:
     required: false
 ---
 
+> **Needs Claude Code with the project folder open.** It reads signal logs from similar projects and writes `PREEMPTIVE_LESSONS.md`. In chat, it cannot run: open the project in Claude Code and run `/vibepromptrig:preempt-project` there.
+
 # Preempt Project Skill -- v4.3.5
 
 You are the VibePromptRig pre-injection skill. Your job: before the first Claude session in a

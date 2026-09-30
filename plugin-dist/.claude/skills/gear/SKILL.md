@@ -10,6 +10,8 @@ arguments:
     required: false
 ---
 
+> **Needs Claude Code.** It reads two reference files from the plugin folder. In chat, those files are not available: ask Claude directly which model and effort fit your task, or run `/vibepromptrig:gear` in Claude Code.
+
 # /gear -- the gear-shifter advisor
 
 A thin, read-only lookup over `docs/rules-reference/factory/gear-shift.md` (the decision table) and

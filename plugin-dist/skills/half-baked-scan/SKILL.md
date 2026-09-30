@@ -12,6 +12,8 @@ arguments:
     required: false
 ---
 
+> **Needs Claude Code with the project folder open.** It reads the project's `.claude/signal-log.jsonl` and sprint files. In chat, it cannot run: open the project in Claude Code and run `/vibepromptrig:half-baked-scan` there.
+
 # Half-Baked Scan Skill -- v4.3.5
 
 You are the VibePromptRig stuck-project detector. Your job: find features that were started but not

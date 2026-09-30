@@ -14,6 +14,8 @@ allowed-tools:
   - WebSearch
 ---
 
+> **Needs Claude Code (or Cowork) with your project folder open.** It reads the project, runs reviewer subagents, and writes one spec file. In chat, subagents do not run and there is no project folder: discuss the change in chat instead, or open the project in Claude Code and run `/vibepromptrig:architect-probe` there.
+
 <!-- Justified: This skill orchestrates risk-selected persona-probe subagents (none to all of the menu). It does NOT itself
 implement search/scrape/parse functionality. Where research is needed (Step 5),
 it delegates to existing tools: firecrawl:firecrawl-search for doc-search,

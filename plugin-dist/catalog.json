@@ -10,7 +10,8 @@
     "known_permissions": "network | filesystem-read | filesystem-write | secrets-access -- shown to the user before approval.",
     "publisher_verified": "boolean -- publisher-only personal vouch. false does NOT mean unsafe; it means not-yet-personally-vetted.",
     "verified_against": "What source the install command was checked against, and 'last_vetted' when.",
-    "sha256": "Tarball checksum when the entry pins a fixed artifact. null for @latest/npx and hosted HTTP servers (nothing to pin).",
+    "sha256": "Tarball checksum when the entry pins a fixed artifact. null for npx packages and hosted HTTP servers.",
+    "launcher_pins": "Every npx package in install.command is pinned to an exact version (the version npm published as latest on 2026-09-25): mcp-remote@0.14.3. Pinning keeps what /setup writes reproducible; bump each pin deliberately after checking the package release notes. The pin was chosen on 2026-09-25 without re-vetting; last_vetted still refers to the earlier check of the command shape, and the entry's verified_against records the 2026-09-25 recheck. Stripe and Supabase moved to their hosted HTTP servers on 2026-09-27 and no longer use a launcher.",
     "tombstoned": "true = a previously-shipped entry marked insecure/retired. /setup NEVER proposes a tombstoned entry, and warns if one is already installed."
   },
   "entries": [
@@ -27,19 +28,19 @@
       ],
       "confidence": "high",
       "install": {
-        "transport": "stdio",
-        "command": "npx -y @supabase/mcp-server-supabase@latest --read-only --project-ref=<your-dev-project-ref>",
+        "transport": "http",
+        "command": "claude mcp add --transport http supabase \"https://mcp.supabase.com/mcp?project_ref=<your-dev-project-ref>&read_only=true\"",
         "scope": "project",
-        "requires": "A Supabase Personal Access Token in env SUPABASE_ACCESS_TOKEN."
+        "requires": "Browser OAuth on first use (type /mcp in Claude Code to authenticate). No token to store. Replace <your-dev-project-ref> with your DEV project's ref, never production."
       },
-      "known_permissions": ["network", "filesystem-write", "secrets-access"],
+      "known_permissions": ["network"],
       "source_url": "https://supabase.com/docs/guides/ai-tools/mcp",
-      "verified_against": "official Supabase MCP docs",
+      "verified_against": "official Supabase MCP docs: hosted server https://mcp.supabase.com/mcp, configured by the project_ref and read_only URL parameters, OAuth by default (docs read 2026-09-26; command changed to this form 2026-09-27). Not vetted: this command has not been connected to a real project; last_vetted refers to the earlier npx command.",
       "last_vetted": "2026-06-10",
       "publisher_verified": false,
       "sha256": null,
       "tombstoned": false,
-      "notes": "Ship with --read-only by default and point at your DEV project ref, never prod -- per data-protection.md token-scope tiers. Drop --read-only only when you explicitly intend migrations."
+      "notes": "Read-only and scoped to your DEV project through the URL (read_only=true, project_ref), never prod -- per data-protection.md token-scope tiers. Remove read_only=true only when you explicitly intend migrations. The docs' personal-access-token header is a fallback for clients without OAuth; it grants more than OAuth scope, so /setup does not propose it."
     },
     {
       "id": "mcp-vercel",
@@ -107,13 +108,13 @@
       "confidence": "medium",
       "install": {
         "transport": "stdio",
-        "command": "claude mcp add-json cloudflare '{\"command\":\"npx\",\"args\":[\"mcp-remote\",\"https://docs.mcp.cloudflare.com/sse\"]}'",
+        "command": "claude mcp add-json cloudflare '{\"command\":\"npx\",\"args\":[\"mcp-remote@0.14.3\",\"https://docs.mcp.cloudflare.com/sse\"]}'",
         "scope": "project",
         "requires": "Nothing for the docs server (read-only). Cloudflare's account-scoped servers (Workers, D1, R2 admin) are separate and OAuth-gated -- add those deliberately."
       },
       "known_permissions": ["network"],
       "source_url": "https://developers.cloudflare.com/agents/model-context-protocol/mcp-servers-for-cloudflare/",
-      "verified_against": "official Cloudflare Agents docs",
+      "verified_against": "official Cloudflare Agents docs (command matched on last_vetted). Recheck 2026-09-25, version pin not vetted: the docs now list https://docs.mcp.cloudflare.com/mcp; /sse remains an alias.",
       "last_vetted": "2026-06-10",
       "publisher_verified": false,
       "sha256": null,
@@ -132,19 +133,19 @@
       ],
       "confidence": "medium",
       "install": {
-        "transport": "stdio",
-        "command": "claude mcp add stripe -- npx -y @stripe/mcp --api-key=<STRIPE_RESTRICTED_KEY>",
+        "transport": "http",
+        "command": "claude mcp add --transport http stripe https://mcp.stripe.com/",
         "scope": "project",
-        "requires": "A Stripe API key. Use a RESTRICTED key (read-only or narrowly-scoped), never your live secret key. Hosted alternative: https://mcp.stripe.com (OAuth)."
+        "requires": "Browser OAuth on first use (type /mcp in Claude Code to authenticate). No key to store. Prefer authorizing a sandbox (test) environment while you build."
       },
-      "known_permissions": ["network", "secrets-access"],
+      "known_permissions": ["network"],
       "source_url": "https://docs.stripe.com/mcp",
-      "verified_against": "official Stripe MCP docs",
+      "verified_against": "official Stripe MCP docs: hosted server https://mcp.stripe.com with OAuth (docs read 2026-09-26; command changed to this form 2026-09-27). From 2026-10-31 Stripe MCP rejects secret keys and restricted keys without the Agent tag; OAuth is unaffected. Not vetted: no live connection has been made with this command; last_vetted refers to the earlier npx command.",
       "last_vetted": "2026-06-10",
       "publisher_verified": false,
       "sha256": null,
       "tombstoned": false,
-      "notes": "Money surface -- use a restricted/test key, prefer the hosted OAuth server (https://mcp.stripe.com) so no secret lands in .mcp.json. Pair with the webhook-handling rule pack below."
+      "notes": "Money surface. OAuth keeps secrets out of .mcp.json, and access can be reviewed or revoked in the Stripe Dashboard. Unverified: for Connect platforms acting on connected accounts, Stripe's docs still describe a platform restricted key because OAuth is not supported there. Pair with the webhook-handling rule pack below."
     },
     {
       "id": "hook-precommit-gates",

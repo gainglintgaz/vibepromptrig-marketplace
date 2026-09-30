@@ -30,7 +30,7 @@
                                                    ]
                                      },
                                      {
-                                         "matcher":  "mcp__31fc416e*apply_migration",
+                                         "matcher":  "^mcp__.+__apply_migration$",
                                          "hooks":  [
                                                        {
                                                            "type":  "command",

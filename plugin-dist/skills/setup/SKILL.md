@@ -12,6 +12,8 @@ allowed-tools:
 disable-model-invocation: true
 ---
 
+> **Needs Claude Code with your project folder open, Node.js 18+, and Git.** It scans the project and, after your approval, writes `.mcp.json` entries, rule packs, and git hooks; the automated write step runs on Windows only. In chat, it cannot run and hooks do not load: open the project in Claude Code and run `/vibepromptrig:setup` there.
+
 # /vibepromptrig:setup -- AI-assisted per-project outfitting
 
 > **Authority:** Implements `docs/architecture/equip-discovery.md` (APPROVED 2026-06-10, all 7 assumptions).
@@ -27,7 +29,11 @@ disable-model-invocation: true
   dependencies, or schema.
 - NOT a substitute for `/architect-probe`. Setup is a configuration decision; architect-probe is a build
   decision. Never trigger the architect-probe flow from here.
-- NOT automatic. Nothing is written without showing the exact change and reading an explicit approval.
+- NOT automatic. No project change (`.mcp.json`, rule packs, hook packs) is written without showing the
+  exact change and reading an explicit approval. The only writes without approval are this skill's own
+  local run records, on Windows only: the Phase 7 audit line in `.claude/setup-audit.jsonl` (also on the
+  empty-scaffold stop) and `.claude/setup-manifest.json` when the run reaches Phase 7. Never sent
+  anywhere. On macOS/Linux nothing is written (see the platform check).
 
 ---
 
@@ -41,7 +47,6 @@ local (no network for the primary flow) and the interview is 5 fixed questions, 
 1. **Locate the catalog.** Read it from the first path that exists:
    - `${CLAUDE_PLUGIN_ROOT}/catalog.json` (installed-plugin case)
    - `.claude-plugin/catalog.json` (running inside the factory / dogfood)
-   - `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/catalog.json` (fallback)
    If none exists, tell the user the catalog is missing and stop.
 
 2. **Platform check.** Detect the OS. The *proposal* phases (1-5) run anywhere. The *equip* step
@@ -98,7 +103,8 @@ Branch idea-first instead:
 > (Already know your stack? Name it now and I'll proceed with that as the Phase 2 answer.)
 
 If the user names a stack, continue to Phase 2 with Q1 pre-answered. Otherwise STOP after writing the
-Phase 7 audit line (`items_proposed: []`, note `empty_scaffold: true`). Do NOT run the architect-probe
+Phase 7 audit line (`items_proposed: []`, note `empty_scaffold: true`; Windows only -- on macOS/Linux
+write nothing, per the platform check). Do NOT run the architect-probe
 flow from inside /setup (see "What this skill is NOT") -- recommend it and end.
 
 ### Phase 2 -- First-run disclaimer + the 5 fixed interview questions
@@ -263,7 +269,7 @@ the user's job (Phase 7 message).
    Written to .mcp.json -- NOT yet active. To finish:
      1. Restart Claude Code.
      2. Run /mcp and confirm each new server shows healthy (approve project-scope servers once).
-     3. For OAuth servers (Vercel, GitHub), authenticate via /mcp.
+     3. For OAuth servers (Stripe, Supabase, Vercel), authenticate via /mcp; GitHub uses the PAT you set.
    Rollback any time: see .claude/setup-rollback-YYYYMMDD.md
    ```
 
@@ -287,9 +293,8 @@ the user's job (Phase 7 message).
 ## Privacy + security (non-negotiable)
 
 - Never `Read` a `.env*` file. Use `.env.example` for expected-var names only.
-- Never write a secret value into any file. The catalog commands carry placeholders
-  (`<YOUR_GITHUB_PAT>`, `<STRIPE_RESTRICTED_KEY>`) -- keep them as placeholders; the user fills real
-  values in their own env, never in `.mcp.json` committed to git.
+- Never write a secret value into any file. Keep credential placeholders such as `<YOUR_GITHUB_PAT>` literal; the user supplies secrets through their own environment, never in `.mcp.json` committed to git. Hosted OAuth servers (Stripe, Supabase, Vercel) need no secret.
+- Supabase's `<your-dev-project-ref>` is a non-secret project identifier, not a credential or an environment-variable reference. Ask the user for their development project reference and confirm the development target. Replace that placeholder in the catalog URL before writing the Supabase entry to `.mcp.json`; retain `read_only=true`. If the reference is unavailable, defer that entry and report it pending; do not write the literal placeholder or an unscoped URL. Never request a token, password, or service-role key for this step.
 - No network call carries project metadata or interview answers anywhere. All four artifacts
   (rollback manifest, setup-manifest.json, setup-audit.jsonl, the .mcp.json edits) are local to the
   target project and user-owned.

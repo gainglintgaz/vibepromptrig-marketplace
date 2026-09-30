@@ -9,6 +9,8 @@ allowed-tools:
   - Write
 ---
 
+> **Needs Claude Code with a terminal and the project folder open.** It reads git history and rule files. In chat, it cannot run: open the project in Claude Code and run `/vibepromptrig:rule-decay-scan` there.
+
 # /rule-decay-scan -- quarterly rule rot detector
 
 ## When to invoke

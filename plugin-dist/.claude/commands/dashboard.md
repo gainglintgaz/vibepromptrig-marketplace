@@ -4,6 +4,8 @@ argument-hint: [--refresh | --help]
 allowed-tools: Bash(powershell *)
 ---
 
+> **Needs Claude Code in a terminal with PowerShell.** It runs the packaged `dashboard.ps1` status script. In chat, it cannot run: use Claude Code and run `/vibepromptrig:dashboard` there.
+
 # /dashboard -- live factory status
 
 Run the dashboard status script and show its output verbatim. The script

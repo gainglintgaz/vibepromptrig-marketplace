@@ -4,6 +4,8 @@ argument-hint: [lean | balanced | max]
 allowed-tools: Bash(powershell *)
 ---
 
+> **Needs Claude Code in a terminal with Windows PowerShell (`powershell`) and Node.js 18+.** It runs `forge profile set` through `powershell`, so on macOS or Linux without it the command cannot run. In chat, it cannot run: use Claude Code and run `/vibepromptrig:mode` there.
+
 # /mode -- the operating-mode dial (lean | balanced | max)
 
 A one-word shortcut over the existing profile system. It REUSES `forge profile set` (do not

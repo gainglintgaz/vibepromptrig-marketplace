@@ -9,6 +9,8 @@ allowed-tools:
   - Write
 ---
 
+> **Needs Claude Code with your projects on this computer.** It reads `errors-fixed.json` and `golden-paths.md` from each project folder. In chat, it cannot run: open Claude Code where the projects live and run `/vibepromptrig:cross-pollinate` there.
+
 # /cross-pollinate -- cross-project pattern detector
 
 ## When to invoke

@@ -4,6 +4,8 @@ argument-hint: <one-line task description>
 allowed-tools: Task, Workflow, Read, Glob, Grep, Bash(git *)
 ---
 
+> **Needs Claude Code with the project folder open.** It runs four subagents and a background workflow that edit, test, and review code. In chat, agents do not run: open the project in Claude Code and run `/vibepromptrig:ship` there.
+
 # /ship — 4-agent pipeline
 
 Orchestrate a task end-to-end through four specialist subagents, each on the right model

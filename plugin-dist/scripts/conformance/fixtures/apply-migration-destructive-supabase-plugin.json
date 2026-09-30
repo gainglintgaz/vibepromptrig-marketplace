@@ -1,0 +1,28 @@
+{
+  "name": "apply-migration-destructive-supabase-plugin",
+  "hook_event": "PreToolUse",
+  "tool": "apply_migration",
+  "category": "destructive",
+  "gate": "pre-migration-destructive-guard",
+  "description": "Destructive apply_migration through the Supabase Claude Code plugin (plugin-scoped tool name). Must BLOCK (exit 2).",
+  "stdin": {
+    "session_id": "00000000-0000-4000-8000-0000000000a9",
+    "transcript_path": "/tmp/transcript.jsonl",
+    "cwd": "/workspace/repo",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "mcp__plugin_supabase_supabase__apply_migration",
+    "tool_input": {
+      "project_id": "deadbeefcafe0001",
+      "name": "drop_legacy_accounts",
+      "query": "DROP TABLE legacy_accounts;"
+    }
+  },
+  "stdin_b64": null,
+  "expect": {
+    "exit_code": 2,
+    "stdout": "",
+    "stderr_contains": "BLOCKED",
+    "side_effects": []
+  },
+  "provenance": "Tool name as Claude Code reports it for this Supabase MCP install path (hooks reference: MCP tools are mcp__<server>__<tool>; plugin-bundled servers are mcp__plugin_<plugin>_<server>__<tool>). Matcher ^mcp__.+__apply_migration$ must fire; expectation identical to apply-migration-destructive."
+}

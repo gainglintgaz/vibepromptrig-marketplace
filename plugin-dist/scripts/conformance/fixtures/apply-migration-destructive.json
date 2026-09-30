@@ -24,5 +24,5 @@
     "stderr_contains": "BLOCKED",
     "side_effects": []
   },
-  "provenance": "Claude Code PreToolUse envelope for matcher mcp__31fc416e*apply_migration (.claude/settings.json); expectation from scripts/hooks/pre-migration-destructive-guard.ps1 (live Windows session 2026-06-13)."
+  "provenance": "Claude Code PreToolUse envelope for matcher ^mcp__.+__apply_migration$ (.claude/settings.json); expectation from scripts/hooks/pre-migration-destructive-guard.ps1 (live Windows session 2026-06-13)."
 }
