@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "_comment": "Customer #1 (the project owner) routine schedules -- the SOURCE OF TRUTH for when scheduled agents/jobs fire, per v5.0 Phase D + routines.schema.json. Agents reference this file (routine <name>) instead of hardcoding a cron in their body. Replace-semantics (A2): a customer's routines.json wholesale replaces the factory defaults.",
+  "_schedule_format_contract": "Each `schedule` MUST be a valid standard 5-field cron (min hour dom mon dow), OR the literal 'stop-hook' for an event-triggered routine. NOTE: this format is NOT yet machine-validated -- routines.schema.json types schedule as a plain string and the hand-rolled PS validator has no regex/pattern support. A syntactically-valid-but-semantically-broken schedule would currently pass validation and (once a scheduler consumes this file -- not wired yet, 'Week 4') silently never fire. All schedules below are hand-verified valid. Recommended hardening surfaced to the project owner: docs/v5.0/phase-d-review-findings.md F3 (hostile-architect HIGH -- add a cron pattern to the schema + pattern support to the validator).",
+  "routines": [
+    { "name": "synthesizer",        "schedule": "0 8 * * 0",  "enabled": true },
+    { "name": "tech-radar",         "schedule": "0 7 * * 1",  "enabled": true },
+    { "name": "outcome-tracker",    "schedule": "0 7 1 * *",  "enabled": true },
+    { "name": "schema-auditor",     "schedule": "0 7 1 * *",  "enabled": true },
+    { "name": "extract-rule-outcomes", "schedule": "0 7 1 * *", "enabled": true },
+    { "name": "debrief",            "schedule": "stop-hook",  "enabled": true },
+    { "name": "daily-status-check", "schedule": "0 8 * * *",  "enabled": true },
+    { "name": "weekly-deep-sweep",  "schedule": "0 8 * * 0",  "enabled": true },
+    { "name": "pg-dump-offsite",    "schedule": "0 3 * * *",  "enabled": true }
+  ]
+}

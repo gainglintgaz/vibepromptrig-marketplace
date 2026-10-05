@@ -1,0 +1,5 @@
+{
+  "_comment": "GOLDEN -- captured BEFORE the auditor body refactor (v5.0 Phase D, arch 9d7294c). Structural snapshot of the tripwire categories the auditor ran while hardcoded (all SIX: the five universal-hygiene checks PLUS the finance compliance banned-phrase grep), and the 5-minute build-timeout. After retrofit, resolve-config.ps1 (the project owner's .forge/agent-configs/auditor.json -- which deep-merge-REPLACES the array, adding 'compliance' to the 5-category stranger default -- onto the frontmatter factory defaults) MUST reproduce these exact values. tripwire_categories is the directive's per-customer 'compliance profile' knob; default omits 'compliance' (a pure-SaaS customer leaves it off), the project owner's finance portfolio enables it -- a genuine second-customer divergence proven by the deep-merge. Tests assert structural equivalence, NOT audit output. See override-layer arch SS1.5.",
+  "tripwire_categories": ["fabrication", "mode-filter", "public-lang", "api-key", "sparse-data", "compliance"],
+  "build_timeout_minutes": 5
+}

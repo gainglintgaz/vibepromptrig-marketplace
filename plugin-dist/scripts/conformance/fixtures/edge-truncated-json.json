@@ -1,0 +1,17 @@
+{
+  "name": "edge-truncated-json",
+  "hook_event": "PreToolUse",
+  "tool": "Bash",
+  "category": "edge-malformed",
+  "gate": "pre-bash-destructive-sql-guard",
+  "description": "Truncated envelope ('{\"tool_name\":\"Bash\",\"tool_inp') -- a partial stream / interrupted write. Parse fails closed to exit 0. stdin_b64 carries the exact bytes.",
+  "stdin": null,
+  "stdin_b64": "eyJ0b29sX25hbWUiOiJCYXNoIiwidG9vbF9pbnA=",
+  "expect": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr_contains": null,
+    "side_effects": []
+  },
+  "provenance": "scripts/hooks/pre-bash-destructive-sql-guard.ps1 line 27 (ConvertFrom-Json catch on a truncated body -> exit 0) (live Windows session 2026-06-13)."
+}

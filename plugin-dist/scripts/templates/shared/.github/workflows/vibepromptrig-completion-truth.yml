@@ -1,0 +1,30 @@
+name: VibePromptRig completion truth
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  completion-truth:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Activate the tracked completion-truth hook in this clean clone
+        run: node tools/install-completion-truth-hook.mjs
+      - name: Reject absolute completion claims in pull-request commits
+        if: github.event_name == 'pull_request'
+        run: node tools/block-unverified-claims.mjs --commits "${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }}"
+      - name: Reject absolute completion claims in direct release-branch pushes
+        if: github.event_name == 'push'
+        run: node tools/block-unverified-claims.mjs --commits "${{ github.event.before }}..${{ github.sha }}"
+      - name: Prove the completion gates reject isolated forgeries and an actual commit
+        run: node --test tools/completion-truth.selftest.mjs

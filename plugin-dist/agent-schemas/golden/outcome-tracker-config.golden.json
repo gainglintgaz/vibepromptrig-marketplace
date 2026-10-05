@@ -1,0 +1,11 @@
+{
+  "_comment": "GOLDEN -- structural snapshot for the outcome-tracker override-layer retrofit (v5.0 Phase D, arch 9d7294c). 'projects' is the OPERATOR-PRIVATE .forge override (repo ROOTS for git log) and ships REDACTED as [] -- no operator paths belong in a distributed fixture (closes the [PORTABLE-PATHS] golden leak). The phase-d equiv test SKIPS the 'projects' field for this reason; override-content divergence is proven by the second-customer test ($SecondCustomer, synthetic path). The thresholds + lookback + output_path below are the frontmatter factory defaults a stranger inherits and ARE matched exactly. Tests assert structural equivalence, NOT LLM output. See override-layer arch SS1.5.",
+  "projects": [],
+  "lookback_days": 30,
+  "low_effectiveness_threshold": 0.6,
+  "low_effectiveness_min_invocations": 3,
+  "high_effectiveness_threshold": 0.85,
+  "high_effectiveness_min_invocations": 10,
+  "tag_coverage_threshold": 0.1,
+  "output_path": "docs/factory-effectiveness.md"
+}

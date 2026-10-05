@@ -1,0 +1,14 @@
+{
+  "schema_version": 2,
+  "bundle_version": "context-v2.0.2",
+  "repository": { "name": "vibepromptrig", "identity_basis": "resolved_root_and_remote" },
+  "scope": "CURRENT_SPRINT.md",
+  "stack": ["Node.js >=18", "PowerShell compatibility wrappers", "Markdown/JSON contracts"],
+  "commands": { "test_context": "node --test scripts/tests/context-contract.test.mjs", "test_schemas": "node scripts/validate-agent-schemas.mjs", "factory_check": "node scripts/test-factory.mjs" },
+  "environments": ["local factory", "plugin bundle"],
+  "capabilities": ["factory-tooling", "portable-generation", "local-file-safety", "context-selection"],
+  "invariants": ["Canonical Node rendering with compatible PowerShell entrypoints", "No secret values in configuration or diagnostics", "No product/database/global-home mutation during VF-CONTEXT-V2 Session 1"],
+  "context_entrypoint": "forge context resolve|explain|check",
+  "host_context_observation": "unknown",
+  "evidence": { "audit_commit": "2fcc7045497c8d73eaed24efb71661df1b1c663d", "clean_baseline_revision": "019f9f80f7faca5ae148f808b4b557a035b6290e", "report": "docs/evidence/VF-CONTEXT-V2-evidence-audit.md", "runtime_unknowns": ["effective_instruction_loading", "provider_token_cache_counters", "child_agent_overhead"] }
+}

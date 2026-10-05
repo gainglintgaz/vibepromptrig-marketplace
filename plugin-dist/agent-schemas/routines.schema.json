@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/gainglintgaz/vibepromptrig-marketplace/main/plugin-dist/agent-schemas/routines.schema.json",
+  "title": "Routines -- scheduled task definitions",
+  "description": "Replace-semantics artifact (A2). v5.0 Sprint 1, arch 9d7294c.",
+  "type": "object",
+  "required": ["schema_version", "routines"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "routines": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "schedule"],
+        "properties": {
+          "name": { "type": "string" },
+          "schedule": { "type": "string" },
+          "enabled": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "write-innocuous",
+  "hook_event": "PreToolUse",
+  "tool": "Write",
+  "category": "happy",
+  "gate": "pre-write-mcp-advisor",
+  "description": "A Write tool call. tool_input carries {file_path, content}. The pre-write advisor is non-blocking (exit 0).",
+  "stdin": {
+    "session_id": "00000000-0000-4000-8000-0000000000a5",
+    "transcript_path": "/tmp/transcript.jsonl",
+    "cwd": "/workspace/repo",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Write",
+    "tool_input": {
+      "file_path": "/workspace/repo/src/example.ts",
+      "content": "export const answer = 42;\n"
+    }
+  },
+  "stdin_b64": null,
+  "expect": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr_contains": null,
+    "side_effects": []
+  },
+  "provenance": "Claude Code PreToolUse(Write) envelope; field contract verified against scripts/hooks/pre-write-mcp-advisor.ps1 (live Windows session 2026-06-13)."
+}

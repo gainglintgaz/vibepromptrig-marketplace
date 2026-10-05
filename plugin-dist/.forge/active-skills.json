@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0.0",
+  "_comment": "Customer #1 (the project owner) skill enable/disable state, per v5.0 Phase D + active-skills.schema.json. Skills are UNIVERSAL by design -- they carry no per-skill configurable block (the directive's 'most skills are universal' rule); the only per-customer knob is which skills are ON. Boolean-replace semantics (A2): a customer's active-skills.json wholesale replaces the factory enable map. Tier entitlement (A7) still gates which skills a tier may enable. the project owner (senior-dev) runs all 7 installed skills.",
+  "skills": [
+    { "name": "architect-probe",          "enabled": true },
+    { "name": "case-study-generate",       "enabled": true },
+    { "name": "cross-pollinate",           "enabled": true },
+    { "name": "half-baked-scan",           "enabled": true },
+    { "name": "migrate-existing-projects", "enabled": true },
+    { "name": "preempt-project",           "enabled": true },
+    { "name": "rule-decay-scan",           "enabled": true }
+  ]
+}

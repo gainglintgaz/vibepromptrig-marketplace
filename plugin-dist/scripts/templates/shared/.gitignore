@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist/
+.next/
+out/
+build/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/settings.json
+.idea/
+
+# VibePromptRig ephemeral reports
+SESSION_DEBRIEF.md
+STATUS_REPORT.md
+WEEKLY_INSIGHTS.md

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/gainglintgaz/vibepromptrig-marketplace/main/plugin-dist/agent-schemas/customer-config.schema.json",
+  "title": "Customer Agent Config -- .forge/agent-configs/<agent>.json",
+  "description": "A customer's override values for one agent. Deep-merged over factory defaults (A2). v5.0 Sprint 1, arch 9d7294c.",
+  "type": "object",
+  "required": ["schema_version", "agent", "config"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "agent": { "type": "string" },
+    "config": { "type": "object" },
+    "budget_cents_per_month": { "type": "integer", "minimum": 0 },
+    "overage_policy": { "type": "string", "enum": ["hard_stop"] }
+  }
+}

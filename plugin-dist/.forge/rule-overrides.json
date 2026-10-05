@@ -1,0 +1,6 @@
+{
+  "schema_version": "1.0.0",
+  "_comment": "Customer #1 (the project owner) rule enable/disable overrides, per v5.0 Phase D + rule-overrides.schema.json. Rules are enable/disable-only per customer (A2): no per-rule body editing. the project owner disables no factory rules, so the overrides list is empty -- every factory rule is active. A different customer (e.g. a non-finance shop) could add { \"name\": \"<rule>\", \"enabled\": false } to switch off an inapplicable OPTIONAL rule.",
+  "_WARNING_enforcement_pending": "A2 says a required:true rule (the essential floors: data-protection, secrets-handling, privacy, execution, vibe-standard) must NEVER be disable-able. As of Phase D that guard is NOT YET WIRED in the resolver -- a malicious/mistaken { name:<required-rule>, enabled:false } would currently resolve without error. This file is SAFE because it disables nothing AND no rule-loader consumes this artifact yet (zero live blast radius). Do NOT wire any rule-loading consumer to resolve-config -ArtifactType rule-override until the required-rule guard ships. Recommended fix surfaced to the project owner: docs/v5.0/phase-d-review-findings.md F1 (hostile-architect CRITICAL).",
+  "rules": []
+}

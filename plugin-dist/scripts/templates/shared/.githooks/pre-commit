@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# VibePromptRig pre-commit gate (Tier-1 mechanical) -- installed in every
+# scaffolded/onboarded project via `git config core.hooksPath .githooks`.
+#
+# This file holds the MESSAGE-INDEPENDENT gate (secrets scan). The four
+# message-dependent gates (arch-gate, destructive-SQL, component-deletion,
+# discovery interlock) live in .githooks/commit-msg, because the commit
+# message is not reliably available at pre-commit time (git writes
+# COMMIT_EDITMSG after this hook when -m is used).
+#
+# Rules enforced here: secrets-handling.md SS6.3.
+# To bypass in a genuine emergency: git commit --no-verify (leaves no audit
+# trail -- prefer fixing the finding).
+
+# --- Gate: secrets scan (secrets-handling.md SS6.3) -------------------------
+# Value-shaped patterns only, so placeholders (sbp_your-token-here,
+# sk-ant-your-key-here) never false-positive. Covers: Supabase access tokens,
+# Anthropic keys, OpenAI project keys, AWS access keys, GitHub PATs, JWTs.
+SECRET_PATTERNS='sbp_[A-Za-z0-9]{20,}|sk-ant-api03-[A-Za-z0-9_-]{20,}|sk-proj-[A-Za-z0-9_-]{20,}|AKIA[A-Z0-9]{16}|ghp_[A-Za-z0-9]{36}|github_pat_[A-Za-z0-9_]{30,}|eyJhbGciOiJ[A-Za-z0-9_-]{10,}'
+
+found=""
+while IFS= read -r f; do
+    [ -z "$f" ] && continue
+    # Scan staged CONTENT (the index), not the working tree.
+    if git show ":$f" 2>/dev/null | grep -qE "$SECRET_PATTERNS"; then
+        found="${found}    ${f}
+"
+    fi
+done < <(git diff --cached --name-only --diff-filter=ACM)
+
+if [ -n "$found" ]; then
+    echo ""
+    echo "[BLOCKED] Possible secret VALUE in staged content (secrets-handling.md SS6.3):"
+    printf '%s' "$found"
+    echo ""
+    echo "  1. Remove the value from the file (use an env var; .env* are gitignored)."
+    echo "  2. If the value is a real credential, ROTATE it now -- it touched the index."
+    echo "  3. Placeholders are fine: sbp_your-token-here etc. do not trip this gate."
+    exit 1
+fi
+
+exit 0

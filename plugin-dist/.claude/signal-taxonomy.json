@@ -1,0 +1,163 @@
+{
+  "version": "v4.4.5",
+  "description": "VibePromptRig passive-listening signal taxonomy. 12 categories, Tier-1 regex + Tier-2 Haiku escalation. v4.4.5 adds negative_patterns + meta_context_exclusions to cut false-positive rate.",
+  "updated": "2026-05-16",
+  "meta_context_exclusions": "(?i)\\b(explain|describe|tell me (about|how)|what (is|are|does)\\b|how (does|do|to)|summarize (the|that)|outline (the|that)|brainstorm|review the (rule|policy|doc|file)|audit (the|this) (rule|policy|file)|the rule (file|says|covers)|document (the|this)|plan (out|the)|consider (the|whether)|discuss (the|whether)|inspect (the|this))\\b",
+  "signals": [
+    {
+      "type": "REWORK",
+      "description": "User asking Claude to redo, redesign, or pivot what was just built",
+      "priority": "HIGH",
+      "tier1_patterns": [
+        "(?i)\\b(redesign|rewrite|rebuild|redo|start over|different approach|from scratch|pivot|scrap this|throw this out|do it again|try again|this isn't right)\\b"
+      ],
+      "strength_markers": ["(?i)\\b(completely|entirely|whole thing|all of it)\\b"],
+      "auto_action": "If 3+ REWORK signals in a session, suggest /audit-gate or hostile-architect review",
+      "promotes_to_rule": false
+    },
+    {
+      "type": "CORRECTION",
+      "description": "User correcting a factual or design error Claude made",
+      "priority": "HIGH",
+      "tier1_patterns": [
+        "(?i)\\b(no,?\\s+that's|wrong|not right|that's not|incorrect|you missed|not what I|that's wrong|actually it|no that|nope)\\b"
+      ],
+      "strength_markers": ["(?i)\\b(actually|I said|I meant|I told you|the correct|it should be)\\b"],
+      "auto_action": "Log; if pattern matches existing rule, flag as potential rule violation",
+      "promotes_to_rule": false
+    },
+    {
+      "type": "REPEAT",
+      "description": "Claude doing something it was already told not to do. Hardened v4.4.5 with negative patterns for past-tense recap.",
+      "priority": "CRITICAL",
+      "require_incident_context": true,
+      "tier1_patterns": [
+        "(?i)\\b(you keep [a-z]+ing\\b|you keep (doing|making|breaking)|I already told you|for the (\\d+|second|third|nth) time|still (doing|breaking|making)|you('?re| are) still|keep doing this|I said (don't|never|stop)|how many times|stop doing (this|that))\\b"
+      ],
+      "negative_patterns": [
+        "(?i)\\b(used to|previously|in the past|last time|history of|past sessions?|recurring (pattern|theme|issue) (in|from) (history|the past))\\b"
+      ],
+      "strength_markers": ["(?i)\\b(again|still|every time|always do this)\\b"],
+      "auto_action": "HIGH PRIORITY — if prior lesson exists for this pattern, auto-promote to rule candidate",
+      "promotes_to_rule": true
+    },
+    {
+      "type": "BUG",
+      "description": "User reporting a bug, error, or broken behavior",
+      "priority": "HIGH",
+      "tier1_patterns": [
+        "(?i)\\b(doesn't work|isn't working|not working|broken|fails|failing|error|errors|crashes|crash|404|500|undefined|null|TypeError|SyntaxError|ReferenceError|NullPointer|exception|throws|threw)\\b"
+      ],
+      "negative_patterns": [
+        "(?i)\\b(no (errors?|bugs?|issues?|crashes?)|zero (errors?|bugs?)|build (passes|clean|green)|tests? (pass|green|passing)|works? (now|fine|correctly|as expected)|fixed the (bug|error|issue)|bug.{0,30}(closed|resolved|fixed)|error.{0,30}(handled|caught|resolved))\\b"
+      ],
+      "strength_markers": ["(?i)\\b(always|never|every time|completely)\\b"],
+      "auto_action": "Auto-append to errors-fixed.json as a new entry with status: INVESTIGATING",
+      "promotes_to_rule": false
+    },
+    {
+      "type": "SECURITY",
+      "description": "User flagging a security incident, data leak, or policy violation. Only fires on token-shape OR explicit incident phrasing (hardened v4.4.5).",
+      "priority": "CRITICAL",
+      "require_incident_context": true,
+      "tier1_patterns": [
+        "(?i)\\b(breach|leaked|leaking|exposed|exposing|compromised|auth bypass|hardcoded (key|token|secret|password)|plaintext (key|token|secret|password)|in the (transcript|log|output|repo|commit history)|just (committed|pushed|pasted) (the|a|my) (key|token|secret|password|credential)|accidentally (committed|pushed|pasted))\\b",
+        "(?i)(sbp_[a-zA-Z0-9]{10,}|sk-ant-[a-zA-Z0-9\\-_]{20,}|sk-proj-[a-zA-Z0-9\\-_]{20,}|AKIA[A-Z0-9]{16}|eyJhbGci[a-zA-Z0-9\\-_.]{20,}|gh[pousr]_[a-zA-Z0-9]{36,})"
+      ],
+      "negative_patterns": [
+        "(?i)\\b(rotation (policy|protocol|rule|schedule)|secrets?-handling|secrets? management|how (to|do you) rotate|token (rotation|hygiene|registry|naming)|credential (hygiene|management|registry)|security (rule|policy|review|audit|checklist)|policy (says|covers|document|spec)|no (leaked|exposed|secrets?)|rotated (the|all|both) (token|key|credential))\\b"
+      ],
+      "strength_markers": ["(?i)\\b(just|right now|literally|actually exposed|actually leaked)\\b"],
+      "auto_action": "IMMEDIATE — notification hook fires, logs SEC-incident entry, prompts token rotation",
+      "promotes_to_rule": false
+    },
+    {
+      "type": "MISSING",
+      "description": "User pointing out something Claude omitted",
+      "priority": "MEDIUM",
+      "tier1_patterns": [
+        "(?i)\\b(you missed|you forgot|didn't include|where('?s| is) the|what about|you left out|where did the|missing from|not included|forgot to|you never added)\\b"
+      ],
+      "strength_markers": ["(?i)\\b(always|supposed to|should have|was supposed)\\b"],
+      "auto_action": "Log + cross-reference against this rule type's checklist",
+      "promotes_to_rule": false
+    },
+    {
+      "type": "CLARIFY_NEEDED",
+      "description": "Claude misunderstood; user re-explaining the same concept",
+      "priority": "MEDIUM",
+      "tier1_patterns": [
+        "(?i)\\b(let me (re-?explain|restate|clarify|be clear|rephrase)|what I (mean|meant|said|want)|to be clear|I mean|what I('?m| am) saying|not what I asked|that's not what|you misunderstood)\\b"
+      ],
+      "strength_markers": ["(?i)\\b(again|still|I keep saying)\\b"],
+      "auto_action": "Log; if 3+ in session, surface prompt-template improvement suggestion",
+      "promotes_to_rule": false
+    },
+    {
+      "type": "FRUSTRATION",
+      "description": "User expressing frustration with Claude's output or behavior",
+      "priority": "MEDIUM",
+      "tier1_patterns": [
+        "(?i)\\b(ugh|why (do you|does this|can't you)|annoying|frustrating|wtf|this is stupid|I hate this|come on|seriously\\?|are you kidding|for the love of|this sucks)\\b",
+        "!{2,}|\\?{2,}"
+      ],
+      "strength_markers": ["(?i)\\b(always|never|every single|every time)\\b"],
+      "auto_action": "Aggregate; track per-vertical frustration density for weekly synthesis",
+      "promotes_to_rule": false
+    },
+    {
+      "type": "CONFUSION",
+      "description": "User does not understand Claude's output or explanation",
+      "priority": "LOW",
+      "tier1_patterns": [
+        "(?i)\\b(I don't understand|what does this mean|huh\\?|confused|confusing|makes no sense|what('?s| is) (going on|this|that)|explain|I('?m| am) lost|what do you mean|say that again)\\b"
+      ],
+      "strength_markers": ["(?i)\\b(at all|completely|totally)\\b"],
+      "auto_action": "Log; signal explanation-gap in output style",
+      "promotes_to_rule": false
+    },
+    {
+      "type": "APPROVAL",
+      "description": "User explicitly approving Claude's output — positive signal",
+      "priority": "LOW",
+      "tier1_patterns": [
+        "(?i)\\b(great|perfect|yes that('?s|) it|exactly|nailed it|that('?s| is) (great|perfect|what I wanted|correct|right)|love it|this is good|works|this works|ship it)\\b"
+      ],
+      "strength_markers": ["(?i)\\b(exactly|perfectly|exactly what I)\\b"],
+      "auto_action": "POSITIVE — log the pattern that worked; promote to golden-paths candidate if 3+ approvals for same pattern",
+      "promotes_to_rule": false
+    },
+    {
+      "type": "PIVOT_STRATEGIC",
+      "description": "User changing direction at a project or feature level",
+      "priority": "HIGH",
+      "tier1_patterns": [
+        "(?i)\\b(let('?s| us) pivot|different direction|rethink (this|the|our)|kill this|park this|scrap the (plan|feature|idea)|change direction|going a different|new approach|forget (this|the) (plan|idea|feature|approach))\\b"
+      ],
+      "strength_markers": ["(?i)\\b(entirely|completely|whole|all of)\\b"],
+      "auto_action": "Project-level event — update CURRENT_SPRINT.md with PIVOTED status; update project BRIEF.md",
+      "promotes_to_rule": false
+    },
+    {
+      "type": "RULE_VIOLATION",
+      "description": "User accusing Claude of violating a VibePromptRig rule. Requires accusatory framing (not just rule citation). Hardened v4.4.5 to drop bare 'rule \\d+' matches.",
+      "priority": "CRITICAL",
+      "require_incident_context": true,
+      "tier1_patterns": [
+        "(?i)\\b(you (just |literally |again |again, )?(broke|violated|ignored|bypassed) (rule|the rule|vibe|factory|VIBE \\d+)|you('?re| are) not supposed to|you shouldn't (have|be)|you (always|keep) (doing|breaking)|against (the|our) (rules?|policy)|that('?s| is) not allowed|you weren't supposed)\\b"
+      ],
+      "negative_patterns": [
+        "(?i)\\b(the rule (says|covers|reads|file|allows|requires)|rule \\d+ (says|covers|reads|allows|requires)|VIBE \\d+ (says|covers|reads|allows|requires)|read (the |this )?rule|review (the |this )?rule|the policy (says|covers)|per (the )?(rule|policy)|according to (the )?rule)\\b"
+      ],
+      "strength_markers": ["(?i)\\b(just|explicitly|clearly|literally|again|still)\\b"],
+      "auto_action": "HIGHEST PRIORITY — log + audit rule enforcement; if specific rule cited, flag for rule-strengthening review",
+      "promotes_to_rule": true
+    }
+  ],
+  "tier2_trigger": ">=2 signals match in single prompt",
+  "tier2_model": "claude-haiku-4-7",
+  "tier2_budget_usd": 0.001,
+  "signal_log_path": ".claude/signal-log.jsonl",
+  "signal_log_ttl_days": 90,
+  "pii_scrub_before_storage": true
+}

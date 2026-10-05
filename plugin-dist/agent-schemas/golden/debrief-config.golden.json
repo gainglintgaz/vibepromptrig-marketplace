@@ -1,0 +1,5 @@
+{
+  "_comment": "GOLDEN -- captured BEFORE the debrief body refactor (v5.0 Phase D, arch 9d7294c). Structural snapshot of the inputs debrief used while hardcoded: the 240-minute (4h) session window default and the SESSION_DEBRIEF.md output. Tier-2 configurable -- the project owner uses both factory defaults, so there is NO .forge/agent-configs/debrief.json and the resolver returns the frontmatter defaults unchanged. After retrofit, resolve-config.ps1 MUST reproduce these exact values. Tests assert structural equivalence, NOT LLM output. See override-layer arch SS1.5.",
+  "session_window_minutes": 240,
+  "output_path": "SESSION_DEBRIEF.md"
+}

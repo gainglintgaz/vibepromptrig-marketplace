@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/gainglintgaz/vibepromptrig-marketplace/main/plugin-dist/agent-schemas/active-skills.schema.json",
+  "title": "Active Skills list -- which skills are enabled for a customer",
+  "description": "Boolean-replace artifact (A2). Gated by tier entitlement (A7). v5.0 Sprint 1, arch 9d7294c.",
+  "type": "object",
+  "required": ["schema_version", "skills"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "enabled"],
+        "properties": {
+          "name": { "type": "string" },
+          "enabled": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "bash-delete-no-where",
+  "hook_event": "PreToolUse",
+  "tool": "Bash",
+  "category": "destructive",
+  "gate": "pre-bash-destructive-sql-guard",
+  "description": "DELETE FROM without a WHERE clause is destructive (wipes the table). Must BLOCK (exit 2).",
+  "stdin": {
+    "session_id": "00000000-0000-4000-8000-0000000000a3",
+    "transcript_path": "/tmp/transcript.jsonl",
+    "cwd": "/workspace/repo",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "psql \"$DATABASE_URL\" -c 'DELETE FROM sessions;'"
+    }
+  },
+  "stdin_b64": null,
+  "expect": {
+    "exit_code": 2,
+    "stdout": "",
+    "stderr_contains": "BLOCKED",
+    "side_effects": []
+  },
+  "provenance": "scripts/hooks/pre-bash-destructive-sql-guard.ps1 'DELETE FROM (no WHERE)' branch (live Windows session 2026-06-13)."
+}

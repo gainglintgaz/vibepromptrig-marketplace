@@ -1,0 +1,7 @@
+{
+  "schema_version": "1.0.0",
+  "agents": [
+    { "name": "synthesizer", "enabled": true },
+    { "name": "tech-radar", "enabled": false }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0.0",
+  "agent": "marketer",
+  "config": {
+    "voice_profile": "cynical software engineer who built something useful; short sentences, specific claims, numbers over adjectives"
+  },
+  "budget_cents_per_month": 500,
+  "overage_policy": "hard_stop"
+}

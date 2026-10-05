@@ -1,0 +1,24 @@
+# {{PROJECT_NAME}}
+
+## Quick Start
+```
+cd {{PROJECT_PATH}}
+claude
+```
+
+## Rules
+All files in `.claude/rules/` are auto-loaded from the VibePromptRig factory.
+See the factory at `<factory-root>` for rule documentation.
+
+## Tracking Files
+- `CURRENT_SPRINT.md` — Update after every task
+- `V1_FEATURE_BACKLOG.md` — Add features as DISCUSSED immediately
+- `errors-fixed.json` — Log bugs with root cause
+- `golden-paths.md` — Log patterns that worked
+
+## Tech Stack
+{{TECH_STACK}}
+
+## Tech Stack Rationale
+<!-- Run "Optimize stack for [project]" to fill this section -->
+Not yet evaluated. Run Stack Optimizer (Phase 1.5) to validate tech choices.

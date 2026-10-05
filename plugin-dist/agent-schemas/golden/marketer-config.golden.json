@@ -1,0 +1,9 @@
+{
+  "_comment": "GOLDEN -- captured BEFORE the marketer body refactor (v5.0 Phase D, arch 9d7294c). Structural snapshot of the inputs the marketer used while its values were hardcoded in the .md body: the founder voice (the project owner's cynical-engineer voice), the consulting.md 11-word anti-slop banned list, and the drafts/marketing output dir. After retrofit, resolve-config.ps1 (the project owner's .forge/agent-configs/marketer.json -- voice override only -- deep-merged onto the frontmatter factory defaults) MUST reproduce these exact values. Factory default voice_profile is generic (a stranger gets it); banned_words + output_directory are universal so they live in the frontmatter default and the project owner inherits them. Tests assert structural equivalence field-by-field, NOT LLM output. See override-layer arch SS1.5.",
+  "voice_profile": "cynical software engineer who built something useful; short sentences, specific claims, numbers over adjectives",
+  "banned_words": [
+    "Revolutionize", "Unleash", "Delve", "Harness", "Elevate", "Empower",
+    "Seamless", "Cutting-edge", "Groundbreaking", "Game-changing", "Supercharge"
+  ],
+  "output_directory": "drafts/marketing"
+}

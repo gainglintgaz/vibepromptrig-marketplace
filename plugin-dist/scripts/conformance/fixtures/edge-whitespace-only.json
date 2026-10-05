@@ -1,0 +1,17 @@
+{
+  "name": "edge-whitespace-only",
+  "hook_event": "PreToolUse",
+  "tool": "Bash",
+  "category": "edge-empty",
+  "gate": "pre-bash-destructive-sql-guard",
+  "description": "Whitespace-only stdin (spaces + newline + tab). After trim it is empty -> exit 0. stdin_b64 carries the exact bytes '   \\n\\t  '.",
+  "stdin": null,
+  "stdin_b64": "ICAgCgkgIA==",
+  "expect": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr_contains": null,
+    "side_effects": []
+  },
+  "provenance": "scripts/hooks/pre-bash-destructive-sql-guard.ps1 line 24 (Trim().Length -eq 0 -> exit 0) (live Windows session 2026-06-13)."
+}

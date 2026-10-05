@@ -1,0 +1,17 @@
+{
+  "name": "edge-bom-prefixed",
+  "hook_event": "PreToolUse",
+  "tool": "Bash",
+  "category": "edge-bom",
+  "gate": "pre-bash-destructive-sql-guard",
+  "description": "Valid envelope prefixed with a UTF-8 BOM (EF BB BF). The gate must strip the BOM and behave as the inner envelope -- here an innocuous 'ls -la' -> exit 0. stdin_b64 carries the exact bytes (BOM + JSON).",
+  "stdin": null,
+  "stdin_b64": "77u/eyJzZXNzaW9uX2lkIjoiMDAwMDAwMDAtMDAwMC00MDAwLTgwMDAtMDAwMDAwMDAwMGJtIiwiaG9va19ldmVudF9uYW1lIjoiUHJlVG9vbFVzZSIsInRvb2xfbmFtZSI6IkJhc2giLCJ0b29sX2lucHV0Ijp7ImNvbW1hbmQiOiJscyAtbGEifX0=",
+  "expect": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr_contains": null,
+    "side_effects": []
+  },
+  "provenance": "scripts/hooks/session-guard.ps1 line 45 ($stdin.TrimStart([char]0xFEFF)) proves BOM-on-stdin is tolerated (live Windows session 2026-06-13). First 3 bytes verified = EF BB BF."
+}
