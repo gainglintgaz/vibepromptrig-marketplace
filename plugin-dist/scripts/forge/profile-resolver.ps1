@@ -58,7 +58,9 @@ $ErrorActionPreference = "Stop"
 # Step 1: Locate profile sources
 # ---------------------------------------------------------------
 $ProjectProfilePath = Join-Path $ProjectRoot ".forge\profile.json"
-$FactoryDefaultPath = Join-Path $FactoryRoot ".forge\default-profile.json"
+. (Join-Path $PSScriptRoot 'state-templates.ps1')
+
+$FactoryDefaultPath = Get-StateConfigPath -Root $FactoryRoot -Name 'default-profile'
 $PresetsDir = Join-Path $FactoryRoot ".forge\profiles"
 
 # ---------------------------------------------------------------
@@ -183,7 +185,7 @@ if ($Field) {
 # ---------------------------------------------------------------
 # Step 7: Plain-English translation (load plan info)
 # ---------------------------------------------------------------
-$translationsPath = Join-Path $FactoryRoot ".forge\plan-translations.json"
+$translationsPath = Get-StateConfigPath -Root $FactoryRoot -Name 'plan-translations'
 $planInfo = $null
 if (Test-Path $translationsPath) {
     $translations = Get-Content $translationsPath -Raw | ConvertFrom-Json

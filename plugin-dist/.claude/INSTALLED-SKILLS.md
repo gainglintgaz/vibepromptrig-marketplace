@@ -17,7 +17,7 @@
 > **To add a skill:** create `.claude/skills/<name>/SKILL.md` AND add a `- \`<name>\`` line here.
 > **To remove a skill:** delete both. Keep this list and the directory in lockstep.
 
-## Installed factory skills (9)
+## Installed factory skills (11)
 
 - `architect-probe` — 6-persona pre-build probing protocol (runnable Senior Council)
 - `case-study-generate` — drafts a project case study from git log + signals + outcomes
@@ -25,6 +25,8 @@
 - `gear` — advises which model + effort fits a task, per gear-shift.md + model-router.json (read-only, never switches the seat itself)
 - `half-baked-scan` — stuck-project detector via signal density + sprint staleness
 - `migrate-existing-projects` — one-shot rule refresh across all projects
+- `next` — the owner's standing "what is next" question answered from live evidence: queue, commands and paste prompts per tool, decisions with norms, evidence-backed gaps, tracker updates
 - `preempt-project` — pre-injects project-specific lessons at scaffold/onboard time
 - `rule-decay-scan` — quarterly rule-rot detector (uncited / stale rules)
+- `second-look` — writes read-only outside-diagnosis prompts for 2+ rotated tools plus a COMPARE.md after a review FAIL/HOLD
 - `setup` — project-aware outfitting: scans stack, proposes MCP servers + rule packs from a curated catalog, equips after approval

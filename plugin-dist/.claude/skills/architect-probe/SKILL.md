@@ -85,7 +85,7 @@ These six are expensive to reverse. Decide them now, not at 95% done.
 1. Target OS / platforms     -- default: <guess>   risk if wrong: full port later
 2. Runtime / language        -- default: <guess>   (available on ALL targets above?)
 3. Audience: me-only / others -- default: <guess>  risk if wrong: de-personalization retrofit
-4. Tenancy: single / multi   -- default: <guess>   (per VIBE Rule 17)
+4. Tenancy: single / multi   -- default: <guess>   (per VIBE Rule 55)
 5. Distribution model        -- default: <guess>   local / plugin / SaaS / installable
 6. Data + privacy boundary   -- default: <guess>   what never leaves the device/tenant
 ```

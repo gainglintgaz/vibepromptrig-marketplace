@@ -20,6 +20,7 @@
 // Usage: node scripts/setup-scheduler.mjs            (registers triggers; Windows needs admin)
 //        node scripts/setup-scheduler.mjs --dry-run  (prints the planned triggers; no side effects)
 
+import { stateConfigPath } from './forge/state-templates.mjs';
 import { existsSync, readFileSync, realpathSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -98,19 +99,19 @@ export function cronLabel(cron) {
   return cron;
 }
 
-export function readRoutines(factoryRoot = FACTORY_ROOT_DEFAULT) {
-  const p = join(factoryRoot, '.forge', 'routines.json');
+export function readRoutines(factoryRoot = FACTORY_ROOT_DEFAULT, projectRoot = factoryRoot) {
+  const p = stateConfigPath(factoryRoot, 'routines', projectRoot);
   if (!existsSync(p)) return null;
   try { return JSON.parse(readFileSync(p, 'utf8')); } catch { return null; }
 }
 
 // Classify every routine in routines.json. The `schedulable` set is what setup-scheduler registers
 // AND what forge doctor expects to find as OS tasks -- one predicate, two consumers (no drift).
-export function resolveRoutinePlan(factoryRoot = FACTORY_ROOT_DEFAULT) {
-  const doc = readRoutines(factoryRoot);
+export function resolveRoutinePlan(factoryRoot = FACTORY_ROOT_DEFAULT, projectRoot = factoryRoot) {
+  const doc = readRoutines(factoryRoot, projectRoot);
   const plan = {
     ok: !!(doc && Array.isArray(doc.routines)),
-    routinesFile: join(factoryRoot, '.forge', 'routines.json'),
+    routinesFile: stateConfigPath(factoryRoot, 'routines', projectRoot),
     schedulable: [], agentsNoRunner: [], eventRoutines: [], disabled: [],
   };
   if (!plan.ok) return plan;
@@ -138,7 +139,8 @@ function argVal(flag) { const i = process.argv.indexOf(flag); return i >= 0 ? pr
 function main() {
   const dryRun = process.argv.includes('--dry-run');
   const factoryRoot = argVal('--factory-root') || argVal('-FactoryRoot') || process.env.VIBE_ROOT || FACTORY_ROOT_DEFAULT;
-  const plan = resolveRoutinePlan(factoryRoot);
+  const projectRoot = argVal('--project-root') || argVal('-ProjectRoot') || process.cwd();
+  const plan = resolveRoutinePlan(factoryRoot, projectRoot);
 
   console.log('\n  VibePromptRig Scheduler Setup (Node, cross-OS)\n');
   if (!plan.ok) {

@@ -13,6 +13,7 @@
 // (also accepts the PowerShell-style -ArtifactType / -Name / -ProjectRoot / -FactoryRoot /
 //  -Json / -SkipTierCheck flags)
 
+import { stateConfigPath } from './state-templates.mjs';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -80,7 +81,7 @@ try {
         const pp = join(ProjectRoot, '.forge', 'profile.json');
         if (existsSync(pp)) { try { tierName = JSON.parse(readFileSync(pp, 'utf8')).profile; } catch { /* keep */ } }
         else {
-          const dp = join(FactoryRoot, '.forge', 'default-profile.json');
+          const dp = stateConfigPath(FactoryRoot, 'default-profile');
           if (existsSync(dp)) { try { tierName = JSON.parse(readFileSync(dp, 'utf8')).profile; } catch { /* keep */ } }
         }
         throw new Error(`RESOLVER ERROR: agent '${Name}' is not included in your tier '${tierName}'. Upgrade your tier or enable it in your profile's agents_enabled. (A7)`);
@@ -127,7 +128,9 @@ try {
       meta.customer_layer_present = true;
       resolved = custObj;
     } else {
-      resolved = null;
+      const base = schemaMap[ArtifactType] ? stateConfigPath(FactoryRoot, schemaMap[ArtifactType]) : null;
+      resolved = base ? readJsonFileOrThrow(base, `factory ${ArtifactType}`) : null;
+      if (resolved) assertCustomerConfigValid(resolved, schemaMap[ArtifactType], base);
     }
   }
 

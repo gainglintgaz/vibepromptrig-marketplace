@@ -32,10 +32,12 @@ configurable:
 
 # marketer
 
-> **Gear (per gear-shift.md):** `model: opus, effort: medium` -- reconciles the prior mismatch
-> (was `sonnet`): the agent's own `router_category: marketing_copy` prefers Opus 4.8 ("least
-> template-shaped output per the anti-slop rules"), so the seat now matches the category. Medium
-> effort -- drafting copy is creative but not the deepest-reasoning lane.
+> **Gear (per gear-shift.md):** `model: opus, effort: medium` expresses the intended family.
+> `router_category: marketing_copy` selects the programmatic API route; read
+> `.claude/model-router.json` for that route's configured ID and prices. This preference does
+> not prove which model the live seat or host-dispatched subagent resolves to: inspect the
+> active runtime (`/model`, `/status`) and provider-returned provenance for the actual identity.
+> Medium effort -- drafting copy is creative but not the deepest-reasoning lane.
 
 ## Resolved configuration (read this FIRST -- v5.0 override layer)
 
@@ -150,7 +152,7 @@ template-grade copy would cost them users.
    c. **Specificity check**: the draft must contain at least one concrete number
       OR one verifiable claim (link to a real artifact, real metric, real user
       quote). No number + no verifiable claim = FAIL.
-   d. **Story-vs-template gate (VIBE Rule 13)**: substitute the product name with
+   d. **Story-vs-template gate (senior-council.md)**: substitute the product name with
       a competitor's. If the draft still reads identically, it is generic
       template copy = FAIL. Rewrite to surface the specific story that only this
       product can tell.
@@ -199,7 +201,7 @@ template-grade copy would cost them users.
   gates were bypassed. Never quietly upgrade a FAIL to PASS.
 - **No context available and user declines to provide a brief.** Refuse to
   draft. Do not invent the product story.
-- **Token budget exceeded (VIBE Rule 21).** If draft + audit approaches 30k
+- **Token budget exceeded (VIBE Rule 58).** If draft + audit approaches 30k
   tokens (huge case study with long brief), summarize the brief first, draft
   against the summary, and note "summary-based draft -- full brief not in
   context window" in the audit block.

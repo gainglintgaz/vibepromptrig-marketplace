@@ -13,6 +13,7 @@
 //
 // Dependency-free (Node stdlib only), node:path throughout, ESM, Node >= 18. UTF-8 (no BOM), LF.
 
+import { stateConfigPath, initializeState } from './state-templates.mjs';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -25,7 +26,7 @@ const FactoryRoot = process.env.VIBE_ROOT || dirname(dirname(here));
 const ProjectRoot = process.cwd();
 const PresetsDir = join(FactoryRoot, '.forge', 'profiles');
 const ProjectProfile = join(ProjectRoot, '.forge', 'profile.json');
-const TranslationsPath = join(FactoryRoot, '.forge', 'plan-translations.json');
+const TranslationsPath = stateConfigPath(FactoryRoot, 'plan-translations');
 const ProfileScript = join(here, 'profile.mjs'); // sibling -- resolve via own dir, NOT VIBE_ROOT (which may point elsewhere)
 
 // ----------------------------------------------------------------
@@ -119,6 +120,7 @@ function testPlanKnown(key) {
   if (!existsSync(TranslationsPath)) return true; // tolerate missing file
   try {
     const t = JSON.parse(readFileSync(TranslationsPath, 'utf8'));
+    if (t?.plans && Object.keys(t.plans).length === 0) return true; // neutral optional catalog
     return !!(t && t.plans && Object.prototype.hasOwnProperty.call(t.plans, key) && t.plans[key] != null);
   } catch {
     return true; // tolerate unparseable file, matching the .ps1's lenient posture
@@ -134,6 +136,8 @@ function applyProfile(presetName, planKey) {
   const r = spawnSync(process.execPath, [ProfileScript, 'set', presetName], { stdio: 'inherit' });
   const code = r.status === null ? 1 : r.status;
   if (code !== 0) process.exit(code);
+
+  initializeState(FactoryRoot, ProjectRoot);
 
   // Stamp ai_plan into the freshly-written profile.json.
   if (planKey && existsSync(ProjectProfile)) {

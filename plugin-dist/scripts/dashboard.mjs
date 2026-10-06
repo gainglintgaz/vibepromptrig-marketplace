@@ -18,6 +18,7 @@
 //   [NOT-TRACKED] not captured yet -- shown honestly, never guessed.
 //   [PARTIAL]    events logged but no real cost captured -- never a fabricated $0.00 [MEASURED].
 
+import { stateConfigPath } from './forge/state-templates.mjs';
 import { existsSync, readFileSync, writeFileSync, statSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -82,7 +83,8 @@ if (wantHelp) {
 }
 
 // ---- Customer display config (the `dashboard` block in .forge/cockpit.json) ----
-const cockpitJsonPath = join(FactoryRoot, '.forge', 'cockpit.json');
+const ProjectRoot = flagValue('-ProjectRoot', '--project-root') || (flagValue('-FactoryRoot', '--factory-root') ? FactoryRoot : process.cwd());
+const cockpitJsonPath = stateConfigPath(FactoryRoot, 'cockpit', ProjectRoot);
 let cfgSections = ['status', 'goals', 'blockers', 'spend'];
 let cfgDataSource = 'terminal';
 let cfgCacheMin = 10;
@@ -111,14 +113,14 @@ function frHash(root) {
   }
   return (h >>> 0).toString(16).padStart(8, '0');
 }
-const cachePath = join(tmpdir(), `vibepromptrig-dashboard-cache-${frHash(FactoryRoot)}.json`);
+const cachePath = join(tmpdir(), `vibepromptrig-dashboard-cache-${frHash(FactoryRoot + ":" + ProjectRoot)}.json`);
 
 let cacheAgeMin = null;
 let cockpit = null;
 let usedCache = false;
 
 function getCockpitFresh() {
-  const obj = gatherCockpit({ factoryRoot: FactoryRoot });
+  const obj = gatherCockpit({ factoryRoot: FactoryRoot, projectRoot: ProjectRoot });
   // cache it (best-effort; never fatal)
   try { writeFileSync(cachePath, JSON.stringify(obj, null, 2), { encoding: 'utf8' }); } catch { /* ignore */ }
   return obj;

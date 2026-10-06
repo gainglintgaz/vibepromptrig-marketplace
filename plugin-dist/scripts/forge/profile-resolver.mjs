@@ -10,6 +10,7 @@
 // (also accepts the PowerShell-style -ProjectRoot / -FactoryRoot / -Json / -Terse /
 //  -Verbose_Output / -Pretty / -Field flags)
 
+import { stateConfigPath } from './state-templates.mjs';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -39,7 +40,7 @@ const readJson = (p) => JSON.parse(readFileSync(p, 'utf8'));
 
 // --- Step 2: load active profile (project > factory default > built-in fallback) ---
 const projectProfilePath = join(ProjectRoot, '.forge', 'profile.json');
-const factoryDefaultPath = join(FactoryRoot, '.forge', 'default-profile.json');
+const factoryDefaultPath = stateConfigPath(FactoryRoot, 'default-profile');
 const presetsDir = join(FactoryRoot, '.forge', 'profiles');
 
 let active, activeSource;
@@ -103,7 +104,7 @@ if (args.field) {
 
 // --- Step 7: plan info ---
 let planInfo = null;
-const translationsPath = join(FactoryRoot, '.forge', 'plan-translations.json');
+const translationsPath = stateConfigPath(FactoryRoot, 'plan-translations');
 if (existsSync(translationsPath)) {
   try { planInfo = readJson(translationsPath).plans?.[effective.ai_plan] ?? null; } catch { planInfo = null; }
 }

@@ -1,6 +1,6 @@
 ---
 name: resolver
-description: When two existing patterns contradict, pick one and explain why. Per VIBE Rule 22 ('surface conflicts, don't average them').
+description: When two existing patterns contradict, pick one and explain why. Per VIBE Rule 59 ('surface conflicts, don't average them').
 tier: full
 model: sonnet
 effort: medium
@@ -35,7 +35,7 @@ trigger:
 
 When two patterns coexist in the codebase and contradict each other -- try/catch sprinkled in handlers AND a global error boundary; cookie-based sessions in one route + JWT in another; tier-cascade additive in one place and exclusive in another; snake_case in DB-layer files vs camelCase mapping in mid-layer; Zustand persist in one feature + manual localStorage in the adjacent feature -- this agent's job is to pick ONE pattern, not average them.
 
-Per VIBE Rule 22: "Average code that satisfies both contradicting patterns is the worst code." Real failure mode the rule was promoted from: a codebase with both async/await + try/catch and a global error boundary -- new code did BOTH, the doubled error handlers swallowed errors twice, and a payment-failure stack trace never surfaced for three days.
+Per VIBE Rule 59: "Average code that satisfies both contradicting patterns is the worst code." Real failure mode the rule was promoted from: a codebase with both async/await + try/catch and a global error boundary -- new code did BOTH, the doubled error handlers swallowed errors twice, and a payment-failure stack trace never surfaced for three days.
 
 Tier is `full` (not `essential` or `standard`) because pattern-conflict resolution is a senior-dev judgment call that doesn't block V1 ship -- it prevents the codebase from rotting between V1 and V2. Indie-free and solo-pro profiles can ship without this; senior-dev / agency / enterprise need it once a codebase has 6+ months of pattern accretion.
 
@@ -95,7 +95,7 @@ If a `CONFLICTS.md` entry was written, the report ends with: `Resolution logged 
 
 ## Failure modes
 
-- **Genuine tie -- both patterns equally recent, equally tested, no rule applies.** The agent MUST NOT default-pick. Output: `Decision: TIE -- escalating to user judgment.` Then surface both options with full evidence (recency, test coverage, factor count per side) so the project owner can decide in one read. Picking arbitrarily in this case is the exact failure mode VIBE Rule 22 warns against.
+- **Genuine tie -- both patterns equally recent, equally tested, no rule applies.** The agent MUST NOT default-pick. Output: `Decision: TIE -- escalating to user judgment.` Then surface both options with full evidence (recency, test coverage, factor count per side) so the project owner can decide in one read. Picking arbitrarily in this case is the exact failure mode VIBE Rule 59 warns against.
 
 - **False conflict -- two valid patterns for different contexts.** Example: cookie-based auth for browser routes + JWT for service-to-service routes is NOT a conflict -- it's the correct two-pattern design for two distinct caller types. The agent must recognize this and refuse to force a merge. Output: `Decision: NOT A CONFLICT -- patterns serve distinct contexts (<browser> vs <service>). No cleanup needed; consider adding a comment in each site explaining the boundary.`
 
@@ -107,4 +107,4 @@ If a `CONFLICTS.md` entry was written, the report ends with: `Resolution logged 
 
 ## Cost target
 
-Under $0.20/run on Sonnet. Single-shot for most cases -- read 5-15 files (the two pattern's instance set), check 1-3 rule files, run 1 git log batch. Multi-shot only if the pattern signatures need iterative Grep refinement. Token budget per VIBE Rule 21: stay under 4,000 tokens per resolution; if surface is larger, summarize and ask user to narrow scope.
+Under $0.20/run on Sonnet. Single-shot for most cases -- read 5-15 files (the two pattern's instance set), check 1-3 rule files, run 1 git log batch. Multi-shot only if the pattern signatures need iterative Grep refinement. Token budget per VIBE Rule 58: stay under 4,000 tokens per resolution; if surface is larger, summarize and ask user to narrow scope.

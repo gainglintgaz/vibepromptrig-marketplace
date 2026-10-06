@@ -10,6 +10,7 @@
 // POSIX -- i.e. it matches the real filesystem semantics on each OS (a tightening, never a
 // loosening: the traversal cases the test exercises are rejected on every OS).
 
+import { stateConfigPath } from './state-templates.mjs';
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve as pathResolve, sep, join } from 'node:path';
 import process from 'node:process';
@@ -236,7 +237,7 @@ export function getTierAgents(projectRoot, factoryRoot) {
   const profilePath = join(projectRoot, '.forge', 'profile.json');
   if (existsSync(profilePath)) tier = readProfile(profilePath);
   if (!tier) {
-    const dp = join(factoryRoot, '.forge', 'default-profile.json');
+    const dp = stateConfigPath(factoryRoot, 'default-profile');
     if (existsSync(dp)) tier = readProfile(dp);
   }
   if (!tier) return null;

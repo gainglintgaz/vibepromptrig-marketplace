@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    VIBE Rule 24 enforcer -- PreToolUse hook on Write tool.
+    mcp-servers.md enforcer -- PreToolUse hook on Write tool.
     Before writing a new utility file in scripts/, src/lib/, lib/, .claude/agents/,
     or .claude/skills/, runs a deterministic check for patterns that overlap with
     known MCP/Skill marketplace offerings. Exit 2 = block with stderr; the agent
@@ -78,7 +78,7 @@ $patterns = @(
     @{ regex='(?i)\b(slack(_| )?(api|webhook|client|send-?message))\b';                                                   tip='Slack MCP already exists (Anthropic-official).' },
     @{ regex='(?i)\b(discord(_| )?(api|webhook|bot))\b';                                                                  tip='Discord MCP / claude-in-chrome can post to Discord webhooks.' },
     @{ regex='(?i)\b(github.*(api|rest|graphql)|octokit)\b';                                                              tip='github MCP is already wired (search: github__*).' },
-    @{ regex='(?i)\b(stripe|invoice|charge|subscription).*\b(api|webhook|sdk)\b';                                         tip='Stripe MCP is an Anthropic-official integration (per VIBE Rule 24 cite).' },
+    @{ regex='(?i)\b(stripe|invoice|charge|subscription).*\b(api|webhook|sdk)\b';                                         tip='Stripe MCP is an Anthropic-official integration (per mcp-servers.md cite).' },
     @{ regex='(?i)\b(sentry|posthog|datadog).*\b(api|capture|track)\b';                                                   tip='Sentry / Posthog / Datadog MCPs are off-the-shelf -- use those.' },
     @{ regex='(?i)\b(xlsx|excel|spreadsheet).*\b(parse|write|generate|read)\b';                                           tip='anthropic-skills:xlsx already handles xlsx/csv read+write.' },
     @{ regex='(?i)\b(figma.*(parse|extract|design)|figma.*api)\b';                                                        tip='figma MCP is already wired (figma:* skills + use_figma tool).' },
@@ -102,7 +102,7 @@ foreach ($p in $patterns) {
 if ($hits.Count -eq 0) { exit 0 }
 
 [Console]::Error.WriteLine("[BLOCKED] mcp-advisor: this file may duplicate existing MCP/Skill marketplace functionality.")
-[Console]::Error.WriteLine("          VIBE Rule 24 -- MCP/Skill First, never reinvent.")
+[Console]::Error.WriteLine("          mcp-servers.md -- MCP/Skill First, never reinvent.")
 [Console]::Error.WriteLine("          File: $path ($nonBlank non-blank lines)")
 [Console]::Error.WriteLine("          Overlap candidates:")
 foreach ($h in $hits) {

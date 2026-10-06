@@ -14,6 +14,7 @@
 // dashboard.mjs imports gatherCockpit() from here (sibling, via import.meta.url) so the
 // RENDER layer never duplicates this aggregation -- it is the single source of status truth.
 
+import { stateConfigPath } from './forge/state-templates.mjs';
 import { existsSync, readFileSync, writeFileSync, openSync, readSync, closeSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -216,7 +217,7 @@ export function gatherCockpit(opts = {}) {
   const factoryRoot = opts.factoryRoot || resolveFactoryRoot([]);
 
   // DECLARED layer
-  const cockpitJsonPath = join(factoryRoot, '.forge', 'cockpit.json');
+  const cockpitJsonPath = stateConfigPath(factoryRoot, 'cockpit', opts.projectRoot || factoryRoot);
   let declared = null;
   if (existsSync(cockpitJsonPath)) {
     try { declared = JSON.parse(readFileSync(cockpitJsonPath, 'utf8')); } catch { declared = null; }
@@ -371,7 +372,7 @@ function main() {
   const factoryRoot = resolveFactoryRoot(argv);
   const asJson = hasFlag(argv, '-Json', '--json');
 
-  const snapshot = gatherCockpit({ factoryRoot });
+  const snapshot = gatherCockpit({ factoryRoot, projectRoot: process.cwd() });
 
   if (asJson) {
     // No process.exit(): main() returns and the process ends naturally, so Node drains stdout fully.

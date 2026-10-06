@@ -7,6 +7,9 @@
 // Dependency-free (Node stdlib only), Node >= 18.
 
 import process from 'node:process';
+import { deferToLocalHook } from './hook-lib.mjs';
+
+deferToLocalHook(import.meta.url, 'PreToolUse', 'Bash');
 
 if (process.env.VIBE_HOOKS_DISABLE) process.exit(0);
 

@@ -146,7 +146,7 @@ Read the following at session end:
 - **PENDING_APPROVALS.md missing**: omit the carried-in subsection. Do not create the file.
 - **Not in a git repo**: print a single-line note to stdout and exit 0. Do not write SESSION_DEBRIEF.md (it would be orphaned).
 - **Signal-log JSONL contains entries with `secret_in_prompt: true`**: do NOT quote the excerpt in the CRITICAL signals subsection. Instead write: "<SIGNAL_TYPE> at <ts>: secret detected, excerpt redacted (see signal-log.jsonl)".
-- **Token budget hit on a very long session**: if input context approaches 30k tokens (per VIBE Rule 21), truncate commit-body summaries and file-touch list, prioritize CRITICAL signals + task closure, and note "summary truncated due to long session" in the Drafts subsection.
+- **Token budget hit on a very long session**: if input context approaches 30k tokens (per VIBE Rule 58), truncate commit-body summaries and file-touch list, prioritize CRITICAL signals + task closure, and note "summary truncated due to long session" in the Drafts subsection.
 
 ## Cost target
 

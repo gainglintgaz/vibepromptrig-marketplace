@@ -10,7 +10,7 @@ enforcement_ref: ".claude/lib/router/src/budget.ts checkAndReserve (per-task USD
 # gear-shift.md -- The Gear Shifter (per-task model + effort routing)
 
 > **Authority:** Auto-loaded global rule. Applies to every VibePromptRig session.
-> **Created:** 2026-07-05. **Last refreshed:** 2026-07-08 (Fable-5 first-class seat + alias set +
+> **Created:** 2026-07-05. **Last refreshed:** 2026-07-08 (Fable first-class seat + alias set +
 > effort tier names + ultracode mode; de-hardcoded prices; corrected per-session-cap enforcement claim).
 > **Purpose:** Stop burning tokens/credits by matching the MODEL and the EFFORT to the
 > task in front of you. This is the live-seat companion to `model-router.json` (which
@@ -46,11 +46,11 @@ task needs, separately from which model. High effort on a trivial edit is the #1
 - **Haiku** -- quick, simple jobs you want done fast and cheap. Cheapest tier.
 - **Sonnet** -- your everyday driver for writing and editing real code.
 - **Opus** -- a hard call that's expensive to get wrong.
-- **Fable 5** -- the biggest, longest, or hardest job you've got. Priciest tier.
+- **Fable** -- the biggest, longest, or hardest job you've got. Priciest tier.
 
 > **Prices live in `model-router.json`, not here** (per the header rule -- tech-radar refreshes
 > the live $/Mtok in its `models` block). Relative order, cheap -> dear: **Haiku < Sonnet < Opus
-> < Fable 5.** When you need the actual number for a budget call, read `.claude/model-router.json`;
+> < Fable.** When you need the actual number for a budget call, read `.claude/model-router.json`;
 > never quote a price from memory or from this file.
 
 ## The gears, by workflow phase
@@ -67,10 +67,10 @@ code is the biggest silent token drain.
 
 ---
 
-## Fable 5, effort by effort
+## Fable, effort by effort
 
 1M context - frontier tier - **reserve for the genuinely biggest/hardest work.** As of the
-2026-07-08 refresh, Fable 5 is a **first-class seat** (`/model fable`) AND a subagent-dispatch
+2026-07-08 refresh, Fable is a **first-class seat** (`/model fable`) AND a subagent-dispatch
 target (router category `deep_program`) -- it is no longer subagent-only. A single full-context
 call is the most expensive thing you can run and approaches the `per_task_usd` cap in
 `model-router.json` `hard_caps` (read the live number there, don't assume it), so reach for it
@@ -94,27 +94,33 @@ model, so only reach for it when the work is genuinely the biggest or hardest yo
 ### Model seat (`/model <name>`)
 
 `/model` takes a built-in alias or a full model id (per Claude Code's model-config docs). The
-aliases you'll actually use:
+aliases you'll actually use. Read resolved model IDs, context, default effort, and availability
+from the active Claude Code runtime (`/model`, `/status`) and provider documentation.
+`.claude/model-router.json` governs programmatic API routing, not live-seat alias resolution:
 
 - `/model haiku` - `/model sonnet` - `/model opus` -- the three everyday seats.
-- `/model fable` -- Fable 5, now a REAL seat (no longer subagent-only). Your hardest / longest work.
-- `/model best` -- resolves to Fable 5 where your org has access, otherwise the latest Opus.
+- `/model fable` -- Fable, now a REAL seat (no longer subagent-only). Your hardest / longest work.
+- `/model best` -- resolves to Fable where your org has access, otherwise the latest Opus.
   The "just give me the top seat" alias.
 - `/model opusplan` -- hybrid: uses Opus while you're in plan mode, then auto-switches to Sonnet
   for execution. Cheap way to get flagship planning without paying Opus rates through the whole build.
 - `/model default` -- clears any override, reverts to your account's recommended model
-  (Opus 4.8 on this account type).
+  (inspect `/model` or `/status` in the active Claude Code runtime for the resolved model).
 - `sonnet[1m]` / `opus[1m]` -- the `[1m]` **suffix** (not a standalone alias) selects the
   1M-token-context variant for very long sessions. It's a no-op when the alias already resolves
-  to a native-1M model (Sonnet 5 already carries 1M), and it composes with opusplan as `opusplan[1m]`.
+  to a native-1M model (check the active runtime alias and its context in `/model`, `/status`,
+  and the [provider model configuration docs](https://code.claude.com/docs/en/model-config)),
+  and it composes with opusplan as `opusplan[1m]`.
 
 `/model` also **saves** your pick as the default for new sessions (Claude Code v2.1.153+), so a
 one-off heavy seat sticks until you change it back -- switch down when the heavy work is done.
 
 ### Speed
 
-- `/fast` -- Opus with faster output, same model/brain (Opus 4.8 / 4.7 only; it does NOT drop to a
-  smaller model). A good default for the Build lane.
+- `/fast` -- `opus` with faster output, same model/brain (availability depends on the resolved
+  model and your runtime/account configuration; check `/fast` and the
+  [provider fast-mode docs](https://code.claude.com/docs/en/fast-mode)). It does NOT drop to a
+  smaller model. A good default for the Build lane.
 
 ### Effort (type the keyword into your prompt -- independent of the model)
 
@@ -124,7 +130,7 @@ Five effort tiers, cheapest to deepest, each with the think-keyword that trigger
 |---|---|---|
 | `low` | (plain -- no keyword) | mechanical / quick edits |
 | `medium` | `think` | standard build + edit work |
-| `high` | `think hard` | real judgment (also the DEFAULT effort on Sonnet 5 / Opus 4.8 / Fable 5) |
+| `high` | `think hard` | real judgment (check the active runtime for the default effort on `sonnet` / `opus` / `fable`) |
 | `xhigh` | `think harder` | hardest planning / whole-system reasoning |
 | `max` | `ultrathink` | your single deepest job of the day |
 
@@ -163,7 +169,7 @@ The expensive Opus seat is for judgment, planning, and synthesis. Keep it lean:
 - Respect the router's hard caps in `model-router.json` `hard_caps`: `per_task_usd` IS enforced
   pre-dispatch (`checkAndReserve` refuses a call whose estimate exceeds it), but `per_session_usd`
   is declared and NOT yet enforced in code (route() has no session identity -- tracked follow-up),
-  so watch the session ceiling by hand. Never silently overrun -- surface the breach (VIBE Rule 21 + 58).
+  so watch the session ceiling by hand. Never silently overrun -- surface the breach (VIBE Rule 58).
 - Cross-provider work (Gemini vision, Grok X-data, Perplexity cited research) never touches the
   seat -- route it through the matching router category via a subagent.
 

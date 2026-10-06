@@ -90,11 +90,13 @@ if (-not $event)     { $event     = "unknown" }
 # change to the resolution ORDER here must also change profile-resolver.ps1 (single source of truth).
 $PresetsDir = Join-Path $FactoryRoot ".forge\profiles"
 
+. (Join-Path $PSScriptRoot '../forge/state-templates.ps1')
+
 function Get-ActiveProfile {
     $cwd = (Get-Location).Path
     $candidates = @(
         (Join-Path $cwd ".forge\profile.json"),
-        (Join-Path $FactoryRoot ".forge\default-profile.json")
+        (Get-StateConfigPath -Root $FactoryRoot -Name 'default-profile')
     )
     foreach ($p in $candidates) {
         if (Test-Path $p) {
@@ -278,7 +280,7 @@ $costCents = [Math]::Round((($tokensIn / 1000000.0) * $costPerMIn) + (($tokensOu
 # ---- Budget guard (G1): warn at 80%, LOUD at 100%+, for SESSION and MONTHLY. UserPromptSubmit only.
 # NEVER hard-blocks: a UserPromptSubmit hook that blocked would stop the user mid-thought with no
 # recourse (hostile). The decision to continue stays with the human; this just makes the cost
-# impossible to miss (VIBE Rule 21 -- surface the breach, don't lock the user out of their own tool).
+# impossible to miss (VIBE Rule 58 -- surface the breach, don't lock the user out of their own tool).
 # The router's assertWithinBudget hard-stop is the right place for a true STOP (automated dispatch).
 if ($event -eq "UserPromptSubmit") {
     $notes = @()

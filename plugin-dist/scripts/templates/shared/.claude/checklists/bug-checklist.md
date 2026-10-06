@@ -63,7 +63,7 @@ Mark secondary layers that also need touching (multi-layer fixes are common).
 - [ ] **One-line summary** of the fix (root cause + change vector)
 - [ ] **Files to touch** (paths + reason per file)
 - [ ] **Tests to add** (unit + integration + regression-grep)
-- [ ] **Migration needed?** If yes, separate the migration commit from the code commit per VIBE Rule 38 + `data-protection.md` §4
+- [ ] **Migration needed?** If yes, separate the migration commit from the code commit per data-protection.md + `data-protection.md` §4
 - [ ] **Multi-Dimensional Flow check** — does this fix break the metric anywhere else? (Dashboard / Reports / Calendar / Tax / Settings)
 
 ---
@@ -75,7 +75,7 @@ Each item must produce a concrete pass/fail artifact:
 - [ ] `npx tsc --noEmit` passes (catches what Vite/Turbopack skip — VIBE Rule 35 gate #1)
 - [ ] `npm run lint` passes
 - [ ] Unit tests added + passing for the regression case
-- [ ] **DB SELECT round-trip** — for any data-write fix: run SELECT confirming the row exists with correct columns (VIBE Rule 2 — toast ≠ saved)
+- [ ] **DB SELECT round-trip** — for any data-write fix: run SELECT confirming the row exists with correct columns (VIBE Rule 35 — toast ≠ saved)
 - [ ] **Browser click-through** with DevTools console open — primary user flow renders zero console errors
 - [ ] **Column-drift grep** — for any data-shape fix: `.from("table").select("col")` strings audited against live `information_schema.columns`
 - [ ] **Regression grep** — `grep -rn "<pattern from fix>" src/` returns zero new matches that share the bug shape

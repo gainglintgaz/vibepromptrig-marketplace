@@ -208,7 +208,7 @@ Under $1.00/run on Opus. Plans are usually 2-10k tokens; phases require multi-pa
 (cascade chains, cost tables, RLS verification). Expect 20-40k input tokens and 5-15k output
 tokens. Phase 0 dominates if WebFetch is heavy -- limit to 8 fetches per run, prioritize the
 most expensive services in the plan first. If a run exceeds $1.50, summarize findings so far
-and stop -- per VIBE Rule 21 (hard token budgets, not advisory).
+and stop -- per VIBE Rule 58 (hard token budgets, not advisory).
 
 ---
 

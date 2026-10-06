@@ -1,6 +1,6 @@
 # VibePromptRig installation
 
-VibePromptRig's Claude Code plugin is named `vibepromptrig`. Its marketplace is also named `vibepromptrig`, so the install identifier is `vibepromptrig@vibepromptrig`. Release 5.1.8 contains 14 agents, 9 skills, 3 commands, 4 workflows, compact Context V2 cards, and 5 selected reference rules. It does not install the former full `.claude/rules/` tree or generated editor mirrors.
+VibePromptRig's Claude Code plugin is named `vibepromptrig`. Its marketplace is also named `vibepromptrig`, so the install identifier is `vibepromptrig@vibepromptrig`. Release 5.1.9 contains 15 agents, 11 skills, 3 commands, 4 workflows, compact Context V2 cards, and 5 selected reference rules. It does not install the former full `.claude/rules/` tree or generated editor mirrors.
 
 ## Requirements
 
@@ -21,6 +21,23 @@ claude plugin list
 ```
 
 Start Claude Code in your own project and run `/vibepromptrig:setup`. Review its proposed tooling and approve individual writes. On macOS and Ubuntu, follow the manual checklist it prints. Setup stores its project state in the project's `.claude/`; installing or updating the plugin does not require replacing your Claude Code user settings or project files.
+
+## Initialize your project state
+
+Before the first setup, ask Claude Code to run this from your project directory using the
+installed plugin's `CLAUDE_PLUGIN_ROOT` (replace the variable with its actual cache path
+if you run it outside Claude Code):
+
+```bash
+node "${CLAUDE_PLUGIN_ROOT}/scripts/forge/init.mjs" --profile solo-pro --plan claude-pro --no-prompt
+```
+
+Choose the profile and plan that match your project. This required step creates editable
+neutral defaults in your project's `.forge/` directory, including routines and cockpit
+preferences. Existing customer state files are preserved. Review and enable routines there
+before running the scheduler; the package continues to supply their executable runners.
+Then run `/vibepromptrig:setup` and review its proposals. Repeating initialization needs
+`--force` only to replace the profile; it still preserves the other customer state files.
 
 ## Local marketplace from a checkout
 

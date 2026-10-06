@@ -7,6 +7,7 @@
 // neither resolution/merge path is reimplemented here. Dependency-free (Node stdlib), node:path
 // throughout, Node >= 18, ESM, UTF-8 no-BOM writes, genuine UTC timestamps.
 
+import { stateConfigPath } from './state-templates.mjs';
 import { existsSync, readFileSync, writeFileSync, copyFileSync, rmSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -19,7 +20,7 @@ const FactoryRoot = process.env.VIBE_ROOT || dirname(dirname(here));
 const ProjectRoot = process.cwd();
 const ProjectProfile = join(ProjectRoot, '.forge', 'profile.json');
 const ResolverScript = join(here, 'profile-resolver.mjs'); // sibling -- resolve via own dir, NOT VIBE_ROOT
-const TranslationsPath = join(FactoryRoot, '.forge', 'plan-translations.json');
+const TranslationsPath = stateConfigPath(FactoryRoot, 'plan-translations');
 
 // ----------------------------------------------------------------
 // Field schema: name -> { type, validate, hint }   (mirrors config.ps1 $Schema)

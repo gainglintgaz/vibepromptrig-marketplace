@@ -128,6 +128,17 @@ function registeredProjects(projectsDir) {
       mode: registryField(brief, 'Delivery Mode').toLowerCase(), conflict: false, duplicate: false,
     });
   }
+  // STATE.json owns Task/Checkpoint/Checkpoint Date, so shadow exactly those fields BEFORE the
+  // duplicate check: a canonical + alias pair that differs only in legacy BRIEF values is not a conflict.
+  for (const record of records) {
+    record.briefFields = { task: record.task, checkpoint: record.checkpoint, checkpointDate: record.checkpointDate };
+    record.coord = readCoordState(registryField(record.brief, 'State Root') || record.location);
+    if (record.coord.present && record.coord.valid) {
+      record.task = record.coord.task;
+      record.checkpoint = record.coord.checkpoint;
+      record.checkpointDate = record.coord.checkpointDate;
+    }
+  }
   for (let i = 0; i < records.length; i++) {
     for (let j = i + 1; j < records.length; j++) {
       const a = records[i]; const b = records[j];
@@ -148,7 +159,79 @@ function registeredProjects(projectsDir) {
       (aScore >= bScore ? b : a).duplicate = true;
     }
   }
+  // A real conflict keeps its BRIEF values and ignores STATE.json (identity is unknown).
+  for (const record of records.filter((r) => r.conflict)) {
+    Object.assign(record, record.briefFields);
+    record.coord = { present: false };
+  }
   return records.filter((record) => !record.duplicate || record.conflict);
+}
+
+// --- STATE.json (schema coord-state/1) -> BRIEF registry fields ------------------------------
+// docs/architecture/coordination-layer-v1.md §0.2 F1/F2. STATE.json is read from the project's
+// canonical root ("Registry State Root:" in BRIEF, else the "## Location" checkout); BRIEF stays
+// the fallback when it is absent. F2 4-row mapping: Owner from BRIEF; Task = ids of active tasks;
+// Checkpoint = committed path of the newest validated receipt (see committedReceiptPath);
+// Checkpoint Date = newest updatedAt. Read-only.
+const STATE_SCHEMA = 'coord-state/1';
+
+function localYmd(iso) {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+// Committed receipt location for a task. F3 stores {sha, validatedAt, receiptSha256} with no path,
+// so the path comes from the convention: the receipt itself when it is a path string, an explicit
+// receipt.path, else the committed diagnosis folder docs/diagnosis/<sha12>/ (as /ship writes it).
+function committedReceiptPath(receipt) {
+  if (typeof receipt === 'string') return receipt.trim();
+  if (!receipt || typeof receipt !== 'object') return '';
+  if (typeof receipt.path === 'string' && receipt.path) return receipt.path;
+  const sha = typeof receipt.sha === 'string' ? receipt.sha.trim() : '';
+  return /^[0-9a-f]{7,64}$/i.test(sha) ? join('docs', 'diagnosis', sha.slice(0, 12).toLowerCase()) : '';
+}
+
+function readCoordState(stateRoot) {
+  if (!stateRoot) return { present: false };
+  const statePath = join(stateRoot, 'STATE.json');
+  const raw = readTextRaw(statePath);
+  if (raw == null) return { present: false };
+  let state;
+  try { state = JSON.parse(raw.replace(/^﻿/, '')); } catch { return { present: true, valid: false }; }
+  if (!state || state.version !== STATE_SCHEMA || !Array.isArray(state.tasks)) return { present: true, valid: false };
+  const tasks = state.tasks.filter((t) => t && typeof t === 'object');
+  const task = tasks.filter((t) => t.stage === 'active' && t.id).map((t) => String(t.id)).join(', ');
+  let checkpoint = ''; let validatedAt = -Infinity;
+  for (const t of tasks) {
+    const receiptPath = committedReceiptPath(t.receipt);
+    if (!receiptPath) continue;
+    const at = Date.parse(typeof t.receipt === 'string' ? t.updatedAt : t.receipt.validatedAt);
+    if (Number.isNaN(at) || at <= validatedAt) continue;
+    validatedAt = at;
+    checkpoint = isAbsolute(receiptPath) ? receiptPath : join(stateRoot, receiptPath);
+  }
+  let newest = -Infinity; let newestIso = '';
+  for (const entry of [...tasks, ...(Array.isArray(state.topics) ? state.topics : [])]) {
+    const at = Date.parse(entry?.updatedAt);
+    if (!Number.isNaN(at) && at > newest) { newest = at; newestIso = entry.updatedAt; }
+  }
+  return { present: true, valid: true, task, checkpoint, checkpointDate: newestIso ? localYmd(newestIso) : '' };
+}
+
+// STATE.json was applied over the BRIEF fields in registeredProjects(). Returns whether the BRIEF
+// registry is shadowed (both exist and any derived field differs) so the caller can print the single
+// warning line.
+function applyCoordState(registration) {
+  const { coord, briefFields: brief } = registration;
+  if (!coord.present) return { shadowed: false, invalid: false };
+  if (!coord.valid) return { shadowed: false, invalid: true };
+  const known = (value) => value && value !== 'UNKNOWN';
+  const briefHasRegistry = ['task', 'checkpoint', 'checkpointDate'].some((f) => known(brief[f]));
+  const differs = (brief.task || '') !== coord.task
+    || (brief.checkpointDate || '') !== coord.checkpointDate
+    || (brief.checkpoint ? pathKey(brief.checkpoint) : '') !== (coord.checkpoint ? pathKey(coord.checkpoint) : '');
+  return { shadowed: briefHasRegistry && differs, invalid: false };
 }
 
 function repositoryIdentity(repoPath) {
@@ -247,9 +330,14 @@ function main() {
   const staleFiles = [];
   const deliveryActions = [];
 
+  let briefShadowed = false;
+
   for (const registration of registeredProjects(projectsDir)) {
     const { brief: briefContent, status, canonical: projName, location: projPath, mode } = registration;
     const issues = [];
+    const coord = applyCoordState(registration);
+    if (coord.shadowed) { briefShadowed = true; issues.push('BRIEF registry shadowed by STATE.json'); }
+    if (coord.invalid) issues.push(`UNKNOWN: STATE.json is not valid ${STATE_SCHEMA}; BRIEF registry used`);
     if (registration.conflict) issues.push('UNKNOWN: conflicting registration or alias');
     if (!registration.owner || registration.owner === 'UNKNOWN') issues.push('UNKNOWN: accountable owner missing');
     if (!registration.task || registration.task === 'UNKNOWN') issues.push('UNKNOWN: active task missing');
@@ -309,6 +397,9 @@ function main() {
 
     projectRows.push(`| ${displayCell(projName)} | ${displayCell(registration.owner)} | ${displayCell(registration.task)} | ${displayCell(registration.checkpoint)} | ${displayCell(mode)} | ${displayCell(status)} | ${lastCommit} | ${daysSince} | ${blockers} |`);
   }
+
+  // F2: one line, never a silent preference, however many projects are shadowed.
+  if (briefShadowed) process.stdout.write('BRIEF registry shadowed by STATE.json\n');
 
   // ---- Count learning metrics ----------------------------------------------------------------
   // lessons.md was split into lessons-critical.md + reference/lessons-archive.md; count UNIQUE

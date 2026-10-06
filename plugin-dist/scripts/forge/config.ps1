@@ -61,7 +61,9 @@ if (-not $FactoryRoot) { $FactoryRoot = Split-Path (Split-Path $PSScriptRoot -Pa
 $ProjectRoot = (Get-Location).Path
 $ProjectProfile = Join-Path $ProjectRoot ".forge\profile.json"
 $ResolverScript = Join-Path $FactoryRoot "scripts\forge\profile-resolver.ps1"
-$TranslationsPath = Join-Path $FactoryRoot ".forge\plan-translations.json"
+. (Join-Path $PSScriptRoot 'state-templates.ps1')
+
+$TranslationsPath = Get-StateConfigPath -Root $FactoryRoot -Name 'plan-translations'
 
 # ----------------------------------------------------------------
 # Field schema: name -> { type, validate, hint }

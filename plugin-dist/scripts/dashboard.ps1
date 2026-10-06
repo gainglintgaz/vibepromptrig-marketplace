@@ -39,10 +39,12 @@ param(
     [switch]$Refresh,
     [switch]$Json,
     [switch]$Help,
-    [string]$FactoryRoot = $env:VIBE_ROOT
+    [string]$FactoryRoot = $env:VIBE_ROOT,
+    [string]$ProjectRoot = (Get-Location).Path
 )
 
 $ErrorActionPreference = "Stop"
+if (-not $PSBoundParameters.ContainsKey("ProjectRoot") -and $PSBoundParameters.ContainsKey("FactoryRoot")) { $ProjectRoot = $FactoryRoot }
 if (-not $FactoryRoot) { $FactoryRoot = Split-Path $PSScriptRoot -Parent }
 
 if ($Help) {
@@ -67,7 +69,9 @@ if ($Help) {
 }
 
 # ---- Customer display config (the `dashboard` block in .forge/cockpit.json) ----
-$cockpitJsonPath = Join-Path $FactoryRoot ".forge\cockpit.json"
+. (Join-Path $PSScriptRoot 'forge/state-templates.ps1')
+
+$cockpitJsonPath = Get-StateConfigPath -Root $FactoryRoot -Name 'cockpit' -ProjectRoot $ProjectRoot
 $cfgSections = @("status", "goals", "blockers", "spend")
 $cfgDataSource = "terminal"
 $cfgCacheMin = 10
@@ -83,7 +87,7 @@ if (Test-Path $cockpitJsonPath) {
 }
 
 # ---- Get cockpit status data (cached by default; -Refresh forces live) ----
-$frHash = [Math]::Abs($FactoryRoot.ToLowerInvariant().GetHashCode()).ToString("x8")
+$frHash = [Math]::Abs(($FactoryRoot + ":" + $ProjectRoot).ToLowerInvariant().GetHashCode()).ToString("x8")
 $cachePath = Join-Path ([System.IO.Path]::GetTempPath()) "vibepromptrig-dashboard-cache-$frHash.json"
 # cockpit.ps1 is a FACTORY script (sibling of this one), found relative to THIS script's
 # location -- not relative to $FactoryRoot, which is the customer/data root (where cockpit.json
@@ -94,7 +98,7 @@ $cockpit = $null
 $usedCache = $false
 
 function Get-CockpitFresh {
-    $raw = (& powershell -NoProfile -ExecutionPolicy Bypass -File $cockpitScript -FactoryRoot $FactoryRoot -Json 2>&1 | Out-String)
+    $raw = (& powershell -NoProfile -ExecutionPolicy Bypass -File $cockpitScript -FactoryRoot $FactoryRoot -ProjectRoot $ProjectRoot -Json 2>&1 | Out-String)
     $obj = $raw | ConvertFrom-Json   # throws if cockpit failed -> caller handles
     # cache it (best-effort)
     try { [System.IO.File]::WriteAllText($cachePath, ($obj | ConvertTo-Json -Depth 12), (New-Object System.Text.UTF8Encoding $false)) } catch { }

@@ -50,6 +50,16 @@ function Get-CanonicalPath {
     catch { return $Path.TrimEnd('\').ToLowerInvariant() }
 }
 
+# Compare with the caller's checkout, even when FactoryRoot was explicitly supplied.
+# Stderr keeps the hook's JSON stdout parseable; this is advisory, not a root override.
+if ($env:VIBE_ROOT) {
+    $currentGitRoot = & git rev-parse --show-toplevel 2>$null
+    if ($LASTEXITCODE -eq 0 -and $currentGitRoot -and
+        (Get-CanonicalPath $env:VIBE_ROOT) -ne (Get-CanonicalPath $currentGitRoot)) {
+        [Console]::Error.WriteLine('WARN: VIBE_ROOT differs from the current git toplevel; scripts may target another checkout. Clear VIBE_ROOT for worktree tests.')
+    }
+}
+
 $isFactorySession = ((Get-CanonicalPath $ProjectDir) -eq (Get-CanonicalPath $FactoryRoot))
 $scope    = if ($isFactorySession) { "factory" } else { "project" }
 $scopeTag = "[$scope]"
@@ -270,8 +280,8 @@ if ($branch) {
                 }
                 if ($isMerged) {
                     # "Merged" is NOT "safe to retire" -- candidacy requires (merged AND clean),
-                    # matching the guard scripts/worktree-retire.ps1 already applies at line ~97
-                    # ($dirty.Count -gt 0 -and -not $Force -> SKIP). Before 2026-08-14 this list
+                    # scripts/worktree-retire.mjs also checks ignored files and protects active trees.
+                    # Before 2026-08-14 this list
                     # counted merged alone, so it advertised data-bearing worktrees as disposable.
                     # Real near-miss (Example Wellness App P-11 / errors-fixed #14): two cert worktrees were
                     # fully merged (0 commits ahead) while holding the ONLY copy of a Google Place
@@ -305,12 +315,12 @@ if ($branch) {
             Write-Host ("  [WRN] $mergedDirty merged worktree(s) hold UNCOMMITTED work -- excluded from the retirement count above." +
                 $(if ($dirtyExample) { " e.g. $dirtyExample" })) -ForegroundColor Yellow
             Write-Host "        Merged + dirty is the worst quadrant: git calls the branch fully integrated while the worktree holds the only copy." -ForegroundColor Yellow
-            Write-Host "        Commit or harvest before retiring. 'worktree-retire.ps1 -Force' WOULD destroy these." -ForegroundColor Yellow
+            Write-Host "        Commit or harvest before retiring. worktree-retire.mjs skips dirty trees and never forces removal." -ForegroundColor Yellow
         }
         if ($wtTotal -gt $wtWarnTotal -or (-not $skipDetail -and $oldestDays -gt $wtWarnAgeDays)) {
             Write-Host ("  [WRN] WORKTREE PILE: $wtTotal worktrees (warn > $wtWarnTotal), oldest merged $oldestDays d (warn > $wtWarnAgeDays d)" +
                 $(if ($oldestPath) { " -- e.g. $oldestPath" })) -ForegroundColor Yellow
-            Write-Host "        Retire merged worktrees via scripts/worktree-retire.ps1 (NEVER bare 'git worktree remove' -- 2026-08-08 node_modules incident)." -ForegroundColor Yellow
+            Write-Host "        Preview merged worktree retirement via node scripts/worktree-retire.mjs (dry-run default; --apply after review; NEVER bare 'git worktree remove' -- 2026-08-08 node_modules incident)." -ForegroundColor Yellow
         }
     }
 }

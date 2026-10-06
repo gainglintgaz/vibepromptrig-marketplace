@@ -30,6 +30,8 @@ $script:SecretPatterns = @(
 # Schema contract version this build validates against (A5).
 $script:SchemaVersion = '1.0.0'
 
+. (Join-Path $PSScriptRoot 'state-templates.ps1')
+
 function Test-PathJail {
     <#
     .SYNOPSIS  A3 path jail. Returns $true if Candidate stays inside Base.
@@ -347,7 +349,7 @@ function Get-TierAgents {
     }
     if (-not $tier) {
         # No project profile -> fall back to factory default-profile tier.
-        $dp = Join-Path $FactoryRoot ".forge\default-profile.json"
+        $dp = Get-StateConfigPath -Root $FactoryRoot -Name 'default-profile'
         if (Test-Path $dp) {
             try { $tier = (Get-Content $dp -Raw | ConvertFrom-Json).profile } catch { $tier = $null }
         }

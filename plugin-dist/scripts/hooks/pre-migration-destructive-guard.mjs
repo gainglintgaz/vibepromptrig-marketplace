@@ -23,6 +23,9 @@
 // Other SQL shapes may pass; database authorization, restorable backups and human review remain necessary.
 
 import process from 'node:process';
+import { deferToLocalHook } from './hook-lib.mjs';
+
+deferToLocalHook(import.meta.url, 'PreToolUse', '^mcp__.+__apply_migration$');
 
 if (process.env.VIBE_HOOKS_DISABLE) process.exit(0);
 

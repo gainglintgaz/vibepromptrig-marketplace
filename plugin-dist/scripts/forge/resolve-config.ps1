@@ -59,6 +59,8 @@ if (-not $FactoryRoot) { $FactoryRoot = Split-Path (Split-Path $PSScriptRoot -Pa
 
 $schemaDir = Join-Path $FactoryRoot 'agent-schemas'
 
+. (Join-Path $PSScriptRoot 'state-templates.ps1')
+
 function Read-JsonFileOrThrow {
     param([string]$Path, [string]$Label)
     if (-not (Test-Path $Path)) { return $null }
@@ -111,7 +113,7 @@ switch ($ArtifactType) {
                 $pp = Join-Path $ProjectRoot ".forge\profile.json"
                 if (Test-Path $pp) { try { $tierName = (Get-Content $pp -Raw | ConvertFrom-Json).profile } catch {} }
                 else {
-                    $dp = Join-Path $FactoryRoot ".forge\default-profile.json"
+                    $dp = Get-StateConfigPath -Root $FactoryRoot -Name 'default-profile'
                     if (Test-Path $dp) { try { $tierName = (Get-Content $dp -Raw | ConvertFrom-Json).profile } catch {} }
                 }
                 throw "RESOLVER ERROR: agent '$Name' is not included in your tier '$tierName'. Upgrade your tier or enable it in your profile's agents_enabled. (A7)"
@@ -178,7 +180,12 @@ switch ($ArtifactType) {
             $meta.customer_layer_present = $true
             $resolved = $custObj
         } else {
-            $resolved = $null   # no customer layer -> factory behaves as default (valid, not error)
+            $resolved = $null
+            if ($schemaMap[$ArtifactType]) {
+                $base = Get-StateConfigPath -Root $FactoryRoot -Name $schemaMap[$ArtifactType]
+                $resolved = Read-JsonFileOrThrow -Path $base -Label "factory $ArtifactType"
+                if ($resolved) { Assert-CustomerConfigValid -Data $resolved -SchemaName $schemaMap[$ArtifactType] -SourcePath $base }
+            }
         }
     }
 }

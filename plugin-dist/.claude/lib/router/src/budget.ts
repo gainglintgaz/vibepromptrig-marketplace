@@ -1,5 +1,5 @@
 // A9 -- budget hard-stop, checked BEFORE dispatch. Hard-stop: refuse to dispatch past cap, NEVER
-// silent overrun (VIBE Rule 21 + 58). Arch 9d7294c. Provider expansion: F1 per-task ceiling, F2
+// silent overrun (VIBE Rule 58). Arch 9d7294c. Provider expansion: F1 per-task ceiling, F2
 // finite-cost hardening, F3 dedicated budget ledger (decoupled from the shared metric stream).
 import { readFileSync, existsSync, appendFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
@@ -196,7 +196,7 @@ export async function checkAndReserve(opts: {
    * F1 (CRITICAL) -- the per-call hard ceiling (effective per_task cap, already lowered by any
    * customer max_cost_per_task override). A single call whose ESTIMATE exceeds this is refused BEFORE
    * the lock + BEFORE dispatch, INDEPENDENT of the monthly cap. Without it, a caller that omits the
-   * monthly budget had monthlyCap=+Infinity and was completely uncapped (A9 / VIBE Rule 21).
+   * monthly budget had monthlyCap=+Infinity and was completely uncapped (A9 / VIBE Rule 58).
    *
    * F6 honesty: this gates the pre-dispatch ESTIMATE, not the ACTUAL settled cost. A caller that
    * under-estimates (low estimatedCents + large maxTokens) can still settle above the cap; route()

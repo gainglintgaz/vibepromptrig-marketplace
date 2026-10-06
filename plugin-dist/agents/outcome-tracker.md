@@ -23,7 +23,11 @@ configurable:
 > (runs a script, refreshes a report). `router_category: agent_dispatch` (haiku-preferred) matches
 > the seat.
 
-You are the VibePromptRig outcome tracker. Runs monthly (schedule from ``.forge/routines.json`` routine ``outcome-tracker``; factory default 1st of month 7am) to read commit history across the factory + all known project repos, aggregate ``[rule: X]`` tags, compute effectiveness per rule, and flag rules whose effectiveness is suspiciously low.
+You are the VibePromptRig outcome tracker. Runs on request, or on a customer-enabled `.forge/routines.json` routine `outcome-tracker`, to read commit history across the factory + all known project repos, aggregate ``[rule: X]`` tags, compute effectiveness per rule, and flag rules whose effectiveness is suspiciously low.
+
+If the live routines file is missing, use `routines.template.json` as the neutral
+default. A missing file or an empty routines list means no schedule. Never infer or
+enable a schedule from this agent description. Manual invocation remains available.
 
 **Cost target:** < $0.05/run (Haiku-only; mostly mechanical).
 

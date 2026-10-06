@@ -14,13 +14,15 @@
     .\scripts\setup-scheduler.ps1
     .\scripts\setup-scheduler.ps1 -DryRun
 #>
-param([switch]$DryRun)
+param([switch]$DryRun, [string]$ProjectRoot = (Get-Location).Path)
 
 $ErrorActionPreference = "Stop"
 
 $ScriptsDir  = $PSScriptRoot
 $FactoryRoot = Split-Path $PSScriptRoot -Parent
-$RoutinesFile = Join-Path $FactoryRoot ".forge\routines.json"
+. (Join-Path $PSScriptRoot 'forge/state-templates.ps1')
+
+$RoutinesFile = Get-StateConfigPath -Root $FactoryRoot -Name 'routines' -ProjectRoot $ProjectRoot
 $Dow3 = @{ "0" = "SUN"; "7" = "SUN"; "1" = "MON"; "2" = "TUE"; "3" = "WED"; "4" = "THU"; "5" = "FRI"; "6" = "SAT" }
 
 # cron -> schtasks. Returns @{ sc = @(...); st = "HH:MM"; label = "..." } or $null if untranslatable.

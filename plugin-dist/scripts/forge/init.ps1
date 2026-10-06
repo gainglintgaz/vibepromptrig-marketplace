@@ -89,7 +89,9 @@ if (-not $FactoryRoot) { $FactoryRoot = Split-Path (Split-Path $PSScriptRoot -Pa
 $ProjectRoot = (Get-Location).Path
 $PresetsDir = Join-Path $FactoryRoot ".forge\profiles"
 $ProjectProfile = Join-Path $ProjectRoot ".forge\profile.json"
-$TranslationsPath = Join-Path $FactoryRoot ".forge\plan-translations.json"
+. (Join-Path $PSScriptRoot 'state-templates.ps1')
+
+$TranslationsPath = Get-StateConfigPath -Root $FactoryRoot -Name 'plan-translations'
 $ProfileScript = Join-Path $FactoryRoot "scripts\forge\profile.ps1"
 
 # ----------------------------------------------------------------
@@ -165,6 +167,7 @@ function Test-PlanKnown {
     param([string]$Key)
     if (-not (Test-Path $TranslationsPath)) { return $true }   # tolerate missing file
     $t = Get-Content $TranslationsPath -Raw | ConvertFrom-Json
+    if ($t.plans -and @($t.plans.PSObject.Properties).Count -eq 0) { return $true } # neutral optional catalog
     $null -ne $t.plans.$Key
 }
 
@@ -176,6 +179,9 @@ function Apply-Profile {
 
     & $ProfileScript "set" $PresetName
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+    & node (Join-Path $PSScriptRoot 'state-templates.mjs') --init $FactoryRoot $ProjectRoot
+    if ($LASTEXITCODE -ne 0) { throw 'Neutral state initialization failed' }
 
     # Stamp ai_plan into the freshly-written profile.json
     if ($PlanKey -and (Test-Path $ProjectProfile)) {

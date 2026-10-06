@@ -1,0 +1,14 @@
+{
+  "profile": "indie-free",
+  "ai_plan": "claude-free",
+  "user_overrides": {
+    "rules_added": [],
+    "rules_removed": [],
+    "agents_added": [],
+    "agents_removed": [],
+    "skills_added": [],
+    "skills_removed": [],
+    "hooks_added": [],
+    "hooks_removed": []
+  }
+}

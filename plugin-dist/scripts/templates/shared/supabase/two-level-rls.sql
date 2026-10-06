@@ -120,7 +120,7 @@ END;
 $$;
 
 -- ============================================================
--- §5 — Enable RLS on every table (data-protection.md §1 + VIBE Rule 5)
+-- §5 — Enable RLS on every table (data-protection.md §1 + privacy.md)
 -- ============================================================
 ALTER TABLE firms ENABLE ROW LEVEL SECURITY;
 ALTER TABLE firm_members ENABLE ROW LEVEL SECURITY;

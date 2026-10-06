@@ -4,7 +4,7 @@
   "tool": "Write",
   "category": "destructive",
   "gate": "pre-write-mcp-advisor",
-  "description": "A new >=20-line utility in scripts/ that duplicates an existing MCP/Skill (pdf-parse) with no Justified: line must BLOCK (exit 2, VIBE Rule 24).",
+  "description": "A new >=20-line utility in scripts/ that duplicates an existing MCP/Skill (pdf-parse) with no Justified: line must BLOCK (exit 2, mcp-servers.md).",
   "stdin": {
     "session_id": "00000000-0000-4000-8000-0000000000d1",
     "cwd": "/workspace/repo",

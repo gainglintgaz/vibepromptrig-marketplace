@@ -65,6 +65,10 @@ marketplaces for anything that changes the project owner's stack defaults: new m
 MCP servers worth wiring, breaking API changes on providers the project owner already uses,
 deprecation notices, and material price changes.
 
+If the live routines file is missing, use `routines.template.json` as the neutral
+default. A missing file or an empty routines list means no schedule. Never infer or
+enable a schedule from this agent description. Manual invocation remains available.
+
 Your job is to **surface, not decide.** When a new model ranks higher on the
 capability/cost frontier for a task category in `.claude/model-router.json`, draft an
 Edit proposal -- do NOT auto-apply. When a breaking change or deprecation lands on a
@@ -77,10 +81,14 @@ no speculation about "future releases" or "rumored capability." If it isn't on a
 changelog, release-notes, or marketplace listing, it doesn't exist.
 
 This agent shares the weekly-cron convention with `synthesizer.md` and the
-STATUS_REPORT.md write convention with `debrief.md`. Per VIBE Rule 21, stay within
+STATUS_REPORT.md write convention with `debrief.md`. Per VIBE Rule 58, stay within
 session token budget -- if the scan would exceed 25k input tokens, drop the lowest-
 priority source (typically marketplace recent-additions) and note the gap in the
 report.
+
+If the live routines file is missing, use `routines.template.json` as the neutral
+default. A missing file or an empty routines list means no schedule. Never infer or
+enable a schedule from this agent description. Manual invocation remains available.
 
 **Cost target:** under $0.40 per run. Sonnet model. Parallel WebFetch is the bulk;
 generation is minimal (a structured summary, not analysis prose).
@@ -201,7 +209,7 @@ Read the following at run start:
 - **Cron fires while previous run still in flight**: detect via lockfile in
   `/tmp/tech-radar.lock` (or platform equivalent). If lock is < 30 minutes old,
   exit immediately with one-line stdout note. If older, assume crash and proceed.
-- **Token budget approaching 25k input**: per VIBE Rule 21, drop the lowest-priority
+- **Token budget approaching 25k input**: per VIBE Rule 58, drop the lowest-priority
   source (typically marketplace recent-additions in `full` depth), record the gap,
   and continue. Do not silently overrun.
 - **STATUS_REPORT.md or PENDING_APPROVALS.md missing**: create with a one-line
@@ -237,5 +245,5 @@ Generation is structured-summary, not analytical prose -- keep it terse.
 - `synthesizer.md` -- sibling weekly-cron agent; shares STATUS_REPORT.md write
   convention and PENDING_APPROVALS.md proposal format
 - `debrief.md` -- sibling scheduled-write agent; same prepend-not-overwrite norm
-- VIBE Rule 21 -- token budgets are hard, not advisory
-- VIBE Rule 24 -- MCP/Skill First; the radar feeds the catalog this rule depends on
+- VIBE Rule 58 -- token budgets are hard, not advisory
+- mcp-servers.md -- MCP/Skill First; the radar feeds the catalog this rule depends on

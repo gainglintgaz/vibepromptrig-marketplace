@@ -22,6 +22,7 @@
 //   This returns the SAME PASS verdict as the .ps1 on a synced factory -- correctly, not by
 //   weakening the freshness semantic.
 
+import { stateConfigPath } from './forge/state-templates.mjs';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -226,7 +227,7 @@ function ruleMetaOf(content) {
   };
 }
 function readActiveProfile() {
-  for (const p of [join(FactoryRoot, '.forge', 'profile.json'), join(FactoryRoot, '.forge', 'default-profile.json')]) {
+  for (const p of [join(FactoryRoot, '.forge', 'profile.json'), stateConfigPath(FactoryRoot, 'default-profile')]) {
     if (existsSync(p)) { try { const j = JSON.parse(readFileSync(p, 'utf8')); if (j.profile) return j.profile; } catch { /* ignore */ } }
   }
   return null;

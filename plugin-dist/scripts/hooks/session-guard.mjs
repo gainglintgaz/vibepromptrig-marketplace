@@ -23,7 +23,7 @@ import { fileURLToPath } from 'node:url';
 import os from 'node:os';
 import process from 'node:process';
 import { createHash } from 'node:crypto';
-import { projectWritesAllowed } from './hook-lib.mjs';
+import { projectWritesAllowed, deferToLocalHook } from './hook-lib.mjs';
 
 // Kill-switch (arch assumption 9): never block when disabled.
 if (process.env.VIBE_HOOKS_DISABLE) process.exit(0);
@@ -39,6 +39,8 @@ function getEvent() {
   return 'start';
 }
 const EVENT = getEvent();
+const hookEvent = { start: 'SessionStart', prewrite: 'PreToolUse', heartbeat: 'UserPromptSubmit', stop: 'Stop' }[EVENT];
+deferToLocalHook(import.meta.url, hookEvent, EVENT === 'prewrite' ? 'Bash' : '');
 
 // ---- stdin ----
 function readStdin() {

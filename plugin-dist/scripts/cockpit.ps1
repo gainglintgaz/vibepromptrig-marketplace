@@ -36,6 +36,7 @@
 [CmdletBinding()]
 param(
     [string]$FactoryRoot = $env:VIBE_ROOT,
+    [string]$ProjectRoot = (Get-Location).Path,
     [switch]$Json
 )
 if (-not $FactoryRoot) { $FactoryRoot = Split-Path $PSScriptRoot -Parent }
@@ -45,7 +46,9 @@ Set-Location $FactoryRoot
 
 # ---- DECLARED layer: human-maintained goals + milestones ----
 # Lives in .forge/cockpit.json. If absent, render a starter the user fills in.
-$cockpitJsonPath = Join-Path $FactoryRoot ".forge\cockpit.json"
+. (Join-Path $PSScriptRoot 'forge/state-templates.ps1')
+
+$cockpitJsonPath = Get-StateConfigPath -Root $FactoryRoot -Name 'cockpit' -ProjectRoot $ProjectRoot
 if (Test-Path $cockpitJsonPath) {
     $declared = Get-Content $cockpitJsonPath -Raw | ConvertFrom-Json
 } else {

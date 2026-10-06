@@ -82,9 +82,11 @@ that you've decided Stage 2 may proceed; for a Bridge-Brief-class kickoff, that 
 automatically or by default.
 
 This runs Code → Test → Review as one background job. Internally it enforces exactly what this
-file used to describe in prose: Tester RED → one Coder retry → re-test, still RED → stop;
-Reviewer HOLD → one Coder retry → re-test AND re-review, still HOLD → stop. You get a single
-result back when it completes — no need to relay each stage individually.
+file used to describe in prose: Tester RED → one Coder retry → re-test, still RED → stop.
+Reviewer HOLD → **root cause before repair**: a read-only `diagnostician` (never the author)
+traces the failure at the reviewed head and names red-first tests; the one Coder retry must add
+those tests before fixing → re-test AND re-review, still HOLD → stop. You get a single result
+back when it completes — no need to relay each stage individually.
 
 **On completion, report to the human based on the workflow's returned `status`:**
 - `status: "ready-to-merge"` → PASS. Report: ready to push/merge (the human decides — you don't
@@ -96,6 +98,17 @@ result back when it completes — no need to relay each stage individually.
   human how they want to proceed. `result.stage === "lock"` specifically means another
   ship-execute run appears to already be in flight (`result.lockInfo` has what it found) —
   don't retry at all until you've confirmed the other run actually finished.
+  `result.stage === "diagnose"` means the repair was refused before any retry:
+  `no-root-cause` (diagnosis missing, for another head, or declined), `incomplete-root-cause`
+  (any mandatory ROOT-CAUSE section empty: failure path, why-tests-passed, class audit,
+  minimal design/files, ranked alternatives including defer, red-first tests, per-claim
+  VERIFIED/HYPOTHESIS tags, or evidence limits) → save the whole result as
+  JSON to `result.reviewArtifactPath`, then run `/second-look <that path>`; `root-cause-recommends-defer` → the owner decides from
+  `result.diagnosis.root_cause_path`. `result.blockedReason === "probes-not-imported"` means
+  the retry omitted required red-first test names. `result.blockedReason === "probes-not-verified"`
+  means the independent Tester could not verify every required test exists in the tree AND
+  fails when replayed at the frozen pre-fix review head, before the implementation commit.
+  The Coder's names or claimed red run are insufficient. Surface `result.recommendation` as given.
 
 ## Conductor rules
 

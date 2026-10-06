@@ -25,6 +25,7 @@
 //     ai_call tokens/cost for the current UTC month (cost_cents guard: numeric, finite, >=0).
 //   - UserPromptSubmit: emit the budget notices byte-for-byte. Stop: append the session_summary row.
 
+import { stateConfigPath } from '../forge/state-templates.mjs';
 import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -90,7 +91,7 @@ try {
   function getActiveProfile() {
     const cwd = process.cwd();
     const candidates = [join(cwd, '.forge', 'profile.json')];
-    if (factoryRoot) candidates.push(join(factoryRoot, '.forge', 'default-profile.json'));
+    if (factoryRoot) candidates.push(stateConfigPath(factoryRoot, 'default-profile'));
     for (const p of candidates) {
       if (existsSync(p)) {
         const cfg = readJsonFile(p);

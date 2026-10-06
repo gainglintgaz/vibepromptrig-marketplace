@@ -2093,6 +2093,151 @@
       "lifecycle": "active",
       "card_version": "2.0.0",
       "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-EDITING-METHOD",
+      "legacy_file": "editing-method.md",
+      "source": "docs/rules-reference/factory/editing-method.md",
+      "summary": "Use native file edits and preserve JSON ledger lines.",
+      "card": ".forge/context/rules/scope-and-preservation.md",
+      "reference": "docs/rules-reference/factory/editing-method.md",
+      "applicability": {
+        "intents": ["build", "test", "tooling"],
+        "paths": ["scripts/**", ".claude/rules-manifest.json", "docs/rules-reference/factory/**"],
+        "capabilities": [],
+        "risks": ["W0", "W1", "W2", "W3"]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "Review the file-edit method and narrow diff before commit.",
+        "coverage_limit": "Process review does not mechanically block shell-based edits."
+      },
+      "replacement": {
+        "outcome": "retained",
+        "card_ids": ["scope-and-preservation"],
+        "rationale": "Factory editing constraints remain source/reference-only; installations retain the portable preservation safeguard."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-CLAIMS-AND-REPORTING",
+      "legacy_file": "claims-and-reporting.md",
+      "source": "docs/rules-reference/factory/claims-and-reporting.md",
+      "summary": "Bind status claims and exact counts to same-turn live evidence.",
+      "card": ".forge/context/rules/completion-claims.md",
+      "reference": "docs/rules-reference/factory/claims-and-reporting.md",
+      "applicability": {
+        "intents": ["all"],
+        "paths": [],
+        "capabilities": [],
+        "risks": ["W0", "W1", "W2", "W3"]
+      },
+      "dependencies": ["VF-RULE-COMPLETION-TRUTH-CONTRACT"],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "Same-turn evidence review of VERIFIED and UNVERIFIED report claims.",
+        "coverage_limit": "Claim tagging is a process gate, not proof of unobserved remote behavior."
+      },
+      "replacement": {
+        "outcome": "retained",
+        "card_ids": ["completion-claims"],
+        "rationale": "Factory reporting constraints remain source/reference-only; installations retain the portable completion safeguard."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-MULTI-AGENT-PREFLIGHT",
+      "legacy_file": "multi-agent-preflight.md",
+      "source": "docs/rules-reference/factory/multi-agent-preflight.md",
+      "summary": "Check task ownership and expected HEAD before work and commit.",
+      "card": ".forge/context/rules/scope-and-preservation.md",
+      "reference": "docs/rules-reference/factory/multi-agent-preflight.md",
+      "applicability": {
+        "intents": ["build", "test", "tooling", "delegate"],
+        "paths": ["scripts/**"],
+        "capabilities": [],
+        "risks": ["W0", "W1", "W2", "W3"]
+      },
+      "dependencies": [],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "Preflight git/gh/handoff inspection and pre-commit HEAD comparison.",
+        "coverage_limit": "Manual checks do not provide an atomic lease or prevent concurrent writes."
+      },
+      "replacement": {
+        "outcome": "retained",
+        "card_ids": ["scope-and-preservation"],
+        "rationale": "Factory collision checks remain source/reference-only; installations retain the portable preservation safeguard."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-WINDOWS-ENVIRONMENT",
+      "legacy_file": "windows-environment.md",
+      "source": "docs/rules-reference/factory/windows-environment.md",
+      "summary": "Use PowerShell paths, scoped reports, and isolated test environments.",
+      "card": ".forge/context/rules/secrets-and-sensitive-data.md",
+      "reference": "docs/rules-reference/factory/windows-environment.md",
+      "applicability": {
+        "intents": ["build", "test", "tooling"],
+        "paths": ["scripts/**"],
+        "capabilities": ["windows"],
+        "risks": ["W0", "W1", "W2", "W3"]
+      },
+      "dependencies": ["VF-RULE-SECRETS-HANDLING"],
+      "enforcement": {
+        "tier": 2,
+        "kind": "process",
+        "reference": "scripts/forge-start.ps1 warning and scripts/tests/forge-start-vibe-root.test.mjs",
+        "coverage_limit": "The root mismatch warning is mechanical; command and credential hygiene require review."
+      },
+      "replacement": {
+        "outcome": "retained",
+        "card_ids": ["secrets-and-sensitive-data"],
+        "rationale": "Factory Windows constraints remain source/reference-only; installations retain the portable credential safeguard."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
+    },
+    {
+      "id": "VF-RULE-ROOT-CAUSE-BEFORE-REPAIR",
+      "legacy_file": "root-cause-before-repair.md",
+      "source": "docs/rules-reference/factory/root-cause-before-repair.md",
+      "summary": "After an independent FAIL or HOLD, a non-author root cause precedes any repair.",
+      "card": ".forge/context/rules/testing-and-evidence.md",
+      "reference": "docs/rules-reference/factory/root-cause-before-repair.md",
+      "applicability": {
+        "intents": ["build", "test", "review"],
+        "paths": [],
+        "capabilities": [],
+        "risks": ["W1", "W2", "W3"]
+      },
+      "dependencies": ["VF-RULE-TESTING-STRATEGY"],
+      "enforcement": {
+        "tier": 1,
+        "kind": "mechanical",
+        "reference": "rootCauseGate + probesImported + probesVerified in .claude/workflows/ship-execute.mjs; scripts/tests/ship-root-cause.test.mjs",
+        "coverage_limit": "Enforced inside /ship only; repairs made outside the pipeline rely on review."
+      },
+      "replacement": {
+        "outcome": "retained",
+        "card_ids": ["testing-and-evidence"],
+        "rationale": "The factory gate lives in the /ship workflow; installations retain the portable testing-and-evidence safeguard."
+      },
+      "lifecycle": "active",
+      "card_version": "1.0.0",
+      "reference_version": "1.0.0"
     }
   ],
   "selection_requirements": {

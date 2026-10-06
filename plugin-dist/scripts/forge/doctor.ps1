@@ -146,7 +146,9 @@ if (Test-Path $resolverScript) {
 # ----------------------------------------------------------------
 # Section 3: Plan translations JSON validity
 # ----------------------------------------------------------------
-$translationsPath = Join-Path $FactoryRoot ".forge\plan-translations.json"
+. (Join-Path $PSScriptRoot 'state-templates.ps1')
+
+$translationsPath = Get-StateConfigPath -Root $FactoryRoot -Name 'plan-translations'
 if (Test-Path $translationsPath) {
     try {
         $t = Get-Content $translationsPath -Raw | ConvertFrom-Json
@@ -276,7 +278,7 @@ if (Test-Path $syncScript) {
 # whose last run is older than 2x its cadence; and every enabled AGENT routine that has no local
 # runner (belongs on cloud Routines -- docs/architecture/agent-routines-cloud-routines.md).
 # ----------------------------------------------------------------
-$routinesFile = Join-Path $FactoryRoot ".forge\routines.json"
+$routinesFile = Get-StateConfigPath -Root $FactoryRoot -Name 'routines'
 if (-not (Test-Path $routinesFile)) {
     Add-Section -Name "scheduler routines" -Status "skip" -Message ".forge/routines.json missing -- cannot check schedulers"
 } else {

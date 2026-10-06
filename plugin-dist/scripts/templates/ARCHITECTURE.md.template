@@ -21,7 +21,7 @@
 - **Target OS / platforms:** <Windows | macOS | Linux | web | mobile -- list EVERY target that must work>
 - **Runtime / language:** <e.g. Node 20+ / Python 3.12 / Deno -- and is it available on ALL the targets above? note how that was verified>
 - **Audience:** <me-only | others -- "others" forces portability + de-personalization from the FIRST commit, never as a retrofit>
-- **Tenancy:** <single | multi -- per VIBE Rule 17; if multi, every UX-affecting value is per-user-configurable from day 1>
+- **Tenancy:** <single | multi -- per VIBE Rule 55; if multi, every UX-affecting value is per-user-configurable from day 1>
 - **Distribution model:** <local | plugin | SaaS | installable -- determines packaging + secrets posture>
 - **Data + privacy boundary:** <what data lives where; what must NEVER leave the device/tenant; which AI/external services see what>
 
@@ -54,7 +54,7 @@ Minimum 3 personas (primary + 2 edges). For each: state when they encounter this
 
 ---
 
-## §3 -- 9-scenario map (per VIBE Rule 11)
+## §3 -- 9-scenario map (per architect-first.md)
 
 3 common flows + 3 edge cases + 3 adjacent surfaces. Required by `vibe-standard.md` Rule 11. If you can't list 9 concrete scenarios, the feature scope is bare-minimum -- re-scope.
 

@@ -10,9 +10,10 @@
 //   5. forge CLI dispatch smoke (node forge.mjs profile show --terse)
 //   6. mirror sync dry-run (sync-verify.mjs)
 
+import { stateConfigPath } from './state-templates.mjs';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import process from 'node:process';
 import { resolveRoutinePlan, CRON_MARKER } from '../setup-scheduler.mjs'; // shared routine->task resolver
@@ -104,7 +105,7 @@ if (existsSync(contextScript)) {
   } catch { addSection('compact context packet', 'fail', 'context renderer produced no parseable budget result'); }
 } else addSection('compact context packet', 'fail', `Missing: ${contextScript}`);
 
-const translationsPath = join(FactoryRoot, '.forge', 'plan-translations.json');
+const translationsPath = stateConfigPath(FactoryRoot, 'plan-translations');
 if (existsSync(translationsPath)) {
   try {
     const t = JSON.parse(readFileSync(translationsPath, 'utf8'));
@@ -188,6 +189,34 @@ else if (existsSync(syncVerify)) {
     for (const ev of plan.eventRoutines) details.push(`${ev.name}: event routine (stop-hook) -- not OS-scheduled by design`);
     const msg = `${plan.schedulable.length} schedulable, ${plan.agentsNoRunner.length} agent(no-runner), ${plan.eventRoutines.length} event`;
     addSection('scheduler routines', worst, msg, details.slice(0, 10));
+  }
+}
+
+// --- Section 8: project registry (state MCP KNOWN_PROJECTS vs BRIEF "## Location") ---
+// The MCP derives KNOWN_PROJECTS from projects/*/BRIEF.md and falls back to its hardcoded list
+// (coordination-layer-v1.md §3). WARNs (never fails) when the two disagree; SKIPs when the MCP
+// source is not present (plugin-dist ships no mcp-servers/). The module is discovered as
+// mcp-servers/<name>/src/registry.js so this shipped file never names the operator's MCP.
+{
+  const mcpRoot = join(FactoryRoot, 'mcp-servers');
+  let registryModule = null;
+  if (existsSync(mcpRoot)) {
+    for (const entry of readdirSync(mcpRoot, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
+      const candidate = join(mcpRoot, entry.name, 'src', 'registry.js');
+      if (entry.isDirectory() && existsSync(candidate)) { registryModule = candidate; break; }
+    }
+  }
+  if (!registryModule) {
+    addSection('project registry', 'skip', 'no mcp-servers/*/src/registry.js present -- nothing to compare');
+  } else {
+    try {
+      const { registryMismatches } = await import(pathToFileURL(registryModule).href);
+      const mismatches = registryMismatches(FactoryRoot);
+      if (mismatches.length) addSection('project registry', 'warn', `${mismatches.length} mismatch(es): BRIEF registry vs hardcoded KNOWN_PROJECTS fallback`, mismatches.slice(0, 10));
+      else addSection('project registry', 'pass', 'BRIEF registry matches the hardcoded KNOWN_PROJECTS fallback');
+    } catch (err) {
+      addSection('project registry', 'warn', `registry comparison unavailable: ${err && err.message ? err.message : err}`);
+    }
   }
 }
 

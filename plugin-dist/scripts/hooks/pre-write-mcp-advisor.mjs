@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // pre-write-mcp-advisor.mjs
 //
-// PreToolUse(Write) hook -- VIBE Rule 24 enforcer. Before writing a new utility file in
+// PreToolUse(Write) hook -- mcp-servers.md enforcer. Before writing a new utility file in
 // scripts/, src/lib/, lib/, .claude/agents/, or .claude/skills/, runs a deterministic
 // (no-LLM) check for patterns overlapping known MCP/Skill marketplace offerings.
 // Node twin of pre-write-mcp-advisor.ps1 (cross-platform port P2, T1a). Byte-identical:
@@ -9,6 +9,9 @@
 // content. Fail-open on error. Dependency-free (Node stdlib only), Node >= 18.
 
 import process from 'node:process';
+import { deferToLocalHook } from './hook-lib.mjs';
+
+deferToLocalHook(import.meta.url, 'PreToolUse', 'Write');
 
 if (process.env.VIBE_HOOKS_DISABLE) process.exit(0);
 
@@ -63,7 +66,7 @@ const patterns = [
   { regex: /\b(slack(_| )?(api|webhook|client|send-?message))\b/i, tip: 'Slack MCP already exists (Anthropic-official).' },
   { regex: /\b(discord(_| )?(api|webhook|bot))\b/i, tip: 'Discord MCP / claude-in-chrome can post to Discord webhooks.' },
   { regex: /\b(github.*(api|rest|graphql)|octokit)\b/i, tip: 'github MCP is already wired (search: github__*).' },
-  { regex: /\b(stripe|invoice|charge|subscription).*\b(api|webhook|sdk)\b/i, tip: 'Stripe MCP is an Anthropic-official integration (per VIBE Rule 24 cite).' },
+  { regex: /\b(stripe|invoice|charge|subscription).*\b(api|webhook|sdk)\b/i, tip: 'Stripe MCP is an Anthropic-official integration (per mcp-servers.md cite).' },
   { regex: /\b(sentry|posthog|datadog).*\b(api|capture|track)\b/i, tip: 'Sentry / Posthog / Datadog MCPs are off-the-shelf -- use those.' },
   { regex: /\b(xlsx|excel|spreadsheet).*\b(parse|write|generate|read)\b/i, tip: 'anthropic-skills:xlsx already handles xlsx/csv read+write.' },
   { regex: /\b(figma.*(parse|extract|design)|figma.*api)\b/i, tip: 'figma MCP is already wired (figma:* skills + use_figma tool).' },
@@ -83,7 +86,7 @@ for (const p of patterns) {
 if (hits.length === 0) process.exit(0);
 
 process.stderr.write('[BLOCKED] mcp-advisor: this file may duplicate existing MCP/Skill marketplace functionality.\n');
-process.stderr.write('          VIBE Rule 24 -- MCP/Skill First, never reinvent.\n');
+process.stderr.write('          mcp-servers.md -- MCP/Skill First, never reinvent.\n');
 process.stderr.write(`          File: ${path} (${nonBlank} non-blank lines)\n`);
 process.stderr.write('          Overlap candidates:\n');
 for (const tip of hits) process.stderr.write(`            - ${tip}\n`);

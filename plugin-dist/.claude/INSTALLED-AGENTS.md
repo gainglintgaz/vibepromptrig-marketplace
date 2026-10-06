@@ -13,17 +13,18 @@
 > **To add an agent:** create `.claude/agents/<name>.md` AND add a `- \`<name>\`` line here.
 > **To remove an agent:** delete both. Keep this list and the directory in lockstep.
 
-## Installed agents (14)
+## Installed agents (15)
 
 - `auditor` — runs the CLAUDE.md §9.2 audit gate; emits an AUDIT GATE block per §9.3
 - `coder` — ship-pipeline stage 2: implements EXACTLY the Planner's kickoff (sonnet, surgical, additive-first)
 - `debrief` — session-end summary writer; maintains SESSION_DEBRIEF.md
+- `diagnostician` — ship-pipeline root-cause stage: after a Reviewer HOLD, non-author read-only trace + class audit + red-first tests before any repair (opus)
 - `hostile-architect` — 9-phase pre-build stress-test protocol
 - `marketer` — anti-slop marketing drafter (DRAFT-only, 4-gate self-audit)
-- `mcp-advisor` — enforces VIBE Rule 24 (MCP/Skill-first before custom build)
+- `mcp-advisor` — enforces mcp-servers.md (MCP/Skill-first before custom build)
 - `outcome-tracker` — extracts `[rule: X]` / `[outcome: Y]` commit tags into factory-effectiveness
 - `planner` — ship-pipeline stage 1: task → kickoff or Bridge Brief (opus, read-only, architect-first gate)
-- `resolver` — VIBE Rule 22 conflict resolution (picks one pattern, explains why)
+- `resolver` — VIBE Rule 59 conflict resolution (picks one pattern, explains why)
 - `reviewer` — ship-pipeline stage 4: adversarial Definition-of-Done gate → PASS/HOLD verdict (opus, read-only)
 - `schema-auditor` — DB schema / RLS coverage / Supabase advisor / FK-index audit
 - `synthesizer` — weekly cross-project signal synthesis

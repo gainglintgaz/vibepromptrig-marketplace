@@ -4,7 +4,8 @@
 // blocks (fail-open), and emits a per-invocation heartbeat. Dependency-free (Node stdlib), Node>=18.
 
 import { appendFileSync, readFileSync, existsSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { join, dirname, basename } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import process from 'node:process';
 
 // BOM-tolerant, never-throws synchronous stdin read. Returns '' on empty / TTY / error.
@@ -49,6 +50,33 @@ function isFactoryCheckout(dir) {
   } catch { return false; }
 }
 
+// The session project wins over cwd (which may be a child directory). VIBE_ROOT
+// authorizes an operator ledger, never deferral in a customer's project.
+function factorySessionRoot() {
+  const root = process.env.CLAUDE_PROJECT_DIR || process.cwd();
+  return isFactoryCheckout(root) && existsSync(join(root, 'plugin-dist')) ? root : null;
+}
+
+// Safety/session hooks defer only to an existing twin registered for THIS event,
+// matcher and argument list. Missing/malformed configuration keeps the guard active.
+// Call before reading stdin or performing effects; customer hook behavior is unchanged.
+export function deferToLocalHook(scriptUrl, event, matcher) {
+  const script = fileURLToPath(scriptUrl);
+  if (!isPluginCopy(dirname(script))) return;
+  const root = factorySessionRoot();
+  if (!root) return;
+  try {
+    const file = basename(script);
+    if (!existsSync(join(root, 'scripts', 'hooks', file))) return;
+    const expected = [`${'${CLAUDE_PROJECT_DIR}'}/scripts/hooks/${file}`, ...process.argv.slice(2)];
+    const settings = JSON.parse(readFileSync(join(root, '.claude', 'settings.json'), 'utf8'));
+    const registered = settings.hooks?.[event]?.some(group => group.matcher === matcher &&
+      group.hooks?.some(hook => hook.type === 'command' && hook.command === 'node' &&
+        JSON.stringify(hook.args) === JSON.stringify(expected)));
+    if (registered) process.exit(0);
+  } catch { /* cannot prove the twin is registered: keep this guard active */ }
+}
+
 // Two separate authorizations govern what capture hooks may write.
 //
 // Project consent -- files inside the user's project (SESSION_DEBRIEF.md, CHANGELOG/VERSION edits,
@@ -71,8 +99,7 @@ export function projectWritesAllowed(scriptDir, projectDir) {
 // including early-exit heartbeats, is skipped. A repo-local factory copy keeps its existing resolution.
 export function resolveFactoryRoot(scriptDir) {
   if (isPluginCopy(scriptDir)) {
-    const cwd = process.cwd();
-    if (existsSync(join(cwd, '.claude-plugin', 'plugin.json')) && existsSync(join(cwd, 'plugin-dist'))) {
+    if (factorySessionRoot()) {
       return { factoryRoot: null, defer: true };
     }
     const operatorRoot = process.env.VIBE_ROOT;

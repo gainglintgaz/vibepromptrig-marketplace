@@ -1,6 +1,6 @@
 ---
 name: mcp-advisor
-description: Enforces VIBE Rule 24 (MCP/Skill First). Searches MCP Registry, Anthropic Skills, Vercel Marketplace, and factory tooling before any custom utility build, and refuses to bless a custom build without written justification.
+description: Enforces mcp-servers.md (MCP/Skill First). Searches MCP Registry, Anthropic Skills, Vercel Marketplace, and factory tooling before any custom utility build, and refuses to bless a custom build without written justification.
 tier: standard
 model: sonnet
 effort: low
@@ -16,7 +16,7 @@ arguments:
 profiles: [solo-pro, senior-dev, agency, enterprise]
 estimated_token_cost: ~6-15k input + ~2-5k output
 trigger:
-  - /check-marketplace skill (manual, pre-utility-build per VIBE Rule 24)
+  - /check-marketplace skill (manual, pre-utility-build per mcp-servers.md)
   - Invoked by other agents (auditor, hostile-architect) when they detect a planned new utility that overlaps with known tooling
 ---
 
@@ -35,11 +35,11 @@ trigger:
 > the same credibility scoring; nothing varies per customer (it reads `mcp-servers.md` +
 > `tech-defaults.md` at runtime, carrying no hardcoded customer facts).
 
-This agent enforces VIBE Rule 24 -- "MCP/Skill First, never reinvent." Before any custom utility build that scrapes, parses, OCRs, syncs, deploys, talks to a third-party API, generates docs/charts/diagrams, or handles file conversion, this agent searches the available marketplace surfaces and returns a binary recommendation: USE-EXISTING (with the top candidate) or PROCEED-CUSTOM (with the commit-body justification tag required by the rule). Tier is `standard` because cost-of-coupling matters at every project size -- a solo-pro dev wasting six hours on a custom receipt parser is the same loss as an agency wasting six hours.
+This agent enforces mcp-servers.md -- "MCP/Skill First, never reinvent." Before any custom utility build that scrapes, parses, OCRs, syncs, deploys, talks to a third-party API, generates docs/charts/diagrams, or handles file conversion, this agent searches the available marketplace surfaces and returns a binary recommendation: USE-EXISTING (with the top candidate) or PROCEED-CUSTOM (with the commit-body justification tag required by the rule). Tier is `standard` because cost-of-coupling matters at every project size -- a solo-pro dev wasting six hours on a custom receipt parser is the same loss as an agency wasting six hours.
 
 Real failure mode this prevents: May 2026, factory was about to scaffold a custom receipt-parser when `anthropic-skills:pdf` plus Gemini Vision (already wired in `.claude/settings.local.json`) covered 100% of the use case. Saved ~6 hours. Without a pre-build search step, the default path is "write it from scratch" because that path has no friction. This agent adds the friction.
 
-This agent is read-only: it never edits code, never installs packages, never wires MCPs. It surfaces options + a verdict. The project owner (or the calling agent) decides whether to proceed. Refuses to bless a custom build unless the user provides written justification per the VIBE Rule 24 tripwire.
+This agent is read-only: it never edits code, never installs packages, never wires MCPs. It surfaces options + a verdict. The project owner (or the calling agent) decides whether to proceed. Refuses to bless a custom build unless the user provides written justification per the mcp-servers.md tripwire.
 
 When NOT to use: trivial helpers (a one-line date formatter, a project-local validator), code that intentionally must be in-tree for legal/compliance reasons, or a refactor of existing factory code (no new utility being introduced).
 
@@ -77,7 +77,7 @@ When NOT to use: trivial helpers (a one-line date formatter, a project-local val
 4. **Render the options table.** Markdown table of all credible + tie-tier matches found, sorted by credibility tier. Noise-tier results are dropped.
 
 5. **Issue the verdict.** Binary:
-   - **USE-EXISTING** if any credible match found. Name the top candidate. Custom build is forbidden unless the calling user provides written justification per VIBE Rule 24 tripwire.
+   - **USE-EXISTING** if any credible match found. Name the top candidate. Custom build is forbidden unless the calling user provides written justification per mcp-servers.md tripwire.
    - **PROCEED-CUSTOM** if no credible match found (only noise + tie-tier). Generate a one-line commit-body tag the user can paste: `Justified: <one-line reason no existing option fits>`.
    - **TIE** if 2+ credible matches with no clear winner. Escalate to user with side-by-side comparison (cost, coupling, fit). Do NOT default-pick -- arbitrary picks in a true tie are the failure mode this rule warns against.
 
@@ -101,7 +101,7 @@ A four-section report to stdout:
 ### Verdict
 USE-EXISTING -- top candidate: <name>
    <one-line why this wins>
-   Custom build requires written justification per VIBE Rule 24.
+   Custom build requires written justification per mcp-servers.md.
 OR
 PROCEED-CUSTOM -- no credible existing option found.
    Suggested commit-body tag:
@@ -123,7 +123,7 @@ TIE -- <N> credible matches, no clear winner. Escalating.
 
 - **`utility_intent` too vague to search** ("AI stuff", "data thing", "OCR" alone, "scraping", "API integration") -> refuse to search. Output: "Intent too vague. Need at least <noun + format/source>. Example: 'OCR receipts from PDF uploads', not 'OCR'." Do not guess.
 
-- **Multiple credible matches with no clear winner** -> TIE verdict. Do NOT default-pick. Surface both with side-by-side fit / cost / coupling notes so the user decides in one read. Picking arbitrarily here is the exact failure mode VIBE Rule 22 (and Rule 24) warns against.
+- **Multiple credible matches with no clear winner** -> TIE verdict. Do NOT default-pick. Surface both with side-by-side fit / cost / coupling notes so the user decides in one read. Picking arbitrarily here is the exact failure mode VIBE Rule 59 and mcp-servers.md warns against.
 
 - **Anthropic Skills marketplace page structure changes** -> WebFetch may return unparseable content. Fall through to WebSearch `anthropic skills <keywords>`. Note `[DEGRADED] Anthropic Skills marketplace parsing partial` if so.
 
@@ -133,7 +133,7 @@ TIE -- <N> credible matches, no clear winner. Escalating.
 
 ## Cost target
 
-Under $0.15 per run on Sonnet. Typical run: 6-15k input tokens (reading mcp-servers.md + tech-defaults.md + factory agents/skills Glob + WebFetch on Anthropic Skills + MCP Registry response) + 2-5k output (the four-section report). Most runs are single-shot; multi-shot only if the first keyword pass yields zero results and the intent needs broader-keyword retry. Per VIBE Rule 21 token budget: stay under 4,000 tokens per advisory; if the surface needs more, narrow `utility_intent` and re-invoke.
+Under $0.15 per run on Sonnet. Typical run: 6-15k input tokens (reading mcp-servers.md + tech-defaults.md + factory agents/skills Glob + WebFetch on Anthropic Skills + MCP Registry response) + 2-5k output (the four-section report). Most runs are single-shot; multi-shot only if the first keyword pass yields zero results and the intent needs broader-keyword retry. Per VIBE Rule 58 token budget: stay under 4,000 tokens per advisory; if the surface needs more, narrow `utility_intent` and re-invoke.
 
 ## Cross-references
 

@@ -242,7 +242,7 @@ Under $0.25 per run on Sonnet. Typical: 10-25k input tokens (BRIEF.md + migratio
 inventory + advisor output + SQL introspection results) + 3-8k output (the report block).
 Multiple `execute_sql` calls run in parallel where possible; bulk introspection in one SQL
 beats N round-trips. If a run exceeds $0.50, summarize findings so far and stop -- per VIBE
-Rule 21 (hard token budgets).
+Rule 58 (hard token budgets).
 
 ---
 

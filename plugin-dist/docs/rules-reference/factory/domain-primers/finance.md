@@ -19,7 +19,7 @@ Every architect-probe pass for a finance feature MUST surface answers to ALL of 
 
 ### Data integrity
 
-- [ ] Money stored as BIGINT cents (per VIBE Rule 9). No float for currency.
+- [ ] Money stored as BIGINT cents (per VIBE Rule 14). No float for currency.
 - [ ] Money displayed as cents / 100 with explicit currency code. No bare `$3,000`.
 - [ ] Two-way drill-down on every dollar number (per `two-way-traceability.md`):
   - Click number -> source rows with date + amount + last-4 of card + import method
@@ -74,7 +74,7 @@ Every architect-probe pass for a finance feature MUST surface answers to ALL of 
 - [ ] All arrays cleared on mode switch
 - [ ] Per-mode helpers (don't share storage between modes)
 
-### Multi-tenant readiness (per VIBE Rule 17)
+### Multi-tenant readiness (per VIBE Rule 55)
 
 - [ ] Every UX-affecting value is per-user-configurable from day 1
 - [ ] No hardcoded magic numbers in components (`limit(50)`, `min_score = 4.5`)

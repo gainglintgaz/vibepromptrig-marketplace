@@ -85,13 +85,15 @@ the lane's "go-to" regardless of lane (e.g. a mechanical Plan-lane task like "li
 that would need to change" doesn't need Opus-high). If Step 2 says **judgment + high
 cost-of-wrong**, do not recommend below the lane's go-to gear even if the task sounds small.
 
-## Step 4 -- Fable 5 check (rare)
+## Step 4 -- Fable check (rare)
 
-Only surface Fable 5 as the recommendation if the task is genuinely the biggest or hardest
+Only surface Fable as the recommendation if the task is genuinely the biggest or hardest
 thing in front of the user right now (whole-codebase synthesis, a problem that touches the
 entire app at once, a full top-to-bottom rebuild/audit) -- per gear-shift.md, Fable's whole
 point is size and depth, and it is dispatched as a subagent / via the router's `deep_program`
-category, not a `/model` seat toggle. If you recommend it, read the current
+category. For a live-seat recommendation, inspect `/model` or `/status` in the active Claude
+Code runtime for availability and the resolved model; the API router is not its authority.
+For an API dispatch, read the current
 `hard_caps.per_task_usd` from model-router.json and mention it plainly, e.g. "a full-context
 Fable call costs roughly $X per the live router config -- that's within/near the $Y per-task
 cap."
@@ -155,7 +157,7 @@ let telemetry block or delay the advice.
   number is a worse answer than "let me check."
 - If `$ARGUMENTS` is missing or too vague to classify (e.g. "help"), ask one clarifying
   question rather than guessing a lane.
-- Fable 5 is a subagent dispatch, never a `/model` recommendation -- say so explicitly if it
-  comes up, per gear-shift.md's own "not a seat toggle" note.
+- For Fable, distinguish API dispatch through `deep_program` from a live `/model fable` seat.
+  Confirm live-seat availability in the active Claude Code runtime before recommending it.
 - This is a lookup, not a report -- resist the urge to explain gear-shift.md's whole
   philosophy back to the user every time. One short block per Step 6 is the deliverable.
