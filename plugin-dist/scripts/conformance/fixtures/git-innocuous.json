@@ -1,0 +1,18 @@
+{
+  "name": "git-innocuous",
+  "hook_event": "PreToolUse",
+  "tool": "Bash",
+  "category": "happy",
+  "gate": "pre-bash-destructive-git-guard",
+  "description": "A harmless git command. The destructive-git guard must let it through (exit 0).",
+  "stdin": {
+    "session_id": "00000000-0000-4000-8000-0000000000c1",
+    "cwd": "/workspace/repo",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": { "command": "git status --short && git log --oneline -5" }
+  },
+  "stdin_b64": null,
+  "expect": { "exit_code": 0, "stdout": "", "stderr_contains": null, "side_effects": [] },
+  "provenance": "scripts/hooks/pre-bash-destructive-git-guard.ps1 -- non-destructive git -> exit 0 (live Windows session 2026-06-13)."
+}

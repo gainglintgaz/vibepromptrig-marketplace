@@ -1,0 +1,4 @@
+{
+  "_comment": "GOLDEN -- captured BEFORE the reviewer body refactor (v5.0 Phase D, arch 9d7294c). Structural snapshot of the tripwire-grep categories the reviewer enforced while hardcoded (the FULL enumerated set in Step 1). Tier-2 configurable -- the directive's 'which rule subset' knob. the project owner enforces all categories (no .forge/agent-configs/reviewer.json), so the resolver returns the frontmatter defaults unchanged. A customer on a lighter posture narrows the list. After retrofit, resolve-config.ps1 MUST reproduce these exact values. Tests assert structural equivalence, NOT LLM output. See override-layer arch SS1.5.",
+  "tripwire_categories": ["fabrication", "compliance-phrases", "mode-filter", "inline-currency", "date-parse", "vite-secret", "silent-no-op", "toast-success"]
+}

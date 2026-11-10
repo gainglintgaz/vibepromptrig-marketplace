@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/gainglintgaz/vibepromptrig-marketplace/main/plugin-dist/agent-schemas/composed-output.schema.json",
+  "title": "Composed Output -- a saved, validated definition built from registered building blocks",
+  "description": "Domain-agnostic. A user- or AI-authored report/view/alert/workflow definition. References ONLY registered building blocks (never raw SQL/code); carries provenance so every element drills two ways. See composable-outputs.md SS3/SS4. Reuses the existing provenance vocabulary (prompt_version, sources[], run_id) -- no fork.",
+  "type": "object",
+  "required": ["schema_version", "output_type", "title", "registered_entity", "blocks", "authored_by"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "output_type": {
+      "type": "string",
+      "enum": ["report_view", "dashboard", "alert_rule", "digest", "workflow", "automation"]
+    },
+    "title": { "type": "string", "minLength": 1 },
+    "registered_entity": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The registered entity this output is built on (e.g. transaction, trip, task, document, listing, shipment)."
+    },
+    "blocks": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Registered building blocks composed into this output. NO freeform SQL/queries/code.",
+      "items": {
+        "type": "object",
+        "required": ["block_id", "kind"],
+        "properties": {
+          "block_id": { "type": "string", "minLength": 1 },
+          "kind": {
+            "type": "string",
+            "enum": ["entity_field", "measure", "dimension", "filter", "derived", "action", "layout"]
+          },
+          "expression": {
+            "type": "string",
+            "description": "ONLY for kind=derived: a constrained expression over OTHER registered block_ids. Never raw SQL/code."
+          },
+          "depends_on": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "block_ids this block derives from (the provenance spine for derived blocks)."
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "authored_by": {
+      "type": "string",
+      "enum": ["user", "ai", "ai_then_user"],
+      "description": "Who composed it. ai / ai_then_user REQUIRE ai_provenance (validated + traceable)."
+    },
+    "ai_provenance": {
+      "type": "object",
+      "description": "Required when authored_by is ai or ai_then_user. Reuses the existing provenance vocabulary -- NO fork.",
+      "required": ["prompt_version", "run_id", "sources"],
+      "properties": {
+        "prompt_version": { "type": "string" },
+        "run_id": { "type": "string", "description": "FK to the Agent-Run record (two-way-traceability.md Agent-Run section)." },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["type", "id"],
+            "properties": {
+              "type": { "type": "string" },
+              "id": { "type": "string" },
+              "label": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "authored_by": { "enum": ["ai", "ai_then_user"] } } },
+      "then": { "required": ["ai_provenance"] }
+    }
+  ],
+  "additionalProperties": false
+}

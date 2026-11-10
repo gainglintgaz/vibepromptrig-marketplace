@@ -1,0 +1,18 @@
+{
+  "_comment": "SYNTHETIC golden fixture for configuration shape and override tests. This invented bicycle-maintenance voice is test data, not a captured personal profile. The banned_words and output_directory fields retain the standard configuration shape.",
+  "voice_profile": "patient bicycle maintenance guide; concrete repair steps, plain descriptions, and a short checklist",
+  "banned_words": [
+    "Revolutionize",
+    "Unleash",
+    "Delve",
+    "Harness",
+    "Elevate",
+    "Empower",
+    "Seamless",
+    "Cutting-edge",
+    "Groundbreaking",
+    "Game-changing",
+    "Supercharge"
+  ],
+  "output_directory": "drafts/marketing"
+}

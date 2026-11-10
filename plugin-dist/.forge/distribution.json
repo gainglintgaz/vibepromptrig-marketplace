@@ -1,0 +1,12 @@
+{
+    "schema_version":  1,
+    "kind":  "packaged-runtime",
+    "source_authoring_corpus":  "excluded",
+    "packaged_factory_refs":  [
+                                  "data-protection.md",
+                                  "domain-primers/finance.md",
+                                  "gear-shift.md",
+                                  "testing-strategy.md",
+                                  "webhook-handling.md"
+                              ]
+}

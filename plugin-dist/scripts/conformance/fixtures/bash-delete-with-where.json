@@ -1,0 +1,26 @@
+{
+  "name": "bash-delete-with-where",
+  "hook_event": "PreToolUse",
+  "tool": "Bash",
+  "category": "happy",
+  "gate": "pre-bash-destructive-sql-guard",
+  "description": "DELETE FROM WITH a WHERE clause is scoped, not destructive. Must PASS (exit 0). Guards the false-positive boundary.",
+  "stdin": {
+    "session_id": "00000000-0000-4000-8000-0000000000a4",
+    "transcript_path": "/tmp/transcript.jsonl",
+    "cwd": "/workspace/repo",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "psql \"$DATABASE_URL\" -c 'DELETE FROM sessions WHERE id = 42;'"
+    }
+  },
+  "stdin_b64": null,
+  "expect": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr_contains": null,
+    "side_effects": []
+  },
+  "provenance": "scripts/hooks/pre-bash-destructive-sql-guard.ps1 -- DELETE with WHERE is allowed (live Windows session 2026-06-13)."
+}

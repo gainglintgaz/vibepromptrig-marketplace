@@ -1,0 +1,28 @@
+{
+  "name": "apply-migration-safe",
+  "hook_event": "PreToolUse",
+  "tool": "apply_migration",
+  "category": "happy",
+  "gate": "pre-migration-destructive-guard",
+  "description": "Supabase apply_migration MCP call with non-destructive DDL (CREATE TABLE). Must PASS (exit 0).",
+  "stdin": {
+    "session_id": "00000000-0000-4000-8000-0000000000a7",
+    "transcript_path": "/tmp/transcript.jsonl",
+    "cwd": "/workspace/repo",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "mcp__31fc416e9d2c1a__apply_migration",
+    "tool_input": {
+      "project_id": "deadbeefcafe0001",
+      "name": "create_invoices",
+      "query": "CREATE TABLE invoices (id uuid primary key default gen_random_uuid(), amount_cents bigint not null);"
+    }
+  },
+  "stdin_b64": null,
+  "expect": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr_contains": null,
+    "side_effects": []
+  },
+  "provenance": "scripts/hooks/pre-migration-destructive-guard.ps1 -- CREATE TABLE is allowed (live Windows session 2026-06-13)."
+}

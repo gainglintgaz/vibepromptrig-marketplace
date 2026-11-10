@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/gainglintgaz/vibepromptrig-marketplace/main/plugin-dist/agent-schemas/provider-prefs.schema.json",
+  "title": "Provider Preferences -- .forge/provider-prefs.json",
+  "description": "Customer override on model-router.json, merged by task-category (A2). Provider VALUES (keys/secrets) come from env only (A10). v5.0 Sprint 1, arch 9d7294c.",
+  "type": "object",
+  "required": ["schema_version", "task_categories"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "task_categories": {
+      "type": "object",
+      "description": "Map of task-category -> { preferred: [model, ...], max_cost_per_task_cents?: int }"
+    }
+  }
+}

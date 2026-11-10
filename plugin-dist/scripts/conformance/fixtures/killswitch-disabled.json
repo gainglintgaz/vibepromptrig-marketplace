@@ -1,0 +1,19 @@
+{
+  "name": "killswitch-disabled",
+  "hook_event": "PreToolUse",
+  "tool": "Bash",
+  "category": "killswitch",
+  "gate": "pre-bash-destructive-sql-guard",
+  "description": "With VIBE_HOOKS_DISABLE set, a normally-blocked destructive command must PASS (exit 0). Proves the kill-switch (arch doc assumption 9) -- degraded, never-block.",
+  "env": { "VIBE_HOOKS_DISABLE": "1" },
+  "stdin": {
+    "session_id": "00000000-0000-4000-8000-0000000000e1",
+    "cwd": "/workspace/repo",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": { "command": "psql \"$DATABASE_URL\" -c 'DROP TABLE users;'" }
+  },
+  "stdin_b64": null,
+  "expect": { "exit_code": 0, "stdout": "", "stderr_contains": null, "side_effects": [] },
+  "provenance": "cross-platform-port.md assumption 9 (VIBE_HOOKS_DISABLE -> exit 0). The Node twins check it first; the legacy .ps1 has no kill-switch, so this fixture targets the twin only."
+}

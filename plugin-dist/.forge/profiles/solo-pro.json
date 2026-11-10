@@ -1,0 +1,30 @@
+{
+  "$schema": "../../forge-profile.schema.json",
+  "profile": "solo-pro",
+  "ai_plan": "claude-pro",
+  "byok": false,
+  "monthly_budget_tokens": 3000000,
+  "session_budget_tokens": 150000,
+  "verbosity": "standard",
+  "rule_tier": "standard",
+  "agents_enabled": ["debrief", "auditor"],
+  "skills_enabled": ["catchup", "today", "ship-status", "ship", "log-finding", "schema-check"],
+  "hooks_enabled": ["destructive-sql-blocker", "git-force-push-blocker", "stop-debrief"],
+  "subagent_dispatch_threshold_tokens": 5000,
+  "compaction_trigger_percent": 70,
+  "tool_result_truncation_kb": 30,
+  "llm_cache_ttl_hours": 24,
+  "vertical_pack": null,
+  "compliance_overlay": [],
+  "user_overrides": {
+    "rules_added": [],
+    "rules_removed": [],
+    "agents_added": [],
+    "agents_removed": [],
+    "skills_added": [],
+    "skills_removed": [],
+    "hooks_added": [],
+    "hooks_removed": []
+  },
+  "factory_version_at_init": "v4.4"
+}

@@ -1,0 +1,331 @@
+{
+  "catalog_version": "5.0.0",
+  "generated": "2026-06-10",
+  "schema_note": "Static, VibePromptRig-curated catalog read by the /vibepromptrig:setup skill. NOT a live registry -- updated only when the plugin is rebuilt + published. For anything this catalog misses, /setup directs the user to /vibepromptrig:mcp-advisor (live registry search). See docs/architecture/equip-discovery.md.",
+  "disclaimer": "VibePromptRig /setup recommendations are best-effort. Verify any MCP server before installing, especially those with network, filesystem-write, or secrets-access permissions. The full install command is shown before you approve. You are responsible for what runs in your Claude Code session. 'publisher_verified' is set only by the project owner after a personal vetting pass -- 'verified_against' + 'last_vetted' record only that the install command matched the named source on that date.",
+  "field_reference": {
+    "kind": "mcp | rule-pack | skill | agent | hook",
+    "stack_triggers": "Signals in the scanned project that make this entry relevant. type: package (string match inside a manifest file) | dir (directory name present) | file (file present) | dep-any (any of several deps).",
+    "confidence": "high | medium | low -- drives proposal ordering (max 5 per run, highest first).",
+    "known_permissions": "network | filesystem-read | filesystem-write | secrets-access -- shown to the user before approval.",
+    "publisher_verified": "boolean -- publisher-only personal vouch. false does NOT mean unsafe; it means not-yet-personally-vetted.",
+    "verified_against": "What source the install command was checked against, and 'last_vetted' when.",
+    "sha256": "Tarball checksum when the entry pins a fixed artifact. null for npx packages and hosted HTTP servers.",
+    "launcher_pins": "Every npx package in install.command is pinned to an exact version (the version npm published as latest on 2026-09-25): mcp-remote@0.14.3. Pinning keeps what /setup writes reproducible; bump each pin deliberately after checking the package release notes. The pin was chosen on 2026-09-25 without re-vetting; last_vetted still refers to the earlier check of the command shape, and the entry's verified_against records the 2026-09-25 recheck. Stripe and Supabase moved to their hosted HTTP servers on 2026-09-27 and no longer use a launcher.",
+    "tombstoned": "true = a previously-shipped entry marked insecure/retired. /setup NEVER proposes a tombstoned entry, and warns if one is already installed."
+  },
+  "entries": [
+    {
+      "id": "mcp-supabase",
+      "kind": "mcp",
+      "name": "Supabase MCP",
+      "plain_name": "Supabase database connection",
+      "plain_summary": "Let Claude inspect the development database you choose, using read-only access.",
+      "plain_access": "Can read information in the selected development database and connect to Supabase online. Cannot change the database with this read-only configuration. Private information may be visible.",
+      "plain_account": "A Supabase account; sign in through your browser when you first use the connection.",
+      "plain_when": "Useful only if your app stores information in Supabase and you choose help with storing information.",
+      "summary": "Hosted Supabase MCP, read-only and scoped to the selected development project; inspect data and schema without write access.",
+      "why_it_fits": "Your project uses Supabase (detected @supabase/supabase-js and/or a supabase/ directory).",
+      "stack_triggers": [
+        { "type": "package", "file": "package.json", "match": "@supabase/supabase-js" },
+        { "type": "package", "file": "package.json", "match": "supabase" },
+        { "type": "dir", "match": "supabase" }
+      ],
+      "confidence": "high",
+      "install": {
+        "transport": "http",
+        "command": "claude mcp add --transport http supabase \"https://mcp.supabase.com/mcp?project_ref=<your-dev-project-ref>&read_only=true\"",
+        "scope": "project",
+        "requires": "Browser OAuth on first use (type /mcp in Claude Code to authenticate). No token to store. Replace <your-dev-project-ref> with your DEV project's ref, never production."
+      },
+      "known_permissions": ["network"],
+      "source_url": "https://supabase.com/docs/guides/ai-tools/mcp",
+      "verified_against": "official Supabase MCP docs: hosted server https://mcp.supabase.com/mcp, configured by the project_ref and read_only URL parameters, OAuth by default (docs read 2026-09-26; command changed to this form 2026-09-27). Not vetted: this command has not been connected to a real project; last_vetted refers to the earlier npx command.",
+      "last_vetted": "2026-06-10",
+      "publisher_verified": false,
+      "sha256": null,
+      "tombstoned": false,
+      "notes": "Read-only and scoped to your DEV project through the URL (read_only=true, project_ref), never prod -- per data-protection.md token-scope tiers. Remove read_only=true only when you explicitly intend migrations. The docs' personal-access-token header is a fallback for clients without OAuth; it grants more than OAuth scope, so /setup does not propose it."
+    },
+    {
+      "id": "mcp-vercel",
+      "kind": "mcp",
+      "name": "Vercel MCP",
+      "plain_name": "Vercel hosting connection",
+      "plain_summary": "Help Claude find information about your Vercel-hosted website and its deployments.",
+      "plain_access": "Can access the deployment information, logs and project details your sign-in allows. This configuration does not enforce read-only access; review available actions before use.",
+      "plain_account": "A Vercel account; sign in through your browser when you first use the connection.",
+      "plain_when": "Useful only if you use Vercel to put your app online and choose help with hosting.",
+      "summary": "Official hosted Vercel MCP -- gives Claude OAuth access to your deployments, logs, project metadata, and Vercel docs.",
+      "why_it_fits": "Your project deploys on Vercel (detected vercel.json, a .vercel/ directory, or Next.js).",
+      "stack_triggers": [
+        { "type": "file", "match": "vercel.json" },
+        { "type": "dir", "match": ".vercel" },
+        { "type": "package", "file": "package.json", "match": "next" }
+      ],
+      "confidence": "high",
+      "install": {
+        "transport": "http",
+        "command": "claude mcp add --transport http vercel https://mcp.vercel.com",
+        "scope": "project",
+        "requires": "Browser OAuth on first use (type /mcp in Claude Code to authenticate). No token to store."
+      },
+      "known_permissions": ["network"],
+      "source_url": "https://vercel.com/docs/agent-resources/vercel-mcp",
+      "verified_against": "official Vercel MCP docs",
+      "last_vetted": "2026-06-10",
+      "publisher_verified": false,
+      "sha256": null,
+      "tombstoned": false,
+      "notes": "Hosted + OAuth -- no secret lands in .mcp.json. Read-leaning by design."
+    },
+    {
+      "id": "mcp-github",
+      "kind": "mcp",
+      "name": "GitHub MCP",
+      "plain_name": "GitHub project connection",
+      "plain_summary": "Let Claude work with the code, issues and reviews you permit in GitHub.",
+      "plain_access": "Can read or change the repositories and other GitHub information allowed by your access key. It may start paid automatic checks if that key permits it.",
+      "plain_account": "A GitHub account and a narrowly limited access key. Set the key locally; never paste it into this conversation. Skip this connection if the key is not ready.",
+      "plain_when": "Useful only if you use GitHub and choose help with checking work automatically.",
+      "summary": "GitHub's official remote MCP -- repos, issues, PRs, code search, Actions.",
+      "why_it_fits": "Your project has a GitHub remote (detected github.com in .git/config).",
+      "stack_triggers": [
+        { "type": "file", "match": ".git/config", "contains": "github.com" }
+      ],
+      "confidence": "high",
+      "install": {
+        "transport": "http",
+        "command": "claude mcp add --transport http github https://api.githubcopilot.com/mcp/ --header \"Authorization: Bearer <YOUR_GITHUB_PAT>\"",
+        "scope": "user",
+        "requires": "A GitHub Personal Access Token. Grant only the scopes you are comfortable giving an AI tool."
+      },
+      "known_permissions": ["network", "secrets-access"],
+      "source_url": "https://github.com/github/github-mcp-server/blob/main/docs/installation-guides/install-claude.md",
+      "verified_against": "official github/github-mcp-server install guide",
+      "last_vetted": "2026-06-10",
+      "publisher_verified": false,
+      "sha256": null,
+      "tombstoned": false,
+      "notes": "The PAT is the whole blast radius -- scope it minimally (read-only where possible). On CLI 2.1.1+ you can use `claude mcp add-json github ...` instead. Claude Desktop needs the local Docker setup (OAuth app not supported there)."
+    },
+    {
+      "id": "mcp-cloudflare-docs",
+      "kind": "mcp",
+      "name": "Cloudflare Docs MCP",
+      "plain_name": "Cloudflare documentation connection",
+      "plain_summary": "Help Claude search instructions for using Cloudflare services.",
+      "plain_access": "Reads public Cloudflare documentation online. Starts a local helper to make that connection; this option does not grant access to manage your Cloudflare account.",
+      "plain_account": "No Cloudflare sign-in is needed for this public documentation connection.",
+      "plain_when": "Useful only if your app uses Cloudflare and you choose help with putting it online.",
+      "summary": "Cloudflare's hosted documentation MCP -- searchable Workers/Pages/D1/R2/KV docs in-session.",
+      "why_it_fits": "Your project targets Cloudflare (detected wrangler.toml / wrangler.jsonc / a Workers entrypoint).",
+      "stack_triggers": [
+        { "type": "file", "match": "wrangler.toml" },
+        { "type": "file", "match": "wrangler.jsonc" },
+        { "type": "file", "match": "_worker.js" }
+      ],
+      "confidence": "medium",
+      "install": {
+        "transport": "stdio",
+        "command": "claude mcp add-json cloudflare '{\"command\":\"npx\",\"args\":[\"mcp-remote@0.14.3\",\"https://docs.mcp.cloudflare.com/sse\"]}'",
+        "scope": "project",
+        "requires": "Nothing for the docs server (read-only). Cloudflare's account-scoped servers (Workers, D1, R2 admin) are separate and OAuth-gated -- add those deliberately."
+      },
+      "known_permissions": ["network"],
+      "source_url": "https://developers.cloudflare.com/agents/model-context-protocol/mcp-servers-for-cloudflare/",
+      "verified_against": "official Cloudflare Agents docs (command matched on last_vetted). Recheck 2026-09-25, version pin not vetted: the docs now list https://docs.mcp.cloudflare.com/mcp; /sse remains an alias.",
+      "last_vetted": "2026-06-10",
+      "publisher_verified": false,
+      "sha256": null,
+      "tombstoned": false,
+      "notes": "This entry is the read-only DOCS server only. The account-management Cloudflare servers carry filesystem-write-equivalent authority over your CF account -- do not auto-add them; vet each separately."
+    },
+    {
+      "id": "mcp-stripe",
+      "kind": "mcp",
+      "name": "Stripe MCP",
+      "plain_name": "Stripe payment connection",
+      "plain_summary": "Help Claude work with the Stripe payment information and actions you permit.",
+      "plain_access": "Can read or change payment information within the access you authorize. Choose a test environment while building; review its permissions before first use.",
+      "plain_account": "A Stripe account; sign in through your browser when you first use the connection.",
+      "plain_when": "Useful only if you use Stripe to accept payments and choose payment help.",
+      "summary": "Official Stripe MCP -- customers, subscriptions, invoices, product catalog, plus Stripe docs/knowledge-base search.",
+      "why_it_fits": "Your project integrates Stripe (detected the stripe dependency).",
+      "stack_triggers": [
+        { "type": "package", "file": "package.json", "match": "stripe" },
+        { "type": "package", "file": "requirements.txt", "match": "stripe" }
+      ],
+      "confidence": "medium",
+      "install": {
+        "transport": "http",
+        "command": "claude mcp add --transport http stripe https://mcp.stripe.com/",
+        "scope": "project",
+        "requires": "Browser OAuth on first use (type /mcp in Claude Code to authenticate). No key to store. Prefer authorizing a sandbox (test) environment while you build."
+      },
+      "known_permissions": ["network"],
+      "source_url": "https://docs.stripe.com/mcp",
+      "verified_against": "official Stripe MCP docs: hosted server https://mcp.stripe.com with OAuth (docs read 2026-09-26; command changed to this form 2026-09-27). From 2026-10-31 Stripe MCP rejects secret keys and restricted keys without the Agent tag; OAuth is unaffected. Not vetted: no live connection has been made with this command; last_vetted refers to the earlier npx command.",
+      "last_vetted": "2026-06-10",
+      "publisher_verified": false,
+      "sha256": null,
+      "tombstoned": false,
+      "notes": "Money surface. OAuth keeps secrets out of .mcp.json, and access can be reviewed or revoked in the Stripe Dashboard. Unverified: for Connect platforms acting on connected accounts, Stripe's docs still describe a platform restricted key because OAuth is not supported there. Pair with the webhook-handling rule pack below."
+    },
+    {
+      "id": "hook-precommit-gates",
+      "kind": "hook",
+      "name": "VibePromptRig pre-commit gates",
+      "plain_name": "Checks before saving code changes",
+      "plain_summary": "Add automated checks that can catch some secrets, unsafe changes and unsupported completion claims before you save a code change.",
+      "plain_access": "Runs local check programs before a code commit and may block it. Changes this project only; it does not replace checks you already customized.",
+      "plain_account": "No external account is needed; Git and the required local helper tools must be available.",
+      "plain_when": "Useful when this project uses Git to track changes and does not already have these checks.",
+      "summary": "Installs the factory's tracked git hooks (.githooks/ wired via core.hooksPath): secrets scan, architect-first gate on feat() commits, destructive-SQL block, user-facing component-deletion gate, discovery interlock.",
+      "why_it_fits": "Your project is a git repository without the VibePromptRig mechanical gates installed. The factory rules assume these gates exist -- per enforcement-first.md, a load-bearing rule without a mechanical gate WILL decay.",
+      "stack_triggers": [
+        { "type": "dir", "match": ".git" }
+      ],
+      "confidence": "high",
+      "install": {
+        "target": ".githooks/",
+        "source": "scripts/templates/shared/.githooks/",
+        "action": "copy-dir-then-set-hooks-path",
+        "on_conflict": "skip-with-warning",
+        "requires": [
+          {
+            "source": "scripts/completion/block-unverified-claims.mjs",
+            "target": "tools/block-unverified-claims.mjs"
+          }
+        ]
+      },
+      "known_permissions": [],
+      "source_url": "internal: scripts/templates/shared/.githooks/",
+      "verified_against": "first-party VibePromptRig hooks",
+      "last_vetted": "2026-09-25",
+      "publisher_verified": true,
+      "sha256": null,
+      "tombstoned": false,
+      "notes": "First-party. All gates are soft-with-override ([no-arch:], [approved-destructive], [approved-deletion], [discovery-skipped]) -- the marker IS the audit trail. Rollback: git config --unset core.hooksPath, then delete .githooks/. Never proposed/installed over an existing hooks setup (husky, custom core.hooksPath) -- merge manually in that case."
+    },
+    {
+      "id": "rule-finance-primer-reference-v2",
+      "kind": "rule-pack",
+      "name": "Finance domain primer",
+      "plain_name": "Guidance for money-related work",
+      "plain_summary": "Give Claude instructions for handling money-related features carefully.",
+      "plain_access": "Adds a local reference document. It guides Claude; it does not itself change financial records or enforce an automated check.",
+      "plain_account": "No external account is needed to add this guidance.",
+      "plain_when": "Useful for projects explicitly building finance, accounting, tax or bookkeeping features. Money uncertainty alone is not enough.",
+      "summary": "Self-contained finance and bookkeeping guidance: exact currency arithmetic, source trails, data quality, account isolation and specialist review.",
+      "why_it_fits": "Your project touches money (detected stripe / plaid / a payments or tax surface).",
+      "stack_triggers": [
+        { "type": "dep-any", "match": ["stripe", "plaid", "@plaid/plaid", "dinero.js"] }
+      ],
+      "confidence": "medium",
+      "install": {
+        "target": "docs/rules-reference/factory/domain-primers/finance.md",
+        "source": "scripts/templates/packs/finance/finance.md",
+        "action": "copy",
+        "on_conflict": "skip-with-warning"
+      },
+      "known_permissions": [],
+      "source_url": "internal: scripts/templates/packs/finance/finance.md",
+      "verified_against": "first-party self-contained customer reference; local audience and installed-reference audit",
+      "last_vetted": "2026-10-07",
+      "publisher_verified": false,
+      "sha256": null,
+      "tombstoned": false,
+      "notes": "First-party. Copied as a reference document (never into a native autoload directory such as .claude/rules/). /setup skips it when the target already exists."
+    },
+    {
+      "id": "rule-webhook-handling-reference-v2",
+      "kind": "rule-pack",
+      "name": "Webhook handling rule pack",
+      "plain_name": "Guidance for incoming service updates",
+      "plain_summary": "Help Claude handle updates from services, such as payment notifications, without trusting fakes or processing the same update twice.",
+      "plain_access": "Adds a local reference document. It does not itself connect to a service or process incoming updates.",
+      "plain_account": "No external account is needed to add this guidance.",
+      "plain_when": "Useful when your app receives updates from another service, such as payment notifications.",
+      "summary": "Self-contained service-notification guidance: signature verification, durable acceptance, safe retries, replay authorization and outgoing destination checks.",
+      "why_it_fits": "Your project receives webhooks (detected stripe / svix / a webhook route).",
+      "stack_triggers": [
+        { "type": "dep-any", "match": ["stripe", "svix"] },
+        { "type": "dir", "match": "webhooks" }
+      ],
+      "confidence": "medium",
+      "install": {
+        "target": "docs/rules-reference/factory/webhook-handling.md",
+        "source": "scripts/templates/packs/webhook-handling/webhook-handling.md",
+        "action": "copy",
+        "on_conflict": "skip-with-warning"
+      },
+      "known_permissions": [],
+      "source_url": "internal: scripts/templates/packs/webhook-handling/webhook-handling.md",
+      "verified_against": "first-party self-contained customer reference; local audience and installed-reference audit",
+      "last_vetted": "2026-10-07",
+      "publisher_verified": false,
+      "sha256": null,
+      "tombstoned": false,
+      "notes": "First-party. Pairs with the Stripe MCP entry. Copied as a reference document, never into a native autoload directory such as .claude/rules/."
+    },
+    {
+      "id": "rule-testing-strategy-reference-v2",
+      "kind": "rule-pack",
+      "name": "Testing strategy rule pack",
+      "plain_name": "Guidance for checking your app",
+      "plain_summary": "Give Claude instructions for choosing useful tests and checking that changes work.",
+      "plain_access": "Adds a local reference document. It does not run tests or make changes to your app by itself.",
+      "plain_account": "No external account is needed to add this guidance.",
+      "plain_when": "Useful when your project already has tests or you choose help with checking work automatically.",
+      "summary": "Self-contained testing guidance: useful failure examples, real-service integration evidence, account isolation and honest result boundaries.",
+      "why_it_fits": "Your project has a test runner (detected vitest / jest / playwright / pytest).",
+      "stack_triggers": [
+        { "type": "dep-any", "match": ["vitest", "jest", "@playwright/test", "pytest"] }
+      ],
+      "confidence": "low",
+      "install": {
+        "target": "docs/rules-reference/factory/testing-strategy.md",
+        "source": "scripts/templates/packs/testing-strategy/testing-strategy.md",
+        "action": "copy",
+        "on_conflict": "skip-with-warning"
+      },
+      "known_permissions": [],
+      "source_url": "internal: scripts/templates/packs/testing-strategy/testing-strategy.md",
+      "verified_against": "first-party self-contained customer reference; local audience and installed-reference audit",
+      "last_vetted": "2026-10-07",
+      "publisher_verified": false,
+      "sha256": null,
+      "tombstoned": false,
+      "notes": "First-party. Copied as a reference document (never into a native autoload directory such as .claude/rules/). /setup skips it when the target already exists."
+    },
+    {
+      "id": "rule-customer-information-reference-v1",
+      "kind": "rule-pack",
+      "name": "Customer information and money guidance",
+      "plain_name": "Guidance for caring for customer information and money",
+      "plain_summary": "Help you plan careful handling of customer details and money without assuming you are building a finance app.",
+      "plain_access": "Adds a local reference document. It guides decisions; it does not connect to a service, change customer records or enforce automated protection.",
+      "plain_account": "No external account is needed to add this guidance.",
+      "plain_when": "Useful when the project handles customer details or money, or when those needs are uncertain. Includes non-software businesses.",
+      "summary": "Self-contained protective guidance for data minimization, customer access, payment collection, consent, backups and honest evidence.",
+      "why_it_fits": "Your answers indicate money or personal information, separate customer records, or uncertainty requiring protective guidance.",
+      "stack_triggers": [],
+      "confidence": "medium",
+      "install": {
+        "target": "docs/rules-reference/customer-information.md",
+        "source": "scripts/templates/packs/customer-information/customer-information.md",
+        "action": "copy",
+        "on_conflict": "skip-with-warning"
+      },
+      "known_permissions": [],
+      "source_url": "internal: scripts/templates/packs/customer-information/customer-information.md",
+      "verified_against": "first-party self-contained customer reference; local audience and installed-reference audit",
+      "last_vetted": "2026-10-07",
+      "publisher_verified": false,
+      "sha256": null,
+      "tombstoned": false,
+      "notes": "Protective guidance only. Does not establish compliance, financial correctness or product safety. Copy only after review and approval; skip customized existing targets."
+    }
+  ]
+}

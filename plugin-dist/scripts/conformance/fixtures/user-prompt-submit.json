@@ -1,0 +1,23 @@
+{
+  "name": "user-prompt-submit",
+  "hook_event": "UserPromptSubmit",
+  "tool": null,
+  "category": "lifecycle",
+  "gate": "signal-classifier-tier1",
+  "description": "UserPromptSubmit envelope carrying the user's prompt text. The Tier-1 classifier reads tool-free, non-blocking; stdout becomes session context, so it must stay silent and exit 0.",
+  "stdin": {
+    "session_id": "00000000-0000-4000-8000-0000000000b3",
+    "transcript_path": "/tmp/transcript.jsonl",
+    "cwd": "/workspace/repo",
+    "hook_event_name": "UserPromptSubmit",
+    "prompt": "add a net worth card to the dashboard"
+  },
+  "stdin_b64": null,
+  "expect": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr_contains": null,
+    "side_effects": ["may append a row to .claude/signal-log.jsonl"]
+  },
+  "provenance": "Claude Code UserPromptSubmit envelope; field contract verified against scripts/signal-classifier-tier1.ps1 + scripts/hooks/session-guard.ps1 -Event heartbeat (live Windows session 2026-06-13)."
+}

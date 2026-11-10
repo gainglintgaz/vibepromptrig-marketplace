@@ -1,0 +1,23 @@
+{
+  "name": "session-start",
+  "hook_event": "SessionStart",
+  "tool": null,
+  "category": "lifecycle",
+  "gate": "session-guard-start",
+  "description": "SessionStart envelope (source = startup|resume|clear). session-guard claims/refreshes the lock and exits 0 (advisory only, never blocks).",
+  "stdin": {
+    "session_id": "00000000-0000-4000-8000-0000000000b1",
+    "transcript_path": "/tmp/transcript.jsonl",
+    "cwd": "/workspace/repo",
+    "hook_event_name": "SessionStart",
+    "source": "startup"
+  },
+  "stdin_b64": null,
+  "expect": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr_contains": null,
+    "side_effects": ["may write .claude/.session-lock.json"]
+  },
+  "provenance": "Claude Code SessionStart envelope; field contract verified against scripts/hooks/session-guard.ps1 -Event start (live Windows session 2026-06-13)."
+}

@@ -1,0 +1,17 @@
+{
+  "name": "edge-malformed-json",
+  "hook_event": "PreToolUse",
+  "tool": "Bash",
+  "category": "edge-malformed",
+  "gate": "pre-bash-destructive-sql-guard",
+  "description": "Malformed JSON on stdin ('{not valid json'). The gate's parse must fail closed to exit 0 -- never crash. stdin_b64 carries the exact bytes.",
+  "stdin": null,
+  "stdin_b64": "e25vdCB2YWxpZCBqc29u",
+  "expect": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr_contains": null,
+    "side_effects": []
+  },
+  "provenance": "scripts/hooks/pre-bash-destructive-sql-guard.ps1 line 27 (ConvertFrom-Json catch -> exit 0) (live Windows session 2026-06-13)."
+}

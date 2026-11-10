@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/gainglintgaz/vibepromptrig-marketplace/main/plugin-dist/agent-schemas/active-agents.schema.json",
+  "title": "Active Agents list -- which agents are enabled for a customer",
+  "description": "Boolean-replace artifact (A2). Gated by tier entitlement (A7). v5.0 Sprint 1, arch 9d7294c.",
+  "type": "object",
+  "required": ["schema_version", "agents"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "agents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "enabled"],
+        "properties": {
+          "name": { "type": "string" },
+          "enabled": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}

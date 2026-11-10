@@ -1,0 +1,27 @@
+{
+  "name": "bash-innocuous",
+  "hook_event": "PreToolUse",
+  "tool": "Bash",
+  "category": "happy",
+  "gate": "pre-bash-destructive-sql-guard",
+  "description": "A harmless Bash command. The destructive-SQL guard must let it through (exit 0).",
+  "stdin": {
+    "session_id": "00000000-0000-4000-8000-0000000000a1",
+    "transcript_path": "/tmp/transcript.jsonl",
+    "cwd": "/workspace/repo",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "ls -la && git status --short",
+      "description": "List files and show working tree"
+    }
+  },
+  "stdin_b64": null,
+  "expect": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr_contains": null,
+    "side_effects": []
+  },
+  "provenance": "Claude Code PreToolUse(Bash) envelope; field contract verified against scripts/hooks/pre-bash-destructive-sql-guard.ps1 (live Windows session 2026-06-13)."
+}

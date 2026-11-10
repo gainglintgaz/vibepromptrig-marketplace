@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/gainglintgaz/vibepromptrig-marketplace/main/plugin-dist/agent-schemas/vf-resource.schema.json",
+  "title": "VFResourceRecord",
+  "description": "Normative V1 contract for the single local VibePromptRig rule resource.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "uri",
+    "slug",
+    "version",
+    "name",
+    "title",
+    "description",
+    "mimeType",
+    "privacyClass",
+    "sourcePath",
+    "dependencies"
+  ],
+  "properties": {
+    "uri": {
+      "type": "string",
+      "pattern": "^vf://rules/[a-z0-9]+(?:-[a-z0-9]+)*@[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mimeType": {
+      "const": "text/markdown"
+    },
+    "privacyClass": {
+      "type": "string",
+      "enum": [
+        "public",
+        "factory_internal",
+        "project_confidential",
+        "pii_restricted",
+        "secret_prohibited"
+      ]
+    },
+    "sourcePath": {
+      "type": "string",
+      "pattern": "^\\.forge/[A-Za-z0-9._/-]+$"
+    },
+    "dependencies": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "sourcePath", "risk", "loadBearing"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "sourcePath": {
+            "type": "string",
+            "pattern": "^\\.forge/[A-Za-z0-9._/-]+$"
+          },
+          "risk": {
+            "type": "string",
+            "enum": ["W0", "W1", "W2", "W3"]
+          },
+          "loadBearing": {
+            "const": true
+          }
+        }
+      }
+    }
+  }
+}

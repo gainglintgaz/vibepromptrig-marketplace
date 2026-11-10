@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "design-system.json -- per-project locked design system (v0.1 contract)",
+  "description": "Contract for the locked design system every UI project must carry before screens are built (rule: .claude/rules/design-system.md). Lives at repo root as design-system.json, or .forge/design/<project-slug>.json for VibePromptRig plugin customers. identity.{direction,references,personality,density} are the minimum lockable identity; antiGenericSignals[] lists THIS-product-only visual signals Claude must preserve (the concrete anti-generic gate). The schema enforces structure -- it never prescribes a look.",
+  "type": "object",
+  "required": ["identity", "tokens", "antiGenericSignals", "project", "locked_at"],
+  "properties": {
+    "identity": {
+      "type": "object",
+      "required": ["direction", "references", "personality", "density"],
+      "properties": {
+        "direction": { "type": "string", "description": "One named design direction, e.g. 'calm-local-intelligence'" },
+        "references": { "type": "array", "minItems": 1, "items": { "type": "string" }, "description": "Real products/sites whose feel this project aims at" },
+        "personality": { "type": "array", "minItems": 3, "items": { "type": "string" }, "description": "3-5 personality adjectives" },
+        "density": { "type": "string", "description": "e.g. compact | comfortable | spacious" }
+      }
+    },
+    "antiGenericSignals": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "THIS-product-only signals Claude must preserve. Empty = gate has no teeth yet; fill before locking."
+    },
+    "tokens": {
+      "type": "object",
+      "required": ["color", "type", "spacing"],
+      "properties": {
+        "color": { "type": "object" },
+        "type": { "type": "object" },
+        "spacing": { "type": "object" },
+        "radius": { "type": "object" },
+        "shadow": { "type": "object" },
+        "motion": { "type": "object" }
+      }
+    },
+    "components": { "type": "object" },
+    "project": { "type": "string" },
+    "locked_at": { "type": "string" },
+    "owner_editable": { "type": "boolean" },
+    "notes": { "type": "string" }
+  }
+}
