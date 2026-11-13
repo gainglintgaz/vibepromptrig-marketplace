@@ -1,8 +1,8 @@
 # VibePromptRig installation
 
-VibePromptRig's Claude Code plugin is named `vibepromptrig`. Its marketplace is also named `vibepromptrig`, so the install identifier is `vibepromptrig@vibepromptrig`. This guide describes source version 5.2.0 (`.claude-plugin/plugin.json`), which contains 15 agents, 19 skills, 3 commands, 4 workflows, compact Context V2 cards, and 5 selected reference rules. It does not install the former full `.claude/rules/` tree or generated editor mirrors.
+VibePromptRig's Claude Code plugin is named `vibepromptrig`. Its marketplace is also named `vibepromptrig`, so the install identifier is `vibepromptrig@vibepromptrig`. This guide describes source version 5.2.1 (`.claude-plugin/plugin.json`), which contains 15 agents, 19 skills, 3 commands, 4 workflows, compact Context V2 cards, and 5 selected reference rules. It does not install the former full `.claude/rules/` tree or generated editor mirrors.
 
-**Which version this describes.** This guide describes VibePromptRig 5.2.0. Check the version you have with `claude plugin list`. To upgrade from an earlier version, run `claude plugin marketplace update vibepromptrig`, then `claude plugin update vibepromptrig@vibepromptrig`. 5.2.0 has not been submitted to Anthropic's plugin directory. When you test a specific build, record that version and, for a local marketplace, the checkout's commit (`git rev-parse HEAD`); the plugin name alone does not identify the artifact.
+**Which version this describes.** This guide describes VibePromptRig 5.2.1. Check the version you have with `claude plugin list`. To upgrade from an earlier version, run `claude plugin marketplace update vibepromptrig`, then `claude plugin update vibepromptrig@vibepromptrig`. 5.2.1 is not yet listed in Anthropic's plugin directory (submission in progress). When you test a specific build, record that version and, for a local marketplace, the checkout's commit (`git rev-parse HEAD`); the plugin name alone does not identify the artifact.
 
 ## Requirements
 
@@ -149,6 +149,8 @@ claude plugin marketplace update vibepromptrig
 claude plugin update vibepromptrig@vibepromptrig
 claude plugin list
 ```
+
+If you also installed the plugin inside individual projects (`claude plugin list` shows entries with scope `local`), `claude plugin update` may update only one of them and report the rest as already current while they stay on the old version (seen with Claude Code during the 5.2.0 rollout). In each such project folder, run `claude plugin uninstall vibepromptrig@vibepromptrig --scope local`, then `claude plugin install vibepromptrig@vibepromptrig --scope local`, and check the version with `claude plugin list`.
 
 The publisher must bump `.claude-plugin/plugin.json` for each release. To turn the plugin off without removing it, run `claude plugin disable vibepromptrig@vibepromptrig` (and `claude plugin enable vibepromptrig@vibepromptrig` to turn it back on). To remove the plugin:
 

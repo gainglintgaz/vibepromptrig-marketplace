@@ -1,6 +1,6 @@
 ---
 description: One-word operating mode -- lean | balanced | max -- over the existing profile system. Flips the rules/agents/budget bundle in a single move (the "how heavy is my system" dial). No arg = show current mode + the 3-dial explainer.
-argument-hint: [lean | balanced | max]
+argument-hint: "[lean | balanced | max]"
 allowed-tools: Bash(powershell *)
 ---
 

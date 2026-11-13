@@ -11,7 +11,7 @@ arguments:
     description: shallow (models only) | standard (models + MCPs) | full (models + MCPs + breaking + pricing). Default standard.
     required: false
 profiles: [senior-dev, agency, enterprise]
-estimated_token_cost: ~10-25k input + ~3-10k output
+estimated_token_cost: "~10-25k input + ~3-10k output"
 trigger:
   - Mon 7am scheduled cron (Week 4 wiring)
   - Manual `/tech-radar` skill

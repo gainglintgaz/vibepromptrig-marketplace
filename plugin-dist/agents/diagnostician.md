@@ -7,10 +7,10 @@ effort: high
 router_category: architecture
 tools: [Read, Glob, Grep, Bash, Write]
 profiles: [solo-pro, senior-dev, agency, enterprise]
-estimated_token_cost: 15000-40000
+estimated_token_cost: "15000-40000"
 trigger:
-  - /ship workflow (stage 4, after a Reviewer HOLD and before any Coder retry)
-  - /second-look skill (outside-diagnosis prompts reuse this output contract)
+  - "/ship workflow (stage 4, after a Reviewer HOLD and before any Coder retry)"
+  - "/second-look skill (outside-diagnosis prompts reuse this output contract)"
 schema_version: "1.0.0"
 configurable:
   fields: ["site_classes"]

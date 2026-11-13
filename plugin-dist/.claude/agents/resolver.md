@@ -14,7 +14,7 @@ arguments:
     description: Comma-separated list of files exhibiting both patterns. Optional -- agent will Glob if not provided.
     required: false
 profiles: [senior-dev, agency, enterprise]
-estimated_token_cost: ~8-20k input + ~2-5k output
+estimated_token_cost: "~8-20k input + ~2-5k output"
 trigger:
   - Invoked by other agents (auditor, hostile-architect, code-reviewer) when they detect conflict
   - Manual invocation when a PR touches an area with contradicting patterns

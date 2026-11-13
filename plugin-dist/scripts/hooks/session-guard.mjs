@@ -5,7 +5,7 @@
 // Byte-faithful behavior: advisory heartbeat lockfile (atomic tmp + rename), 15-min
 // staleness with clock-skew handling, exit-2 ONLY on the interactive commit/push block,
 // dual-signal ownership, degraded mode (no identity -> never claim, never block).
-// Spec: docs/v5.0/one-writer-guard-spec.md. Build: docs/architecture/one-writer-guard.md.
+// Spec: docs/archive/v5.0/one-writer-guard-spec.md. Build: docs/architecture/one-writer-guard.md.
 //
 // Events (passed as `-Event <x>` to match the existing settings.json invocation):
 //   start      SessionStart      claim lock or print LOUD advisory (exit 0 always)
@@ -211,7 +211,7 @@ try {
     const seen = getLastSeenSeconds(lock);
     out('[SESSION GUARD] Another active session appears to be building in this repo:');
     out(`  agent=${lock.agent}  started=${lock.started_at}  last-seen=${seen}s ago  pid=${lock.pid}  host=${lock.host}`);
-    out('Two writers in one working tree corrupt commits (2026-06-01 incident -- docs/v5.0/one-writer-guard-spec.md SS1).');
+    out('Two writers in one working tree corrupt commits (2026-06-01 incident -- docs/archive/v5.0/one-writer-guard-spec.md SS1).');
     out('Options:');
     out('  (a) let that session finish before writing here');
     out('  (b) use a separate git worktree: git worktree add ../vf-<name> <branch>  (VIBE Rule 28)');

@@ -4,7 +4,7 @@ VibePromptRig is a Claude Code plugin with reusable workflows for clarifying a p
 
 It is built for **Claude Code** (the terminal, the IDE extensions, and the desktop app's Code tab). Most of it reads and writes files in your project folder and runs Node.js scripts, so it needs a terminal session with a project open.
 
-**Which version this describes.** This README describes VibePromptRig 5.2.0, the version in this source's `.claude-plugin/plugin.json`. Check the version you have with `claude plugin list`. To upgrade from an earlier version, run `claude plugin marketplace update vibepromptrig`, then `claude plugin update vibepromptrig@vibepromptrig`. 5.2.0 has not been submitted to Anthropic's plugin directory.
+**Which version this describes.** This README describes VibePromptRig 5.2.1, the version in this source's `.claude-plugin/plugin.json`. Check the version you have with `claude plugin list`. To upgrade from an earlier version, run `claude plugin marketplace update vibepromptrig`, then `claude plugin update vibepromptrig@vibepromptrig`. 5.2.1 is not yet listed in Anthropic's plugin directory (submission in progress).
 
 ## Requirements
 
@@ -73,9 +73,9 @@ Previews, initialization, temporary locks and saved notes are different kinds of
 
 ## Optional workforce coordination (preview, Windows only)
 
-VibePromptRig 5.2.0 also ships host APIs that let an already authorized operator coordinate a Claude build, an independent Codex review, a repair and the results on a disposable project. The JavaScript host APIs also have a command-line entry point, `scripts/forge/workforce-entry.mjs`. Installing the plugin does not start a worker, connect an account, enroll a project, install a service or schedule a job. They need Windows and Node.js 24 or newer. This route is a preview: its live recovery behavior with real providers is still being tested.
+VibePromptRig 5.2.1 also ships host APIs that let an already authorized operator coordinate a Claude build, an independent Codex review, a repair and the results on a disposable project. The JavaScript host APIs also have a command-line entry point, `scripts/forge/workforce-entry.mjs`. Installing the plugin does not start a worker, connect an account, enroll a project, install a service or schedule a job. They need Windows and Node.js 24 or newer. This route is a preview: its live recovery behavior with real providers is still being tested.
 
-| Route | 5.2.0 status | What the evidence covers |
+| Route | 5.2.1 status | What the evidence covers |
 | --- | --- | --- |
 | Claude cloud build, independent Codex review, repair, results (`scripts/forge/attended-cloud-loop.mjs`) | Supported, attended | A bounded attended trial with real Claude and Codex sessions on a disposable project passed. You sign in, give consent and supply trusted host callbacks. Each loop allows at most three builds and three reviews, up to 4 active minutes per turn, and expires after 25 minutes. Not unattended operation |
 | Finite automatic coordinator (`scripts/forge/automatic-cloud-coordinator.mjs`) | Included as a finite run the host starts and stops; real-provider recovery PENDING | Local tests with simulated providers. Recovery with real Claude and Codex across two projects (coordinator restart, repeated or missed completion, unavailable provider, no duplicate submission) is PENDING until the live recovery test runs. It creates no schedule or background service |
@@ -98,7 +98,7 @@ What each surface loads follows Anthropic's plugin platform matrix. Only Claude 
 
 | Surface | What loads | What works |
 | --- | --- | --- |
-| Claude Code | Skills, commands, agents, hooks | Local Windows fixture coverage. Historical signed-in evidence covers 5.1.5; 5.1.12 BOM and current 5.2.0 signed-in acceptance remain pending. |
+| Claude Code | Skills, commands, agents, hooks | Local Windows fixture coverage. Historical signed-in evidence covers 5.1.5; 5.1.12 BOM and current 5.2.1 signed-in acceptance remain pending. |
 | Cowork | Skills, commands, agents, hooks | Not tested. The skills expect a local project folder, Node.js, and Git. |
 | Chat (claude.ai web, desktop, mobile) | Skills; commands load as skills | Agents and hooks are ignored, so no hook guard runs in chat. Every skill and command needs a terminal and a project folder; each one says so and asks you to switch to Claude Code. |
 

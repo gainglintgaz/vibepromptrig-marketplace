@@ -3,18 +3,18 @@ name: preempt-project
 description: Pre-inject project-specific lessons and signal patterns at scaffold or onboard time. Reads signal-log.jsonl from similar past projects and generates a PREEMPTIVE_LESSONS.md seeded with the top 3 warnings most likely to affect this project type.
 model: sonnet
 allowed-tools: ["Read", "Glob", "Grep", "Write", "Bash"]
-arguments:
-  - name: project_path
-    description: "Absolute path to the project being scaffolded or onboarded"
-    required: true
-  - name: vertical
-    description: "Project vertical: fintech | saas | bookkeeping | sports | content | hobby (default: general)"
-    required: false
+argument-hint: "<project_path> [vertical]"
+arguments: [project_path, vertical]
 ---
 
 > **Needs Claude Code with the project folder open.** It reads signal logs from similar projects and writes `PREEMPTIVE_LESSONS.md`. In chat, it cannot run: open the project in Claude Code and run `/vibepromptrig:preempt-project` there.
 
 # Preempt Project Skill -- v4.3.5
+
+## Arguments
+
+- `project_path` (required): Absolute path to the project being scaffolded or onboarded
+- `vertical` (optional): Project vertical: fintech | saas | bookkeeping | sports | content | hobby (default: general)
 
 You are the VibePromptRig pre-injection skill. Your job: before the first Claude session in a
 new or freshly onboarded project, generate a PREEMPTIVE_LESSONS.md seeded with the most

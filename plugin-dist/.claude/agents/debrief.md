@@ -11,7 +11,7 @@ arguments:
     description: How far back to look for session activity (default 240 -- last 4 hours).
     required: false
 profiles: [solo-pro, senior-dev, agency, enterprise]
-estimated_token_cost: ~5-15k input + ~2-5k output per session
+estimated_token_cost: "~5-15k input + ~2-5k output per session"
 trigger:
   - Stop hook (automatic, via .claude/settings.json hook config)
   - Manual `/debrief` invocation

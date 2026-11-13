@@ -3,18 +3,18 @@ name: migrate-existing-projects
 description: One-shot migration. For each of the project owner's projects under <factory-root>\projects\, runs onboard-existing-project.ps1 -Force to install the compact Context V2 entry points + verifier scripts, then reports (never applies) the reviewed legacy-rule cleanup. Outputs per-project pass/fail report. Use when the factory ships new compact context or verifier scripts that existing projects need to absorb.
 model: sonnet
 allowed-tools: ["Read", "Glob", "Bash"]
-arguments:
-  - name: target_projects
-    description: "Comma-separated list of project directory names. Required for write mode; omitted means discovery and dry run only."
-    required: false
-  - name: dry_run
-    description: "If 'true', list what would happen without running onboard. Default: false."
-    required: false
+argument-hint: "[target_projects] [dry_run]"
+arguments: [target_projects, dry_run]
 ---
 
 > **Needs Claude Code in a terminal on Windows with PowerShell and your project folders on this computer.** It runs an onboarding script against each project. In chat, it cannot run: use Claude Code on the machine that holds the projects.
 
 # migrate-existing-projects -- v4.4
+
+## Arguments
+
+- `target_projects` (optional): Comma-separated list of project directory names. Required for write mode; omitted means discovery and dry run only.
+- `dry_run` (optional): If 'true', list what would happen without running onboard. Default: false.
 
 Bridge skill: existing projects may predate the compact Context V2 entry points.
 This walks each project, runs `onboard-existing-project.ps1 -Force`, reports outcomes and the
@@ -56,7 +56,7 @@ Otherwise, for each project needing migration:
 powershell -NoProfile -File "${CLAUDE_PLUGIN_ROOT}/scripts/onboard-existing-project.ps1" -Path "<factory-root>\projects\<name>" -Force
 ```
 
-Capture stdout + stderr. Record exit code. If exit code != 0, mark project as `failed` and
+Capture stdout + stderr. Record exit code. If the exit code is not 0, mark the project as `failed` and
 include the last 20 lines of output in the report.
 
 ## Step 4 -- post-flight verification per project

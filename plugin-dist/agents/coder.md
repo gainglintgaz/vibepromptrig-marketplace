@@ -8,9 +8,9 @@ router_category: code_build
 isolation: worktree
 tools: [Read, Glob, Grep, Edit, Write, Bash]
 profiles: [solo-pro, senior-dev, agency, enterprise]
-estimated_token_cost: 15000-50000
+estimated_token_cost: "15000-50000"
 trigger:
-  - /ship command (stage 2, after kickoff exists + any Bridge-Brief approval given)
+  - "/ship command (stage 2, after kickoff exists + any Bridge-Brief approval given)"
 ---
 
 # coder

@@ -1,6 +1,6 @@
 ---
 description: Show current project status, goals, blockers and spending with measured and declared facts clearly labeled.
-argument-hint: [--refresh | --help]
+argument-hint: "[--refresh | --help]"
 allowed-tools:
   - Bash(node "${CLAUDE_PLUGIN_ROOT}/scripts/dashboard.mjs")
   - Bash(node "${CLAUDE_PLUGIN_ROOT}/scripts/dashboard.mjs" --help)

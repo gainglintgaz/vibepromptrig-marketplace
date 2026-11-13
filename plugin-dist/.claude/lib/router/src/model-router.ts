@@ -7,6 +7,23 @@ export interface ModelInfo {
   provider: ProviderName;
   in_usd_mtok: number;
   out_usd_mtok: number;
+  /**
+   * Tiered pricing (first used by claude-haiku-5-5): when the prompt is OVER this many input
+   * tokens, the whole request is billed at long_in_usd_mtok / long_out_usd_mtok. All three are
+   * optional; a model without them is flat-priced.
+   */
+  long_context_threshold_tokens?: number;
+  long_in_usd_mtok?: number;
+  long_out_usd_mtok?: number;
+}
+
+/** USD for one request at the model's rates, applying the long-context tier when it is declared. */
+export function usdForUsage(m: ModelInfo, tokensIn: number, tokensOut: number): number {
+  const long =
+    m.long_context_threshold_tokens !== undefined && tokensIn > m.long_context_threshold_tokens;
+  const inRate = long ? (m.long_in_usd_mtok ?? m.in_usd_mtok) : m.in_usd_mtok;
+  const outRate = long ? (m.long_out_usd_mtok ?? m.out_usd_mtok) : m.out_usd_mtok;
+  return (tokensIn / 1_000_000) * inRate + (tokensOut / 1_000_000) * outRate;
 }
 
 export interface ModelRouter {
@@ -46,7 +63,7 @@ export function costCents(router: ModelRouter, model: string, tokensIn: number, 
   if (!m) {
     throw new Error(`ROUTER ERROR: unknown model '${model}' -- not in model-router.json models map`);
   }
-  const usd = (tokensIn / 1_000_000) * m.in_usd_mtok + (tokensOut / 1_000_000) * m.out_usd_mtok;
+  const usd = usdForUsage(m, tokensIn, tokensOut);
   return Math.round(usd * 100 * 100) / 100; // cents, 2dp
 }
 
@@ -99,7 +116,7 @@ export function costCentsResolved(
     );
     return { cents: 0, estimated: true };
   }
-  const usd = (tokensIn / 1_000_000) * m.in_usd_mtok + (tokensOut / 1_000_000) * m.out_usd_mtok;
+  const usd = usdForUsage(m, tokensIn, tokensOut);
   const cents = Math.round(usd * 100 * 100) / 100;
   // estimated when the echoed id was unknown and we fell back to the requested id's pricing.
   return { cents, estimated: !router.models[echoedModel] };

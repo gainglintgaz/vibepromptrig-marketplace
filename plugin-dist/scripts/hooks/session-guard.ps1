@@ -1,7 +1,7 @@
 <#
 .SYNOPSIS
     One-writer-per-repo guard -- heartbeat lockfile + advisory + commit/push gate.
-    Spec: docs/v5.0/one-writer-guard-spec.md (3 layers, warn-not-block).
+    Spec: docs/archive/v5.0/one-writer-guard-spec.md (3 layers, warn-not-block).
     Build deltas: docs/architecture/one-writer-guard.md (founder-approved 2026-06-04).
 
     Events (wired in .claude/settings.json):
@@ -232,7 +232,7 @@ try {
             $seen = Get-LastSeenSeconds -Lock $lock
             Write-Output "[SESSION GUARD] Another active session appears to be building in this repo:"
             Write-Output "  agent=$($lock.agent)  started=$($lock.started_at)  last-seen=${seen}s ago  pid=$($lock.pid)  host=$($lock.host)"
-            Write-Output "Two writers in one working tree corrupt commits (2026-06-01 incident -- docs/v5.0/one-writer-guard-spec.md SS1)."
+            Write-Output "Two writers in one working tree corrupt commits (2026-06-01 incident -- docs/archive/v5.0/one-writer-guard-spec.md SS1)."
             Write-Output "Options:"
             Write-Output "  (a) let that session finish before writing here"
             Write-Output "  (b) use a separate git worktree: git worktree add ../vf-<name> <branch>  (VIBE Rule 28)"

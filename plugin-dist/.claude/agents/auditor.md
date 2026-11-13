@@ -14,9 +14,9 @@ arguments:
     description: Absolute path to the project being audited. Defaults to current working directory.
     required: false
 profiles: [solo-pro, senior-dev, agency, enterprise]
-estimated_token_cost: 18000-38000 (15-30k in, 3-8k out)
+estimated_token_cost: "18000-38000 (15-30k in, 3-8k out)"
 trigger:
-  - /audit-gate skill (manual)
+  - "/audit-gate skill (manual)"
   - End of major task per CLAUDE.md section 9.1 (automatic when wired in Week 4)
 schema_version: "1.0.0"
 configurable:

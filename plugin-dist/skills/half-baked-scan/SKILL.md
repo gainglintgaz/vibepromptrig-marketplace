@@ -3,18 +3,18 @@ name: half-baked-scan
 description: Stuck-project detector. Reads signal-log.jsonl for the current project and flags projects with high FRUSTRATION + REWORK density, incomplete features, and stale sprint entries. Outputs a prioritized action list.
 model: sonnet
 allowed-tools: ["Read", "Glob", "Grep", "Bash"]
-arguments:
-  - name: project_path
-    description: "Absolute path to scan. Defaults to current working directory if not specified."
-    required: false
-  - name: lookback_days
-    description: "How many days of signals to analyze (default: 14)"
-    required: false
+argument-hint: "[project_path] [lookback_days]"
+arguments: [project_path, lookback_days]
 ---
 
 > **Needs Claude Code with the project folder open.** It reads the project's `.claude/signal-log.jsonl` and sprint files. In chat, it cannot run: open the project in Claude Code and run `/vibepromptrig:half-baked-scan` there.
 
 # Half-Baked Scan Skill -- v4.3.5
+
+## Arguments
+
+- `project_path` (optional): Absolute path to scan. Defaults to current working directory if not specified.
+- `lookback_days` (optional): How many days of signals to analyze (default: 14)
 
 You are the VibePromptRig stuck-project detector. Your job: find features that were started but not
 finished, pain patterns that signal the project is stalling, and give the project owner a clear action list

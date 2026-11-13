@@ -7,9 +7,9 @@ effort: medium
 router_category: data_qa
 tools: [Read, Glob, Grep, Edit, Write, Bash]
 profiles: [solo-pro, senior-dev, agency, enterprise]
-estimated_token_cost: 12000-40000
+estimated_token_cost: "12000-40000"
 trigger:
-  - /ship command (stage 3, after Coder hands off)
+  - "/ship command (stage 3, after Coder hands off)"
 ---
 
 # tester

@@ -11,18 +11,18 @@ allowed-tools:
   - Bash(git show *)
   - Bash(git ls-tree *)
   - Bash(git grep *)
-arguments:
-  - name: review_path
-    description: "Repo-relative path to the review artifact that FAILed/HOLDed: a REVIEW.md, a ROOT-CAUSE.md, a PR review comment saved to a file, or the /ship blocked result saved as docs/diagnosis/<head12>/REVIEW.json (its reviewArtifactPath)."
-    required: true
-  - name: tools
-    description: "Comma-separated outside tools to write prompts for. Default: grok,claude. Use at least two different vendors."
-    required: false
+argument-hint: "<review_path> [tools]"
+arguments: [review_path, tools]
 ---
 
 > **Needs Claude Code.** It reads the review file and git history from your project folder and writes prompt files into it. In chat, paste the review text and ask Claude for an outside-diagnosis prompt in the shape below instead.
 
 # /second-look -- outside root-cause diagnosis, rotated across tools
+
+## Arguments
+
+- `review_path` (required): Repo-relative path to the review artifact that FAILed/HOLDed: a REVIEW.md, a ROOT-CAUSE.md, a PR review comment saved to a file, or the /ship blocked result saved as docs/diagnosis/<head12>/REVIEW.json (its reviewArtifactPath).
+- `tools` (optional): Comma-separated outside tools to write prompts for. Default: grok,claude. Use at least two different vendors.
 
 Use it when the in-pipeline `diagnostician` was refused or its repair still HOLDed, when two repairs
 of the same cause failed, or when a stalled item is classified DEFECT by a stall census. Evidence

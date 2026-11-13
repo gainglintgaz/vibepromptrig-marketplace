@@ -7,9 +7,9 @@ effort: high
 router_category: architecture
 tools: [Read, Glob, Grep, Bash]
 profiles: [solo-pro, senior-dev, agency, enterprise]
-estimated_token_cost: 15000-35000
+estimated_token_cost: "15000-35000"
 trigger:
-  - /ship command (stage 4, after Tester is green)
+  - "/ship command (stage 4, after Tester is green)"
 schema_version: "1.0.0"
 configurable:
   fields: ["tripwire_categories"]

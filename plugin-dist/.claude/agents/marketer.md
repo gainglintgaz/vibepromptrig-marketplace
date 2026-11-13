@@ -17,10 +17,10 @@ arguments:
     description: Target word count. Default 300 for posts, 800 for blogs, 1500 for case studies.
     required: false
 profiles: [senior-dev, agency, enterprise]
-estimated_token_cost: ~8-20k input + ~3-8k output
+estimated_token_cost: "~8-20k input + ~3-8k output"
 trigger:
-  - /marketing-content skill (manual)
-  - /reddit-help skill (manual)
+  - "/marketing-content skill (manual)"
+  - "/reddit-help skill (manual)"
   - Invoked by other agents producing user-acquisition surfaces (e.g., scaffold building landing.md)
 schema_version: "1.0.0"
 configurable:

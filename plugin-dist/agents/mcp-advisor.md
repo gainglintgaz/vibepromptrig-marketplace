@@ -14,9 +14,9 @@ arguments:
     description: Optional project path. Defaults to current working directory.
     required: false
 profiles: [solo-pro, senior-dev, agency, enterprise]
-estimated_token_cost: ~6-15k input + ~2-5k output
+estimated_token_cost: "~6-15k input + ~2-5k output"
 trigger:
-  - /check-marketplace skill (manual, pre-utility-build per mcp-servers.md)
+  - "/check-marketplace skill (manual, pre-utility-build per mcp-servers.md)"
   - Invoked by other agents (auditor, hostile-architect) when they detect a planned new utility that overlaps with known tooling
 ---
 

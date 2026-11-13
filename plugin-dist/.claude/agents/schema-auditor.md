@@ -14,9 +14,9 @@ arguments:
     description: shallow (RLS + advisors only) | full (RLS + advisors + indexes + FK orphans + drift). Default full.
     required: false
 profiles: [senior-dev, agency, enterprise]
-estimated_token_cost: ~10-25k input + ~3-8k output
+estimated_token_cost: "~10-25k input + ~3-8k output"
 trigger:
-  - /schema-check skill (manual)
+  - "/schema-check skill (manual)"
   - Pre-deploy gate (Week 4 hook wiring)
   - Monthly scheduled (Week 4 cron wiring)
 schema_version: "1.0.0"

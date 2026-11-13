@@ -11,9 +11,9 @@ arguments:
     description: Path to plan / brief / spec to stress-test. Defaults to most recent CURRENT_SPRINT.md or last commit message body.
     required: false
 profiles: [solo-pro, senior-dev, agency, enterprise]
-estimated_token_cost: ~20-40k input + ~5-15k output
+estimated_token_cost: "~20-40k input + ~5-15k output"
 trigger:
-  - /hostile skill (manual invocation)
+  - "/hostile skill (manual invocation)"
   - After project brief written or major architecture decision (per CLAUDE.md / execution.md Phase 2)
 ---
 

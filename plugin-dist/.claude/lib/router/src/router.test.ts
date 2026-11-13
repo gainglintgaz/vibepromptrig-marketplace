@@ -20,7 +20,7 @@ import { fileURLToPath } from "node:url";
 import { route, selectModel } from "./router.js";
 import { BudgetExceededError, monthToDateCents, committedAndReservedCents } from "./budget.js";
 import { hashConfig, logAiCall } from "./provenance.js";
-import { loadModelRouter } from "./model-router.js";
+import { loadModelRouter, costCents, costCentsResolved } from "./model-router.js";
 import { LocalProvider } from "./providers/local.js";
 import type { Provider } from "./types.js";
 import type { TaskCategory } from "./schemas/task-categories.js";
@@ -62,12 +62,52 @@ test("config hash is deterministic, order-independent, 64-hex", () => {
   assert.notEqual(a, c, "different config -> different hash");
 });
 
+test("costCents applies the long-context tier only above the declared threshold", () => {
+  const router = {
+    hard_caps: { per_task_usd: 15, per_session_usd: 30 },
+    providers: {},
+    task_categories: {},
+    models: {
+      tiered: {
+        provider: "anthropic" as const, in_usd_mtok: 1, out_usd_mtok: 5,
+        long_context_threshold_tokens: 100_000, long_in_usd_mtok: 5, long_out_usd_mtok: 25,
+      },
+      flat: { provider: "anthropic" as const, in_usd_mtok: 1, out_usd_mtok: 5 },
+    },
+  };
+  // at the threshold: base rates (1M-scaled: 0.1 * $1 + 0.01 * $5 = $0.15)
+  assert.equal(costCents(router, "tiered", 100_000, 10_000), 15);
+  // one token over: the whole request moves to the long rates (5x)
+  assert.equal(costCents(router, "tiered", 200_000, 10_000), 125);
+  assert.equal(costCents(router, "flat", 200_000, 10_000), 25);
+  assert.equal(costCentsResolved(router, "tiered", "tiered", 200_000, 10_000).cents, 125);
+});
+
+test("shipped router: every routed id is priced, and the Anthropic defaults are not legacy", () => {
+  const router = loadModelRouter(FACTORY_ROOT) as unknown as {
+    models: Record<string, { status?: string; long_context_threshold_tokens?: number; long_in_usd_mtok?: number; long_out_usd_mtok?: number }>;
+    task_categories: Record<string, { preferred: string[]; fallback?: string[] }>;
+  };
+  for (const [category, entry] of Object.entries(router.task_categories)) {
+    for (const id of [...entry.preferred, ...(entry.fallback ?? [])]) {
+      const model = router.models[id];
+      assert.ok(model, `${category}: routed id '${id}' has no models entry`);
+      assert.notEqual(model.status, "legacy", `${category}: routes to legacy id '${id}'`);
+    }
+  }
+  for (const [id, model] of Object.entries(router.models)) {
+    if (model.long_context_threshold_tokens === undefined) continue;
+    assert.equal(typeof model.long_in_usd_mtok, "number", `${id}: tier needs long_in_usd_mtok`);
+    assert.equal(typeof model.long_out_usd_mtok, "number", `${id}: tier needs long_out_usd_mtok`);
+  }
+});
+
 test("selectModel: customer prefs win, else factory default (A2)", () => {
   const router = loadModelRouter(FACTORY_ROOT);
-  assert.equal(selectModel(router, "agent_dispatch"), "claude-haiku-4-5");
+  assert.equal(selectModel(router, "agent_dispatch"), "claude-haiku-5-5");
   assert.equal(
-    selectModel(router, "agent_dispatch", { agent_dispatch: { preferred: ["claude-opus-4-8"] } }),
-    "claude-opus-4-8",
+    selectModel(router, "agent_dispatch", { agent_dispatch: { preferred: ["claude-opus-5-5"] } }),
+    "claude-opus-5-5",
   );
   // research_cited (NEW) defaults to Perplexity sonar-pro
   assert.equal(selectModel(router, "research_cited"), "sonar-pro");
@@ -177,7 +217,7 @@ test("A8: logAiCall appends a parseable ai_call with config_hash + cost_estimate
   const metricsPath = tempMetrics();
   const hash = hashConfig({ resolved: true });
   logAiCall(metricsPath, {
-    config_hash: hash, provider: "anthropic", model: "claude-haiku-4-5",
+    config_hash: hash, provider: "anthropic", model: "claude-haiku-5-5",
     task_category: "agent_dispatch", tokens_in: 100, tokens_out: 50, cost_cents: 0.35,
     agent: "synthesizer", agent_version: "1.0.0",
   });
@@ -185,7 +225,7 @@ test("A8: logAiCall appends a parseable ai_call with config_hash + cost_estimate
   assert.equal(ev["event"], "ai_call");
   assert.equal(ev["config_hash"], hash);
   assert.equal(ev["agent"], "synthesizer");
-  assert.equal(ev["model"], "claude-haiku-4-5");
+  assert.equal(ev["model"], "claude-haiku-5-5");
   assert.equal(ev["cost_estimated"], false, "legacy callers default cost_estimated:false");
   assert.equal(typeof ev["ts"], "string");
   assert.ok(monthToDateCents(metricsPath, "synthesizer") >= 0.35);
@@ -345,7 +385,7 @@ test("F3: gate counts commit at actual cost, not estimate; close releases; stale
 // When the key is absent the test is SKIPPED (passes), never faked. Low maxTokens -> minimal spend.
 type RT = { name: string; key: string; category: TaskCategory; model: string };
 const ROUND_TRIPS: RT[] = [
-  { name: "anthropic", key: "ANTHROPIC_API_KEY", category: "agent_dispatch", model: "claude-haiku-4-5" },
+  { name: "anthropic", key: "ANTHROPIC_API_KEY", category: "agent_dispatch", model: "claude-haiku-5-5" },
   { name: "openai", key: "OPENAI_API_KEY", category: "research", model: "gpt-4.1-mini" },
   { name: "google", key: "GEMINI_API_KEY", category: "vision_ocr", model: "gemini-2.5-flash" },
   { name: "xai", key: "XAI_API_KEY", category: "x_data", model: "grok-4.3" },

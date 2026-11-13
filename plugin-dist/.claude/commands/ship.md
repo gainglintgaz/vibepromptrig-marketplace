@@ -1,6 +1,6 @@
 ---
 description: Run the 4-agent ship pipeline (Planner → Coder → Tester → Reviewer) on a task, with a founder-approval gate for Bridge-Brief-class work. Stage 1 (Plan) runs live so you can approve Bridge-Brief-class work; Stages 2-4 (Code/Test/Review) run as one background workflow with the loop-until-green discipline built in as code, not conductor memory.
-argument-hint: <one-line task description>
+argument-hint: "<one-line task description>"
 allowed-tools: Task, Workflow, Read, Glob, Grep, Bash(git *)
 ---
 

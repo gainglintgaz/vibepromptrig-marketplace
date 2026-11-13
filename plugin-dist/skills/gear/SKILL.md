@@ -4,15 +4,17 @@ description: Advises which Claude model + reasoning effort fits a task, scored a
 allowed-tools:
   - Read
   - Bash(node "${CLAUDE_PLUGIN_ROOT}/scripts/log-gear-reco.mjs" *)
-arguments:
-  - name: task_description
-    description: "Free-text description of the task you're about to do (e.g. 'refactor the auth module', 'write a migration for the orders table', 'security audit the webhook handler')."
-    required: false
+argument-hint: "[task_description]"
+arguments: [task_description]
 ---
 
 > **Needs Claude Code.** It reads two reference files from the plugin folder. In chat, those files are not available: ask Claude directly which model and effort fit your task, or run `/vibepromptrig:gear` in Claude Code.
 
 # /gear -- the gear-shifter advisor
+
+## Arguments
+
+- `task_description` (optional): Free-text description of the task you're about to do (e.g. 'refactor the auth module', 'write a migration for the orders table', 'security audit the webhook handler').
 
 A thin, read-only lookup over `docs/rules-reference/factory/gear-shift.md` (the decision table) and
 `.claude/model-router.json` (the live price/category source of truth). It tells you which

@@ -11,15 +11,17 @@ allowed-tools:
   - Bash(node *)
   - WebSearch
   - WebFetch
-arguments:
-  - name: focus
-    description: "Optional narrowing: 'merge' (only the queue and commands), 'decide' (only owner decisions), 'gaps' (only research/feature gaps), or a free-text area such as 'launch' or 'billing'. Default: all five sections."
-    required: false
+argument-hint: "[focus]"
+arguments: [focus]
 ---
 
 > **Needs Claude Code with the project folder open.** It reads the queue, trackers and git/GitHub state and writes prompt files. In chat, paste the contents of `chat-prompt.md` from this skill's folder instead and attach your current DIGEST or status file.
 
 # /next -- what is next, answered without being asked
+
+## Arguments
+
+- `focus` (optional): Optional narrowing: 'merge' (only the queue and commands), 'decide' (only owner decisions), 'gaps' (only research/feature gaps), or a free-text area such as 'launch' or 'billing'. Default: all five sections.
 
 The owner types some version of this at every milestone: *"Is there anything useful, popular or trending I haven't planned (features, searches, analytics, APIs, third-party or competitor angles)? What is still in the queue, roadmap or tracker to build, fix, merge, commit or deploy? Let's work in parallel across Codex, Claude Code, Antigravity, Grok and ChatGPT, overnight if useful, with the right slash commands, modes and effort. Update every tracker and write the full prompts for the next sessions."* This skill is that question, made repeatable and evidence-bound.
 

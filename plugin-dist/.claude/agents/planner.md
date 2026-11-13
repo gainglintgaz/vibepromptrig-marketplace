@@ -7,9 +7,9 @@ effort: high
 router_category: architecture
 tools: [Read, Glob, Grep, WebSearch, WebFetch, Write, Edit, Bash]
 profiles: [solo-pro, senior-dev, agency, enterprise]
-estimated_token_cost: 12000-30000 (10-25k in, 2-6k out)
+estimated_token_cost: "12000-30000 (10-25k in, 2-6k out)"
 trigger:
-  - /ship command (stage 1)
+  - "/ship command (stage 1)"
   - manual planning before a sprint
 ---
 
