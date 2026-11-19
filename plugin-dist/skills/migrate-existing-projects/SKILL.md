@@ -2,7 +2,11 @@
 name: migrate-existing-projects
 description: One-shot migration. For each of the project owner's projects under <factory-root>\projects\, runs onboard-existing-project.ps1 -Force to install the compact Context V2 entry points + verifier scripts, then reports (never applies) the reviewed legacy-rule cleanup. Outputs per-project pass/fail report. Use when the factory ships new compact context or verifier scripts that existing projects need to absorb.
 model: sonnet
-allowed-tools: ["Read", "Glob", "Bash"]
+allowed-tools:
+  - Read
+  - Glob
+  - Bash(powershell -NoProfile -File "${CLAUDE_PLUGIN_ROOT}/scripts/onboard-existing-project.ps1" *)
+  - Bash(node "${CLAUDE_PLUGIN_ROOT}/scripts/forge/legacy-rules.mjs" plan *)
 argument-hint: "[target_projects] [dry_run]"
 arguments: [target_projects, dry_run]
 ---

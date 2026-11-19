@@ -7,7 +7,11 @@ allowed-tools:
   - Grep
   - Write
   - Edit
-  - Bash
+  - Bash(node "${CLAUDE_PLUGIN_ROOT}/scripts/forge/checkup.mjs" *)
+  - Bash(node "${CLAUDE_PLUGIN_ROOT}/scripts/forge/setup-interview.mjs" *)
+  - Bash(node "${CLAUDE_PLUGIN_ROOT}/scripts/forge/legacy-rules.mjs" plan *)
+  - Bash(git config --get core.hooksPath)
+  - Bash(git config --local --get-all core.hooksPath)
   - AskUserQuestion
 disable-model-invocation: true
 ---

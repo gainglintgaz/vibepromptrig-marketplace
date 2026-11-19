@@ -1,2 +1,4 @@
 *.mjs text eol=lf
 plugin-dist/scripts/templates/shared/.githooks/* text eol=lf
+plugin-directory/** text eol=lf
+plugin-directory/.claude-plugin/icon.png binary

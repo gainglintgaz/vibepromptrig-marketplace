@@ -53,8 +53,8 @@ Read the project's testing conventions (`.claude/rules/*`, existing `__tests__/`
 ## Step 2 — run the gates
 
 Run via Bash and capture results honestly:
-- Type-check: `npx tsc --noEmit` (or project equivalent) → must be 0 errors.
-- Test suite: `npx vitest run` (or project equivalent) → 100% pass, report counts.
+- Type-check: the project's own type-check script, for example `npm run typecheck` → must be 0 errors.
+- Test suite: the project's own test script, for example `npm test` → 100% pass, report counts.
 - After an Edit batch, grep for new breakage the project flags (e.g. TS2304/TS2459/TS2552/TS2305).
 
 ## Step 3 — verify-with-SELECT (for any DB write)

@@ -1,7 +1,10 @@
 ---
 description: One-word operating mode -- lean | balanced | max -- over the existing profile system. Flips the rules/agents/budget bundle in a single move (the "how heavy is my system" dial). No arg = show current mode + the 3-dial explainer.
 argument-hint: "[lean | balanced | max]"
-allowed-tools: Bash(powershell *)
+allowed-tools:
+  - Bash(powershell -NoProfile -ExecutionPolicy Bypass -File "${CLAUDE_PLUGIN_ROOT}/scripts/forge.ps1" profile set *)
+  - Bash(powershell -NoProfile -ExecutionPolicy Bypass -File "${CLAUDE_PLUGIN_ROOT}/scripts/forge.ps1" profile show --terse)
+  - Bash(powershell -NoProfile -ExecutionPolicy Bypass -File "${CLAUDE_PLUGIN_ROOT}/scripts/forge.ps1" profile get profile)
 ---
 
 > **Needs Claude Code in a terminal with Windows PowerShell (`powershell`) and Node.js 18+.** It runs `forge profile set` through `powershell`, so on macOS or Linux without it the command cannot run. In chat, it cannot run: use Claude Code and run `/vibepromptrig:mode` there.

@@ -2,7 +2,10 @@
 name: half-baked-scan
 description: Stuck-project detector. Reads signal-log.jsonl for the current project and flags projects with high FRUSTRATION + REWORK density, incomplete features, and stale sprint entries. Outputs a prioritized action list.
 model: sonnet
-allowed-tools: ["Read", "Glob", "Grep", "Bash"]
+allowed-tools:
+  - Read
+  - Glob
+  - Grep
 argument-hint: "[project_path] [lookback_days]"
 arguments: [project_path, lookback_days]
 ---

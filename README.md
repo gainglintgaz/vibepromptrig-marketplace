@@ -1,6 +1,6 @@
 # VibePromptRig marketplace
 
-Reusable project setup, planning, review, and verification workflows for AI-assisted development. This is a Claude Code plugin distribution preview, version 5.2.1.
+Reusable project setup, planning, review, and verification workflows for AI-assisted development. This is a Claude Code plugin distribution preview, version 5.2.2.
 
 The package contains 15 agents, 19 skills, 3 commands, 4 workflows, compact rule cards, hooks, and forge tools. Project labels in examples are anonymized teaching placeholders. Native support in other AI products has not been verified.
 
@@ -16,6 +16,15 @@ claude plugin list
 ```
 
 Restart Claude Code in your project and run `/vibepromptrig:setup`. Review each proposed project change. Setup can apply approved writes on Windows. On macOS and Ubuntu it proposes a manual checklist; an authenticated first-use run remains pending. See the [full installation guide](plugin-dist/INSTALL.md).
+
+## Editions
+
+This repository holds two editions of the same project:
+
+- **VibePromptRig** (`plugin-dist/`, plugin name `vibepromptrig`): the full edition, with project setup, guard hooks and forge tools. It runs packaged Node and PowerShell scripts. Install it with the commands above.
+- **VibePromptRig Lite** (`plugin-directory/`, plugin name `vibepromptrig-lite`): skills and agents as plain Markdown, with no hooks, scripts or tool pre-approvals. This is the edition listed in the Claude plugin directory. From this marketplace: `/plugin install vibepromptrig-lite --marketplace gainglintgaz/vibepromptrig-marketplace`.
+
+Most people want one edition. If both are installed, the skills they share appear once under each plugin name.
 
 ## Update
 

@@ -2,7 +2,11 @@
 name: preempt-project
 description: Pre-inject project-specific lessons and signal patterns at scaffold or onboard time. Reads signal-log.jsonl from similar past projects and generates a PREEMPTIVE_LESSONS.md seeded with the top 3 warnings most likely to affect this project type.
 model: sonnet
-allowed-tools: ["Read", "Glob", "Grep", "Write", "Bash"]
+allowed-tools:
+  - Read
+  - Glob
+  - Grep
+  - Write
 argument-hint: "<project_path> [vertical]"
 arguments: [project_path, vertical]
 ---

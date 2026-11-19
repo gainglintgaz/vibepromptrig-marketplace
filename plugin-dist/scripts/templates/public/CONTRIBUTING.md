@@ -64,8 +64,8 @@ Just open a PR. No issue needed for docs improvements.
 git clone https://github.com/[ORG]/[REPO].git
 cd [REPO]
 
-# 2. Install Node (if you want to build the custom MCPs)
-# Node 20+
+# 2. Install Node.js 20+ (only to build the custom MCPs) with the official installer:
+#    https://nodejs.org/en/download
 
 # 3. Verify factory health
 .\scripts\forge.ps1 doctor

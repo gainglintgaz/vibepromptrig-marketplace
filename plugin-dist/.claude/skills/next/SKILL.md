@@ -6,9 +6,15 @@ allowed-tools:
   - Glob
   - Grep
   - Write
-  - Bash(git *)
-  - Bash(gh *)
-  - Bash(node *)
+  - Bash(git status *)
+  - Bash(git log *)
+  - Bash(git rev-parse *)
+  - Bash(git diff *)
+  - Bash(git branch *)
+  - Bash(gh pr list *)
+  - Bash(gh pr view *)
+  - Bash(gh pr checks *)
+  - Bash(gh run list *)
   - WebSearch
   - WebFetch
 argument-hint: "[focus]"
