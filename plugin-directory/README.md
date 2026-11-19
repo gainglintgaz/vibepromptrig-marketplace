@@ -2,7 +2,7 @@
 
 Reusable planning, review and diagnosis workflows for AI-assisted development, as plain Markdown. This is the Claude plugin directory edition of VibePromptRig. It contains skills and specialist agents only. It runs no hooks, no scripts and no programs, pre-approves no tools, makes no network calls of its own, and reads no credentials.
 
-This README describes VibePromptRig Lite 5.2.2.
+This README describes VibePromptRig Lite 5.2.3.
 
 ## Install
 

@@ -186,19 +186,19 @@ If APPROVAL fires in 3+ projects with similar prompt_excerpt content:
 ### Pattern G (v4.4.5): Low-effectiveness rule + active REPEAT signals
 
 If a rule in factory-effectiveness.md has:
-- ``effectiveness < 0.6`` AND ``invocations >= 3`` over last 30 days
+- `effectiveness < 0.6` AND `invocations >= 3` over last 30 days
 - AND REPEAT signals fired in any project in the last 7 days that match the rule's domain
 
 This is the strongest possible signal for rule-strengthening. The rule is being cited but not preventing the bug class. Draft:
-``[SYNTH-AUTO] Rule X is invoked but ineffective -- strengthen tripwire``
+`[SYNTH-AUTO] Rule X is invoked but ineffective -- strengthen tripwire`
 - Include: invocations N, effectiveness Z, REPEAT count, evidence excerpts (PII-safe)
 - Recommend: move the gate from documentation to mechanical check (pre-commit hook, runtime assertion)
 
 ### Pattern H (v4.4.5): Cost outliers + low engagement
 
 If a session in factory_metrics.jsonl has:
-- ``pct_used > 90`` AND ``cost_cents > 50`` (significant token burn)
-- AND that session's project has ``FRUSTRATION > 3`` in the same window
+- `pct_used > 90` AND `cost_cents > 50` (significant token burn)
+- AND that session's project has `FRUSTRATION > 3` in the same window
 
 Draft: "[BUDGET] Project [X] is burning tokens without converging. Suggest /audit-gate or context-restart for next session."
 

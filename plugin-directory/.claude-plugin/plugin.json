@@ -1,6 +1,6 @@
 {
   "name": "vibepromptrig-lite",
-  "version": "5.2.2",
+  "version": "5.2.3",
   "description": "VibePromptRig Lite gives AI coding assistants reusable planning, review and diagnosis skills and specialist agents as plain Markdown. It runs no hooks or scripts. The full edition with project setup, guard hooks and forge tools installs from the publisher's own marketplace.",
   "author": {
     "name": "gainglintgaz"

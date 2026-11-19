@@ -78,10 +78,10 @@ Read at session start:
 
 1. **Read CLAUDE.md section 9.** Confirm the audit criteria are the version expected. If the project has a local `.claude/CLAUDE.md` override, that wins (per section 18 hierarchy).
 
-2. **Build gate.** Run the project's own build script from `package.json` via Bash (`npm run build`, `pnpm run build` or `yarn build`; for tsc-first projects also its `typecheck` script). Never use a package launcher that downloads a missing tool; if the tool is not installed in the project, report the gate as SKIPPED with the reason.
+2. **Build gate.** Run the project's own build script from `package.json` via Bash (`npm run build`, `pnpm run build` or `yarn build`; for tsc-first projects also its `typecheck` script). Use only tools already installed in the project; if the build tool is missing, report the gate as SKIPPED with the reason.
    Capture exit code + last 50 lines of stderr. Pass = exit 0 + zero errors.
 
-3. **Test gate.** Run the project's own test script via Bash (`npm test`, `pnpm test` or `yarn test`; Vitest, Jest or Playwright behind it). Run Playwright end-to-end tests only if explicitly listed as critical-path. Same rule: no package launcher that downloads a missing tool.
+3. **Test gate.** Run the project's own test script via Bash (`npm test`, `pnpm test` or `yarn test`; Vitest, Jest or Playwright behind it). Run Playwright end-to-end tests only if explicitly listed as critical-path. Same rule: use only tools already installed in the project.
    Capture pass/fail counts. Pass = 100% pass on unit + critical e2e.
 
 4. **Tripwire greps.** Run ONLY the categories present in `resolved.tripwire_categories`

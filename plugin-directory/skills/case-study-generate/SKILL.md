@@ -12,30 +12,30 @@ description: Draft a case study for any VibePromptRig project by reading its git
 - Quarterly per project (or after a major milestone like v1.0 ship)
 - When a new client engagement closes successfully
 - Pre-launch as part of marketing prep
-- Manually: ``/case-study-generate <project-name>`` (e.g. ``/case-study-generate example-finance-app``)
+- Manually: `/case-study-generate <project-name>` (e.g. `/case-study-generate example-finance-app`)
 
 ## What it produces
 
-A draft Markdown file at ``docs/case-studies/<project>-<YYYY-MM-DD>.md`` following the existing
+A draft Markdown file at `docs/case-studies/<project>-<YYYY-MM-DD>.md` following the existing
 Example Finance App/Example Agent App/Example Bookkeeping App template. Target: <30% manual editing before publish.
 
 ## Algorithm
 
 ### Step 1: Resolve project path
 
-Resolve ``<project-name>`` from the explicit project path supplied by the user or the active project's configured repository list. If the name is ambiguous or the path is absent, ask for the exact repository path before reading or writing. Never infer a home-directory path.
+Resolve `<project-name>` from the explicit project path supplied by the user or the active project's configured repository list. If the name is ambiguous or the path is absent, ask for the exact repository path before reading or writing. Never infer a home-directory path.
 
 ### Step 2: Collect raw inputs
 
 For each source, harvest:
 
-1. **git log since last case study** -- check ``docs/case-studies/<project>-*.md`` for the
-   newest existing file; use its date as ``--since``. If none, use 90 days ago.
-2. **errors-fixed.json closed entries** -- read ``<project>/.claude/errors-fixed.json``,
+1. **git log since last case study** -- check `docs/case-studies/<project>-*.md` for the
+   newest existing file; use its date as `--since`. If none, use 90 days ago.
+2. **errors-fixed.json closed entries** -- read `<project>/.claude/errors-fixed.json`,
    filter status=CLOSED, sort by date desc
-3. **outcome-tracked commits** -- grep git log for ``[rule: X]`` entries; aggregate which
+3. **outcome-tracked commits** -- grep git log for `[rule: X]` entries; aggregate which
    rules paid off
-4. **signal-log highlights** -- read ``<project>/.claude/signal-log.jsonl``, surface:
+4. **signal-log highlights** -- read `<project>/.claude/signal-log.jsonl`, surface:
    - APPROVAL signals (what worked)
    - High-severity REPEAT/BUG counts (what was hard)
 5. **BRIEF.md** -- read for the elevator pitch + current status
@@ -43,7 +43,7 @@ For each source, harvest:
 
 ### Step 3: Apply the template
 
-Read an existing well-polished case study (preferably ``docs/case-studies/example-finance-app-*.md``)
+Read an existing well-polished case study (preferably `docs/case-studies/example-finance-app-*.md`)
 as the structural template. The standard sections are:
 
 ```markdown
@@ -67,7 +67,7 @@ What made this hard: scale, privacy, compliance, deadline, team size of one.
 
 ## Outcomes
 - Quantifiable wins (number, percentage, time saved)
-- Rule outcomes: ``rule X prevented N bugs of class Y``
+- Rule outcomes: `rule X prevented N bugs of class Y`
 - User quotes (if any -- from APPROVAL signals or testimonials)
 
 ## What we'd do differently
@@ -86,13 +86,13 @@ Link to the rule or pack file.
 - **No first-person product voice** -- the case study is a third-party-style account.
   Use "the team built X" / "the system tracks Y" not "we built our amazing X."
 - **Numbers must be REAL** -- pulled from signal counts, commit counts, outcome data.
-  If a number is not in source data, write ``[insert: <metric>]`` placeholder, NOT a guess.
+  If a number is not in source data, write `[insert: <metric>]` placeholder, NOT a guess.
 - **Quotes must be REAL** -- only quote actual APPROVAL signal excerpts (already PII-scrubbed)
   or explicitly-saved testimonials. Never fabricate.
 
 ### Step 5: Output
 
-Write the draft to ``docs/case-studies/<project>-<YYYY-MM-DD>.md``.
+Write the draft to `docs/case-studies/<project>-<YYYY-MM-DD>.md`.
 
 Console:
 ```
