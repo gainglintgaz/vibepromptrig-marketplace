@@ -97,7 +97,7 @@ By default, AI session has access to:
 
 Rotate any token an LLM has seen the value of:
 - After every production migration session
-- After any token appears in a `cat .env` or `echo $TOKEN` in transcripts
+- After any secret value has been printed or shown in a transcript
 - Quarterly minimum regardless
 
 ---
@@ -151,7 +151,7 @@ Step 4: Commit body: "Applied migration X. Advisors clean ✓"
         — or list the new findings explicitly
 ```
 
-**Tripwire:** any commit modifying `supabase/migrations/*.sql` whose message does NOT contain `Advisors:` (clean or finding-list) is incomplete. Pre-commit hook can enforce: `grep -E "Advisors: (clean|" $COMMIT_MSG_FILE`.
+**Tripwire:** any commit modifying `supabase/migrations/*.sql` whose message does NOT contain `Advisors:` (clean or finding-list) is incomplete. A pre-commit hook can enforce it by rejecting a migration commit whose message has no Advisors line.
 
 ### §4.4 Audit log
 

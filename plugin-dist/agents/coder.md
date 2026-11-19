@@ -70,8 +70,8 @@ For each numbered step in the kickoff scope:
 
 ## Step 2 — self-check before handing off
 
-Run the project's type-check + lint locally (`tsc --noEmit`, `npm run lint`, or the project's
-equivalent). Fix what you broke. Then **stop** — you do NOT declare the task done. You report:
+Run the project's type-check + lint locally (the type-check and lint scripts already named in the
+project's package.json). Fix what you broke. Then **stop** — you do NOT declare the task done. You report:
 what you changed (files + commits), what you deliberately left out of scope, and anything the
 Tester/Reviewer should scrutinize. The Tester and Reviewer are separate stages for a reason:
 the implementer is the worst judge of their own work.

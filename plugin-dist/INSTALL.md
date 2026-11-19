@@ -1,8 +1,8 @@
 # VibePromptRig installation
 
-VibePromptRig's Claude Code plugin is named `vibepromptrig`. Its marketplace is also named `vibepromptrig`, so the install identifier is `vibepromptrig@vibepromptrig`. This guide describes source version 5.2.3 (`.claude-plugin/plugin.json`), which contains 15 agents, 19 skills, 3 commands, 4 workflows, compact Context V2 cards, and 5 selected reference rules. It does not install the former full `.claude/rules/` tree or generated editor mirrors.
+VibePromptRig's Claude Code plugin is named `vibepromptrig`. Its marketplace is also named `vibepromptrig`, so the install identifier is `vibepromptrig@vibepromptrig`. This guide describes source version 5.2.4 (`.claude-plugin/plugin.json`), which contains 15 agents, 19 skills, 3 commands, 4 workflows, compact Context V2 cards, and 5 selected reference rules. It does not install the former full `.claude/rules/` tree or generated editor mirrors.
 
-**Which version this describes.** This guide describes VibePromptRig 5.2.3. Check the version you have with `claude plugin list`. To upgrade from an earlier version, run `claude plugin marketplace update vibepromptrig`, then `claude plugin update vibepromptrig@vibepromptrig`. 5.2.3 is not yet listed in Anthropic's plugin directory (submission in progress). When you test a specific build, record that version and, for a local marketplace, the checkout's commit (`git rev-parse HEAD`); the plugin name alone does not identify the artifact.
+**Which version this describes.** This guide describes VibePromptRig 5.2.4. Check the version you have with `claude plugin list`. To upgrade from an earlier version, run `claude plugin marketplace update vibepromptrig`, then `claude plugin update vibepromptrig@vibepromptrig`. 5.2.4 is not yet listed in Anthropic's plugin directory (submission in progress). When you test a specific build, record that version and, for a local marketplace, the checkout's commit (`git rev-parse HEAD`); the plugin name alone does not identify the artifact.
 
 ## Requirements
 

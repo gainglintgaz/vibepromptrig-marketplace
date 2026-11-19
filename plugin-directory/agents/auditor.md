@@ -78,10 +78,10 @@ Read at session start:
 
 1. **Read CLAUDE.md section 9.** Confirm the audit criteria are the version expected. If the project has a local `.claude/CLAUDE.md` override, that wins (per section 18 hierarchy).
 
-2. **Build gate.** Run the project's own build script from `package.json` via Bash (`npm run build`, `pnpm run build` or `yarn build`; for tsc-first projects also its `typecheck` script). Use only tools already installed in the project; if the build tool is missing, report the gate as SKIPPED with the reason.
+2. **Build gate.** Run the build script already named in the project's package.json via Bash, with the package tool the project already uses (for tsc-first projects also its typecheck script). If that tool is not installed, skip the gate and report it as SKIPPED with the reason.
    Capture exit code + last 50 lines of stderr. Pass = exit 0 + zero errors.
 
-3. **Test gate.** Run the project's own test script via Bash (`npm test`, `pnpm test` or `yarn test`; Vitest, Jest or Playwright behind it). Run Playwright end-to-end tests only if explicitly listed as critical-path. Same rule: use only tools already installed in the project.
+3. **Test gate.** Run the test script already named in the project's package.json via Bash (Vitest, Jest or Playwright behind it). Run Playwright end-to-end tests only if explicitly listed as critical-path. Same rule: if that tool is not installed, skip the gate and report it as SKIPPED with the reason.
    Capture pass/fail counts. Pass = 100% pass on unit + critical e2e.
 
 4. **Tripwire greps.** Run ONLY the categories present in `resolved.tripwire_categories`
@@ -89,7 +89,7 @@ Read at session start:
    Grep tool, output_mode files_with_matches. Distinguish code violations from prose mentions
    (filter out `*.md` files unless the pattern is explicitly intended for docs):
    - **[compliance] Compliance banned phrases** -- `tax advice|investment advice|guarantee|99% accurate` in `src/**/*.{ts,tsx,js,jsx}` (run only if `compliance` is in `resolved.tripwire_categories`)
-   - **[fabrication] Hardcoded fakes** -- `\+1\.2%|\+8%|\$[0-9]+\.[0-9]{2}` in `src/components/**/*.tsx` (numeric literals in UI components without a helper import in scope)
+   - **[fabrication] Hardcoded fakes** -- `\+1\.2%|\+8%|\x24[0-9]+\.[0-9]{2}` in `src/components/**/*.tsx` (numeric literals in UI components without a helper import in scope)
    - **[mode-filter] Mode filter case-sensitivity** -- `\.eq\('mode',\s*'(Personal|Business)'\)` (capital-M/B is the case-sensitive bug class)
    - **[public-lang] Public language banned terms** -- `revolutionize|unleash|harness|seamless|cutting-edge|game-changing|supercharge` in `src/**/*.{ts,tsx,md}` user-facing copy
    - **[api-key] API key security** -- `VITE_[A-Z_]*(?:SECRET|KEY|TOKEN|PRIVATE)` in `src/**` (VITE_ prefix on a secret-shaped name)

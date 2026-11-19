@@ -299,7 +299,7 @@ For each NEEDS-RESEARCH question, pick the appropriate existing tool. This skill
 - Third-party API questions -> WebFetch on the API docs page
 - "Is there an MCP / skill that covers this" -> mcp-registry:search_mcp_registry + Anthropic Skills marketplace
 - Competitor product questions -> firecrawl:firecrawl-search + firecrawl:firecrawl-scrape on competitor pricing pages
-- Library / package questions -> WebFetch on npm/pypi page
+- Library / package questions -> WebFetch on the package's registry page
 
 Cap research at 10 minutes total. If a question needs more, mark it RESEARCH-DEFERRED and surface to the project owner.
 
