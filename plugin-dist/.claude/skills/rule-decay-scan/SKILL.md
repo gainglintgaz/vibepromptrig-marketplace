@@ -22,7 +22,7 @@ allowed-tools:
 ## Reads
 
 - `docs/rules-reference/factory/**/*.md` -- all current factory rules (plus the project's own `.claude/rules/*.md` if scanning a project)
-- `docs/factory-effectiveness.md` -- per-rule invocation counts (from outcome-tracker)
+- `docs/factory-effectiveness.md` -- per-rule invocation counts (from outcome-tracker). Optional: it exists only after measurements were generated. If it is absent, judge by edit age and references alone and say that invocation counts are unavailable.
 - `git log --since='6 months ago' -- docs/rules-reference/factory/ .claude/rules/` -- rule edit cadence (the factory corpus moved out of `.claude/rules/` in Context V2 Delivery 3; include both paths so pre-move history counts)
 - `factory_metrics.jsonl` -- last 30 days of outcome_scan events
 

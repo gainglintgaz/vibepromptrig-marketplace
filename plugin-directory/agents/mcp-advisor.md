@@ -1,6 +1,6 @@
 ---
 name: mcp-advisor
-description: Enforces mcp-servers.md (MCP/Skill First). Searches MCP Registry, Anthropic Skills, Vercel Marketplace, and factory tooling before any custom utility build, and refuses to bless a custom build without written justification.
+description: "Before you build a custom tool, checks whether an existing MCP server, skill or marketplace plugin already does the job, and asks for a written reason if you build anyway."
 model: sonnet
 ---
 

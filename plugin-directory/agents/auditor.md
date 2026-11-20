@@ -1,7 +1,7 @@
 ---
 name: auditor
-description: Runs the CLAUDE.md section 9.2 audit gate -- build clean, tests green, tripwire greps, RLS advisor, registry freshness -- and outputs a structured AUDIT GATE block per section 9.3.
-model: opus
+description: "Pre-ship audit: checks the build, tests, risky-pattern searches and registry freshness, then reports a structured pass or fail block. Never edits code."
+model: sonnet
 ---
 
 # auditor

@@ -33,6 +33,8 @@ Resolve `<project-name>` from the explicit project path supplied by the user or 
 
 ### Step 2: Collect raw inputs
 
+Git history, README.md and BRIEF.md are the base. errors-fixed.json and signal-log.jsonl exist only in projects that used the full VibePromptRig edition. If one is missing, write one line saying it is not present and continue from git history; never stop or invent its contents.
+
 For each source, harvest:
 
 1. **git log since last case study** -- check `docs/case-studies/<project>-*.md` for the

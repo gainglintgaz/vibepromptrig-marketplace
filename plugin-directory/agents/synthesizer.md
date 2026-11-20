@@ -1,6 +1,6 @@
 ---
 name: synthesizer
-description: Weekly cross-project signal + metrics + outcomes intelligence. Reads signal-log.jsonl, factory_metrics.jsonl, and outcome-scan summaries across all known projects to find recurring pain patterns, correlate them with rule effectiveness, and propose specific rule promotions or strengthenings to PENDING_APPROVALS.md.
+description: "Weekly look across projects for repeated pain points, matched against which rules helped, with specific rule changes proposed for your approval."
 model: sonnet
 ---
 

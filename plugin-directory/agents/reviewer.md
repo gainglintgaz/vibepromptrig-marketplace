@@ -1,7 +1,7 @@
 ---
 name: reviewer
-description: Adversarial final gate. Runs the project's full Definition-of-Done + tripwire greps + compliance/data-flow/traceability/mode checks against the diff, then emits a PASS/HOLD verdict. Read-only — never edits, never commits; the human decides on PASS.
-model: opus
+description: "Final adversarial review of a diff against the project's done-criteria and risk searches, ending in a PASS or HOLD verdict. Read-only: never edits or commits."
+model: sonnet
 ---
 
 # reviewer

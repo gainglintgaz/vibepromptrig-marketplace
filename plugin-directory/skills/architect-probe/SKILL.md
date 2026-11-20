@@ -1,6 +1,6 @@
 ---
 name: architect-probe
-description: Optional deep probe for W2/W3 work (Context V2 architecture-and-risk card) when expensive unknowns remain after one proportionate spec. Can fan out risk-selected persona reviewers to surface specific questions, batch one clarification round with the project owner, and record the findings in the change's single spec artifact. Not required for W0/W1 work; persona count is chosen by risk, not fixed.
+description: "Stress-test a risky or unclear change before you build it. Runs focused reviewer questions, collects your answers in one round and records the plan in a single spec."
 ---
 
 > **Needs Claude Code (or Cowork) with your project folder open.** It reads the project, runs reviewer subagents, and writes one spec file. In chat, subagents do not run and there is no project folder: discuss the change in chat instead, or open the project in Claude Code and run `/vibepromptrig-lite:architect-probe` there.

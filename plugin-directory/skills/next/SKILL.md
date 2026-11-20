@@ -1,6 +1,6 @@
 ---
 name: next
-description: The owner's standing end-of-milestone question, answered from live evidence in one fixed shape -- queue state, exact commands and paste prompts per tool, decisions with options/norm/recommendation, evidence-backed gaps (features, trends, APIs, competitors), and tracker updates. Run after any merge, lane report, or approval; also when the owner asks "what's next" or "anything else" in any wording.
+description: "Answers \"what is next\" after a milestone: current state, exact commands and prompts for each AI tool, decisions with a recommendation, gaps and tracker updates."
 argument-hint: "[focus]"
 arguments: focus
 ---

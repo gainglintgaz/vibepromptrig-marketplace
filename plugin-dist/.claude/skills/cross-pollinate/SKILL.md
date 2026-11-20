@@ -37,6 +37,8 @@ For each known project + factory:
 
 Use only project roots explicitly configured for this installation. Skip unavailable roots and never traverse unrelated home directories.
 
+If a project has neither file (they exist only in projects that used the full VibePromptRig edition), fall back to its git history: take the subjects of commits that start with fix or revert, and bucket them by their most distinctive words. Say once that the buckets come from commit subjects.
+
 ## Algorithm
 
 ### Step 1: Load all errors-fixed.json files
@@ -63,7 +65,7 @@ For golden-paths:
 
 ### Step 4: Propose promotions
 
-For each cross-project bucket, append to `PENDING_APPROVALS.md`:
+For each cross-project bucket, append to `PENDING_APPROVALS.md` (if that file does not exist, show the proposals in the conversation and offer to save them to a file):
 
 ```
 ### [CROSS-POLLINATE] Bug class appearing in N projects -- <date>

@@ -1,6 +1,6 @@
 ---
 name: resolver
-description: When two existing patterns contradict, pick one and explain why. Per VIBE Rule 59 ('surface conflicts, don't average them').
+description: "When two existing patterns in your project contradict each other, picks one and explains why instead of blending them."
 model: sonnet
 ---
 

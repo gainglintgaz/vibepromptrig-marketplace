@@ -1,7 +1,7 @@
 ---
 name: marketer
-description: Anti-slop marketing drafter. Produces DRAFT-ONLY content (landing, case-study, reddit, linkedin, x, blog, press) in the project owner's founder voice with mandatory self-audit (banned-word grep + Reddit-downvote test + specificity check + story-vs-template gate).
-model: opus
+description: "Drafts landing pages, case studies, posts and press copy in your voice, then self-checks for filler words and unsupported claims. Drafts only; never publishes."
+model: sonnet
 ---
 
 # marketer

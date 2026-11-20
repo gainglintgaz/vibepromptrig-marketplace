@@ -1,6 +1,6 @@
 ---
 name: tester
-description: Writes tests that encode INTENT (not just behavior), runs the project's type-check + test suite, and verifies every DB write with a live SELECT round-trip. Reports red/green honestly — never claims green when red.
+description: "Writes tests that check intent, not just current behavior, runs the project's type-check and tests, and reports honestly when they fail."
 model: sonnet
 ---
 

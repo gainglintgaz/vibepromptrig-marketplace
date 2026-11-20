@@ -2,7 +2,17 @@
 
 Reusable planning, review and diagnosis workflows for AI-assisted development, as plain Markdown. This is the Claude plugin directory edition of VibePromptRig. It contains skills and specialist agents only. It runs no hooks, no scripts and no programs, pre-approves no tools, makes no network calls of its own, and reads no credentials.
 
-This README describes VibePromptRig Lite 5.2.4.
+This README describes VibePromptRig Lite 5.2.5.
+
+## Start here
+
+Three skills cover most work. Run each as `/vibepromptrig-lite:<skill>`.
+
+1. `second-look`: when a review or fix has failed, get written prompts for two or more other AI tools (Grok, Codex, Antigravity, Claude) to diagnose the same problem independently, plus a file to compare their answers.
+2. `architect-probe`: before building something risky or unclear, stress-test the plan and record the decisions in one spec.
+3. `next`: after any milestone, get the current state, the exact next commands and a recommendation.
+
+New project? Run `setup-lite` first. Stopping for the day or out of usage? Run `handoff-lite`, then `resume-lite` when you come back.
 
 ## Install
 
@@ -14,37 +24,42 @@ From the Claude plugin directory, choose VibePromptRig Lite. From the maintainer
 
 Skills (run as `/vibepromptrig-lite:<skill>`):
 
-- `architect-probe`: Optional deep probe for W2/W3 work (Context V2 architecture-and-risk card) when expensive unknowns remain after one proportionate spec.
-- `case-study-generate`: Draft a case study for any VibePromptRig project by reading its git log since the last case study, signal-log entries, errors-fixed.json closed entries, and outcome-tracked commits.
-- `cross-pollinate`: Find bug classes or golden paths that appear in 2+ projects.
-- `half-baked-scan`: Stuck-project detector.
-- `next`: The owner's standing end-of-milestone question, answered from live evidence in one fixed shape -- queue state, exact commands and paste prompts per tool, decisions with options/norm/recommendation, evidence-backed gaps (features, trends, APIs, competitors), and tracker updates.
-- `preempt-project`: Pre-inject project-specific lessons and signal patterns at scaffold or onboard time.
-- `rule-decay-scan`: Quarterly rule-rot detector.
-- `second-look`: After a review FAIL/HOLD, or after one repair of the same cause already failed, writes read-only outside-diagnosis prompts for 2+ different tools (grok, antigravity, claude, codex) plus a COMPARE.md to reconcile their answers.
+- `architect-probe`: Stress-test a risky or unclear change before you build it.
+- `case-study-generate`: Draft a project case study from git history, closed bug fixes and project notes.
+- `cross-pollinate`: Find bug types and proven patterns that show up in two or more of your projects, and suggest which ones deserve a shared rule.
+- `half-baked-scan`: Spot a stalled project: unfinished features, stale tasks, TODO markers and old open bugs.
+- `next`: Answers \"what is next\" after a milestone: current state, exact commands and prompts for each AI tool, decisions with a recommendation, gaps and tracker updates.
+- `preempt-project`: Before a new project starts, seed a short lessons file with the most likely mistakes, drawn from past projects and shared lessons.
+- `rule-decay-scan`: Find project rules that were never used or not edited in over six months and propose which to archive.
+- `second-look`: After a failed review or fix, write read-only prompts for two or more different AI tools to diagnose the same problem, plus a file to compare their answers.
+- `setup-lite`: Set up a project for AI-assisted work with five questions.
+- `status`: Print a one-screen project status from git and project files: goal, recent changes, uncommitted work, open to-dos and blockers.
+- `handoff-lite`: Write a short HANDOFF.md so another AI tool or a later session can continue: goal, what is done, decisions, what failed and the next step.
+- `resume-lite`: Pick up from HANDOFF.md: read the note, re-check the repository against it, and propose one next step.
+- `pre-ship-check`: On-demand checklist before you commit, merge or deploy: secrets, scope, tests, risky changes and a diff review.
 
 Agents (Claude Code picks them by task, or ask for one by name):
 
-- `auditor`: Runs the CLAUDE.md section 9.2 audit gate -- build clean, tests green, tripwire greps, RLS advisor, registry freshness -- and outputs a structured AUDIT GATE block per section 9.3.
-- `coder`: Implements EXACTLY the Planner's kickoff — surgical, additive-first, one commit per step.
-- `debrief`: Session-end summary writer.
-- `diagnostician`: Read-only root-cause stage.
-- `hostile-architect`: Stress-tests plans, briefs, and architecture decisions across 9 phases (Tool Audit + 8 attack phases) before any code is written.
-- `marketer`: Anti-slop marketing drafter.
-- `mcp-advisor`: Enforces mcp-servers.md (MCP/Skill First).
-- `planner`: Turns a one-line task into an executable kickoff after a Context V2 W0-W3 risk decision (one proportionate spec; W2/W3 stop for owner approval).
-- `resolver`: When two existing patterns contradict, pick one and explain why.
-- `reviewer`: Adversarial final gate.
-- `schema-auditor`: Runs the database-schema audit -- RLS coverage, Supabase advisor scan (security + performance), missing FK indexes, FK orphans, and migration-vs-live schema drift.
-- `synthesizer`: Weekly cross-project signal + metrics + outcomes intelligence.
-- `tech-radar`: Weekly scan of AI providers, MCP registries, and marketplaces.
-- `tester`: Writes tests that encode INTENT (not just behavior), runs the project's type-check + test suite, and verifies every DB write with a live SELECT round-trip.
+- `auditor`: Pre-ship audit: checks the build, tests, risky-pattern searches and registry freshness, then reports a structured pass or fail block.
+- `coder`: Implements exactly the approved plan with small, additive changes and one commit per step.
+- `debrief`: Writes an end-of-session summary from recent commits, open to-dos and notes into SESSION_DEBRIEF.md.
+- `diagnostician`: Read-only root-cause analysis after a failed review: traces the exact failure, explains why tests missed it and proposes the smallest fix before anyone repairs it.
+- `hostile-architect`: Stress-tests a plan or architecture before any code is written and returns findings ranked by severity.
+- `marketer`: Drafts landing pages, case studies, posts and press copy in your voice, then self-checks for filler words and unsupported claims.
+- `mcp-advisor`: Before you build a custom tool, checks whether an existing MCP server, skill or marketplace plugin already does the job, and asks for a written reason if you build anyway.
+- `planner`: Turns a one-line task into an executable plan sized to the risk.
+- `resolver`: When two existing patterns in your project contradict each other, picks one and explains why instead of blending them.
+- `reviewer`: Final adversarial review of a diff against the project's done-criteria and risk searches, ending in a PASS or HOLD verdict.
+- `schema-auditor`: Audits a Postgres or Supabase database: row-level security coverage, advisor findings, missing indexes, orphaned rows and drift between migrations and the live schema.
+- `synthesizer`: Weekly look across projects for repeated pain points, matched against which rules helped, with specific rule changes proposed for your approval.
+- `tech-radar`: Weekly scan of AI providers and marketplaces for new models, breaking changes, deprecations and price changes; anything needing your decision is flagged.
+- `tester`: Writes tests that check intent, not just current behavior, runs the project's type-check and tests, and reports honestly when they fail.
 
 Every skill and agent is an instruction file. When one of them wants to read your project, search it, or run a command such as `git log`, Claude asks for your approval in the normal way. Nothing is approved in advance.
 
 ## What is not included
 
-The full edition adds project setup, context checkups, session handoff, an operating-mode switch, a status dashboard, guard hooks that stop destructive SQL and git commands, and the forge command-line tools. Those parts run packaged scripts, so they are not part of this edition:
+The full edition adds project setup, context checkups, session handoff, an operating-mode switch, a status dashboard, guard hooks that stop destructive SQL and git commands, and the forge command-line tools. Those parts run packaged scripts, so they are not part of this edition. Lite has Markdown versions of several of them (`setup-lite`, `status`, `handoff-lite`, `resume-lite` and `pre-ship-check`) that do the same job by asking and reading, without scripts or guard hooks:
 
 - `checkup`: skill; runs scripts/forge/checkup.mjs
 - `gear`: skill; reads the packaged model router and logs through a script
@@ -80,6 +95,8 @@ Claude Code, or another Claude product that loads plugins with skills and agents
 ## Data handling
 
 This edition contains no code. It sends nothing anywhere and stores nothing by itself. Some agents (for example `tech-radar`, `marketer` and `hostile-architect`) ask Claude to search or read web pages with Claude Code's own web tools; those requests follow your permission settings. Files that a skill asks Claude to write (for example a spec or a lessons file) are written into your project, after your approval.
+
+Privacy policy: `PRIVACY.md`. Terms of use: `TERMS.md`. Both ship in this plugin.
 
 ## License
 

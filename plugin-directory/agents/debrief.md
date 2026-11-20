@@ -1,6 +1,6 @@
 ---
 name: debrief
-description: Session-end summary writer. Reads recent commits + signal-log + current todos, writes SESSION_DEBRIEF.md. Replaces/complements the PowerShell post-session-enforcer.
+description: "Writes an end-of-session summary from recent commits, open to-dos and notes into SESSION_DEBRIEF.md."
 model: sonnet
 ---
 

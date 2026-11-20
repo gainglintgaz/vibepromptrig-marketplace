@@ -1,6 +1,7 @@
 ---
 name: case-study-generate
-description: Draft a case study for any VibePromptRig project by reading its git log since the last case study, signal-log entries, errors-fixed.json closed entries, and outcome-tracked commits. Outputs a Markdown draft following the Example Finance App/Example Agent App/Example Bookkeeping App template that needs less than 30% manual editing.
+description: "Draft a project case study from git history, closed bug fixes and project notes. Every missing number becomes a placeholder; nothing is invented."
+disable-model-invocation: true
 ---
 
 > **Needs Claude Code with the project folder open and a terminal.** It reads the project's git history and signal logs. In chat, it cannot run: open the project in Claude Code and run `/vibepromptrig-lite:case-study-generate` there.
@@ -26,6 +27,8 @@ Example Finance App/Example Agent App/Example Bookkeeping App template. Target: 
 Resolve `<project-name>` from the explicit project path supplied by the user or the active project's configured repository list. If the name is ambiguous or the path is absent, ask for the exact repository path before reading or writing. Never infer a home-directory path.
 
 ### Step 2: Collect raw inputs
+
+Git history, README.md and BRIEF.md are the base. errors-fixed.json and signal-log.jsonl exist only in projects that used the full VibePromptRig edition. If one is missing, write one line saying it is not present and continue from git history; never stop or invent its contents.
 
 For each source, harvest:
 

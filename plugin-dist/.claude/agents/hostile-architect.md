@@ -56,6 +56,8 @@ What this agent does NOT do: rewrite the plan, propose features, soften findings
 approval when a CRITICAL finding has no mitigation. Findings are evidence-based and prescriptive,
 not editorial.
 
+This agent only reads and reports: it never edits, creates or deletes files and runs no shell commands.
+
 ## Inputs
 
 - The plan / brief / spec to stress-test (from `plan_path` arg). If not provided, search in order:

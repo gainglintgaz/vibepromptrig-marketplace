@@ -1,6 +1,6 @@
 ---
 name: cross-pollinate
-description: Find bug classes or golden paths that appear in 2+ projects. Surfaces global-rule promotion candidates and golden-path generalization candidates for the project owner's review. Reads each project's errors-fixed.json + golden-paths.md and aggregates by root-cause similarity.
+description: "Find bug types and proven patterns that show up in two or more of your projects, and suggest which ones deserve a shared rule."
 ---
 
 > **Needs Claude Code with your projects on this computer.** It reads `errors-fixed.json` and `golden-paths.md` from each project folder. In chat, it cannot run: open Claude Code where the projects live and run `/vibepromptrig-lite:cross-pollinate` there.
@@ -32,6 +32,8 @@ For each known project + factory:
 
 Use only project roots explicitly configured for this installation. Skip unavailable roots and never traverse unrelated home directories.
 
+If a project has neither file (they exist only in projects that used the full VibePromptRig edition), fall back to its git history: take the subjects of commits that start with fix or revert, and bucket them by their most distinctive words. Say once that the buckets come from commit subjects.
+
 ## Algorithm
 
 ### Step 1: Load all errors-fixed.json files
@@ -58,7 +60,7 @@ For golden-paths:
 
 ### Step 4: Propose promotions
 
-For each cross-project bucket, append to `PENDING_APPROVALS.md`:
+For each cross-project bucket, append to `PENDING_APPROVALS.md` (if that file does not exist, show the proposals in the conversation and offer to save them to a file):
 
 ```
 ### [CROSS-POLLINATE] Bug class appearing in N projects -- <date>

@@ -1,6 +1,7 @@
 ---
 name: rule-decay-scan
-description: Quarterly rule-rot detector. Surfaces factory rules that have no outcome data (never invoked, never cited) and rules whose last edit is older than 6 months. Proposes archival to docs/rules-reference/archived/ for the project owner's review. Reads docs/factory-effectiveness.md + git log of the rule corpus.
+description: "Find project rules that were never used or not edited in over six months and propose which to archive. Review only; it changes nothing by itself."
+disable-model-invocation: true
 ---
 
 > **Needs Claude Code with a terminal and the project folder open.** It reads git history and rule files. In chat, it cannot run: open the project in Claude Code and run `/vibepromptrig-lite:rule-decay-scan` there.
@@ -16,7 +17,7 @@ description: Quarterly rule-rot detector. Surfaces factory rules that have no ou
 ## Reads
 
 - `docs/rules-reference/factory/**/*.md` -- all current factory rules (plus the project's own `.claude/rules/*.md` if scanning a project)
-- `docs/factory-effectiveness.md` -- per-rule invocation counts (from outcome-tracker)
+- `docs/factory-effectiveness.md` -- per-rule invocation counts (from outcome-tracker). Optional: it exists only after measurements were generated. If it is absent, judge by edit age and references alone and say that invocation counts are unavailable.
 - `git log --since='6 months ago' -- docs/rules-reference/factory/ .claude/rules/` -- rule edit cadence (the factory corpus moved out of `.claude/rules/` in Context V2 Delivery 3; include both paths so pre-move history counts)
 - `factory_metrics.jsonl` -- last 30 days of outcome_scan events
 

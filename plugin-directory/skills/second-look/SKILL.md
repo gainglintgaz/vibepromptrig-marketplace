@@ -1,6 +1,6 @@
 ---
 name: second-look
-description: After a review FAIL/HOLD, or after one repair of the same cause already failed, writes read-only outside-diagnosis prompts for 2+ different tools (grok, antigravity, claude, codex) plus a COMPARE.md to reconcile their answers. Rotates tools so one model's blind spot is not repeated. Writes prompts only; dispatches nothing.
+description: "After a failed review or fix, write read-only prompts for two or more different AI tools to diagnose the same problem, plus a file to compare their answers."
 argument-hint: "<review_path> [tools]"
 arguments: review_path tools
 ---

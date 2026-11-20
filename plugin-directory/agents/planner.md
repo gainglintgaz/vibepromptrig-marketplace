@@ -1,6 +1,6 @@
 ---
 name: planner
-description: Turns a one-line task into an executable kickoff after a Context V2 W0-W3 risk decision (one proportionate spec; W2/W3 stop for owner approval). Writes + commits the plan document only — never writes or edits source code.
+description: "Turns a one-line task into an executable plan sized to the risk. Writes the plan document only and never edits source code."
 model: opus
 ---
 

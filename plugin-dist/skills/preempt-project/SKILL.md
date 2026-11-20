@@ -112,6 +112,7 @@ PREEMPT-PROJECT -- [project name]
 - If signal logs are all empty (new factory, no history): generate a minimal PREEMPTIVE_LESSONS.md
   that pulls the top 3 lessons from lessons.md for the vertical only, with a note "No signal history yet."
 - NEVER fabricate signal counts. If no cross-project data exists, say so.
+- If neither signal logs nor a lessons file exists (for example outside the full VibePromptRig edition), use the git history of the explicitly configured projects instead: subjects of revert and fix commits, grouped by theme. If there is no history at all, write a short file of general warnings for the vertical and label it "general, not measured".
 - Only quote from existing prompt_excerpts (already PII-scrubbed by the classifier). Never reconstruct prompts.
 - Keep each warning under 150 words total. Dense and actionable > comprehensive and verbose.
 - The SessionStart hook will surface this file automatically at session start via session-start-check.ps1.

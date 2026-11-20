@@ -1,6 +1,6 @@
 ---
 name: half-baked-scan
-description: Stuck-project detector. Reads signal-log.jsonl for the current project and flags projects with high FRUSTRATION + REWORK density, incomplete features, and stale sprint entries. Outputs a prioritized action list.
+description: "Spot a stalled project: unfinished features, stale tasks, TODO markers and old open bugs. Returns a short, prioritized list of what to fix first."
 argument-hint: "[project_path] [lookback_days]"
 arguments: project_path lookback_days
 model: sonnet
@@ -31,8 +31,7 @@ Determine the project ID (last dir segment).
 
 File path: `<project_path>\.claude\signal-log.jsonl`
 
-If the file doesn't exist: output "No signal history for this project. Cannot detect frustration patterns."
-Stop if missing.
+If the file doesn't exist, say so in one line and use git history instead of stopping. Read the commits from the past `lookback_days` days and count: revert commits, commits whose subject starts with fix or wip, and files changed in three or more separate commits. Treat each revert as REWORK, each repeated file as REPEAT, and report these counts as git-derived estimates, not signal counts. Then continue with Step 4 onward.
 
 Parse all lines. Filter to entries within the past `lookback_days` days (default 14).
 

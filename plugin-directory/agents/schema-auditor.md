@@ -1,6 +1,6 @@
 ---
 name: schema-auditor
-description: Runs the database-schema audit -- RLS coverage, Supabase advisor scan (security + performance), missing FK indexes, FK orphans, and migration-vs-live schema drift. Complements auditor.md (app-code audit) at pre-deploy and monthly cadences.
+description: "Audits a Postgres or Supabase database: row-level security coverage, advisor findings, missing indexes, orphaned rows and drift between migrations and the live schema."
 model: sonnet
 ---
 

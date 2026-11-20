@@ -1,6 +1,6 @@
 ---
 name: tech-radar
-description: Weekly scan of AI providers, MCP registries, and marketplaces. Surfaces new models, breaking changes, deprecations, and price changes. Refreshes model-router.json proposals; everything owner-blocking goes to PENDING_APPROVALS.md.
+description: "Weekly scan of AI providers and marketplaces for new models, breaking changes, deprecations and price changes; anything needing your decision is flagged."
 model: sonnet
 ---
 
