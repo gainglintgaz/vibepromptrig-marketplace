@@ -1,0 +1,6 @@
+{
+  "$comment": "Single source for the operator name shown in this repository. Public repo: there is deliberately no address, email or other contact field. Keep llcApproved false until the owner confirms state approval; identity/check-operator-identity.mjs fails the build otherwise.",
+  "operatorBaseName": "Arctave",
+  "entitySuffix": "LLC",
+  "llcApproved": false
+}
